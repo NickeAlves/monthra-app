@@ -1,0 +1,23 @@
+{
+  "@@locale": "en",
+  "preferencesLanguage": "Language",
+  "@preferencesLanguage": {
+    "description": "Label of the language picker (login, landing and settings)."
+  },
+  "preferencesTheme": "Theme",
+  "@preferencesTheme": {
+    "description": "Label of the theme picker (System, Light or Dark)."
+  },
+  "themeSystem": "System",
+  "@themeSystem": {
+    "description": "Theme option that follows the device's light or dark mode."
+  },
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Theme option: always light."
+  },
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Theme option: always dark."
+  }
+}
