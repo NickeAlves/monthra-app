@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/config/env.dart';
 import 'package:monthra/core/design_system/catalog/sample_categories.dart';
@@ -13,16 +12,13 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 /// A development tool, not a product screen: its labels are fixed English
 /// and its samples pt-BR, out of the i18n files on purpose.
 class DesignSystemCatalog extends StatelessWidget {
-  const new({
-    required this.env,
-    required this.themeMode,
-    required this.onThemeModeChanged,
-    super.key,
-  });
+  const new({required this.env, this.actions = const [], super.key});
 
   final Env env;
-  final ThemeMode themeMode;
-  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  /// Shown in the header: the app passes its theme and language pickers,
+  /// to try both live.
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +43,7 @@ class DesignSystemCatalog extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _Header(
-                      env: env,
-                      themeMode: themeMode,
-                      onThemeModeChanged: onThemeModeChanged,
-                    ),
+                    _Header(env: env, actions: actions),
                     const _Section(title: 'Typography', child: _Typography()),
                     const _Section(title: 'Color roles', child: _Palette()),
                     const _Section(title: 'Controls', child: _Controls()),
@@ -71,15 +63,10 @@ class DesignSystemCatalog extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const new({
-    required this.env,
-    required this.themeMode,
-    required this.onThemeModeChanged,
-  });
+  const new({required this.env, required this.actions});
 
   final Env env;
-  final ThemeMode themeMode;
-  final ValueChanged<ThemeMode> onThemeModeChanged;
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
@@ -87,20 +74,6 @@ class _Header extends StatelessWidget {
     final symbol = theme.brightness == Brightness.dark
         ? 'assets/brand/monthra-simbolo-branco.svg'
         : 'assets/brand/monthra-simbolo.svg';
-    Widget mode(ThemeMode value, IconData icon, String label) {
-      final selected = value == themeMode;
-      void select() => onThemeModeChanged(value);
-      final leading = Icon(icon);
-      final child = ButtonLabel(label);
-      return selected
-          ? ShadButton.secondary(
-              onPressed: select,
-              leading: leading,
-              child: child,
-            )
-          : ShadButton.ghost(onPressed: select, leading: leading, child: child);
-    }
-
     return Wrap(
       spacing: MonthraSpacing.x4,
       runSpacing: MonthraSpacing.x4,
@@ -122,16 +95,11 @@ class _Header extends StatelessWidget {
             ShadBadge.secondary(child: Text(env.appEnv.name)),
           ],
         ),
-        Semantics(
-          container: true,
-          label: 'Theme',
-          child: Wrap(
-            children: [
-              mode(ThemeMode.system, LucideIcons.monitor, 'System'),
-              mode(ThemeMode.light, LucideIcons.sun, 'Light'),
-              mode(ThemeMode.dark, LucideIcons.moon, 'Dark'),
-            ],
-          ),
+        Wrap(
+          spacing: MonthraSpacing.x3,
+          runSpacing: MonthraSpacing.x2,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: actions,
         ),
       ],
     );

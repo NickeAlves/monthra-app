@@ -9,14 +9,22 @@ trap 'rm -rf "$tmp"' EXIT
 
 fail() { echo "FAIL: $*" >&2; exit 1; }
 header() { grep -i "^$1:" | head -1 | cut -d' ' -f2- | tr -d '\r'; }
-page_nonce() { grep -o 'nonce="[0-9a-f]\{32\}"' "$1" | cut -d'"' -f2; }
+# Every script tag carries the same per-response nonce (boot.js, flutter_bootstrap.js).
+page_nonce() { grep -o 'nonce="[0-9a-f]\{32\}"' "$1" | cut -d'"' -f2 | sort -u; }
 
 curl -sSf "$base/nginx-health" | grep -qx ok || fail "health check"
 
 curl -sS -D "$tmp/headers" -o "$tmp/index.html" "$base/"
 nonce=$(page_nonce "$tmp/index.html")
 [ -n "$nonce" ] || fail "index.html has no nonce"
+[ "$(wc -l <<< "$nonce")" -eq 1 ] || fail "index.html scripts carry different nonces"
+[ "$(grep -c 'nonce="' "$tmp/index.html")" -ge 2 ] || fail "boot.js and flutter_bootstrap.js must both carry the nonce"
 ! grep -q __CSP_NONCE__ "$tmp/index.html" || fail "nonce placeholder left in index.html"
+# boot.js applies the saved theme before the first paint: a synchronous head script.
+grep -q '<script src="boot.js" nonce=' "$tmp/index.html" || fail "index.html must load boot.js"
+[ "$(curl -sS -o "$tmp/boot.js" -w '%{content_type}' "$base/boot.js")" = application/javascript ] \
+  || fail "boot.js content type"
+grep -q "monthra.boot" "$tmp/boot.js" || fail "boot.js must read the monthra.boot hint"
 csp=$(header content-security-policy < "$tmp/headers")
 [[ "$csp" == *"'nonce-$nonce'"* ]] || fail "CSP does not carry the page nonce: $csp"
 [[ "$csp" == *"connect-src 'self'"* ]] || fail "CSP connect-src: $csp"
