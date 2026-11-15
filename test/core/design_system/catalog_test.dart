@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:monthra/app/router.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/design_system/catalog/sample_categories.dart';
 import 'package:monthra/core/design_system/design_system.dart';
@@ -24,7 +25,7 @@ Future<void> pumpCatalog(
   tester.platformDispatcher.platformBrightnessTestValue = brightness;
   addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
   tester.reduceMotion();
-  await tester.pumpMonthraApp();
+  await tester.pumpMonthraApp(location: AppRoutes.designSystem);
   await tester.pumpAndSettle();
 }
 

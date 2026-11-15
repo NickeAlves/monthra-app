@@ -100,7 +100,7 @@ abstract class AppLocalizations {
     Locale('pt'),
   ];
 
-  /// Label of the language picker (login, landing and settings).
+  /// Label of the language picker (settings and the public landing page).
   ///
   /// In en, this message translates to:
   /// **'Language'**
@@ -129,6 +129,468 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark'**
   String get themeDark;
+
+  /// Short brand line on the green panel beside the sign-in forms (desktop).
+  ///
+  /// In en, this message translates to:
+  /// **'Your finances, month by month.'**
+  String get authTagline;
+
+  /// Title of the sign-in page.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authSignInTitle;
+
+  /// Line under the sign-in title.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back.'**
+  String get authSignInSubtitle;
+
+  /// Label of the email address field.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmailLabel;
+
+  /// Label of the password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPasswordLabel;
+
+  /// Help text under a new password field (sign-up, reset).
+  ///
+  /// In en, this message translates to:
+  /// **'At least 10 characters.'**
+  String get authNewPasswordHint;
+
+  /// Accessible label of the eye button that reveals the password.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get authShowPassword;
+
+  /// Accessible label of the eye button that hides the password again.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get authHidePassword;
+
+  /// Link from the sign-in page to the password reset request.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot your password?'**
+  String get authForgotPasswordLink;
+
+  /// Button that submits the sign-in form.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authSignInButton;
+
+  /// Text before the link to sign up, on the sign-in page.
+  ///
+  /// In en, this message translates to:
+  /// **'New to Monthra?'**
+  String get authNoAccount;
+
+  /// Link from the sign-in page to the sign-up page.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account'**
+  String get authCreateAccountLink;
+
+  /// Text before the link to sign in, on the sign-up page.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get authHaveAccount;
+
+  /// Notice on the sign-in page after the session ran out or was revoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session ended. Sign in again.'**
+  String get authNoticeSessionExpired;
+
+  /// Notice on the sign-in page after a password reset (every session was signed out).
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed. Sign in with the new one.'**
+  String get authNoticePasswordReset;
+
+  /// Notice on the sign-in page when the two-step challenge expired or ran out of attempts.
+  ///
+  /// In en, this message translates to:
+  /// **'The verification step expired. Sign in again.'**
+  String get authNoticeMfaExpired;
+
+  /// Error when signing in with the right password on an unconfirmed address.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your email before signing in. The link is in your inbox.'**
+  String get authEmailNotVerified;
+
+  /// Button that sends a new confirmation link.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend the email'**
+  String get authResendVerification;
+
+  /// Disabled resend button while waiting before another email can be sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds} s'**
+  String authResendIn(int seconds);
+
+  /// Confirmation that a new confirmation link was sent.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a new link to {email}.'**
+  String authVerificationSent(String email);
+
+  /// Title of the second sign-in step.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification'**
+  String get authMfaTitle;
+
+  /// Line under the two-step title when asking for an authenticator code.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code from your authenticator app.'**
+  String get authMfaSubtitle;
+
+  /// Label of the 6-digit code field.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get authMfaCodeLabel;
+
+  /// Line under the two-step title when asking for a recovery code.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter one of your recovery codes. Each one works once.'**
+  String get authMfaRecoverySubtitle;
+
+  /// Label of the recovery code field.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code'**
+  String get authMfaRecoveryLabel;
+
+  /// Switches the two-step page to a recovery code.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a recovery code'**
+  String get authMfaUseRecovery;
+
+  /// Switches the two-step page back to an authenticator code.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the authenticator app'**
+  String get authMfaUseApp;
+
+  /// Button that submits the two-step code.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get authMfaVerifyButton;
+
+  /// Link back to the sign-in page.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to sign in'**
+  String get authBackToSignIn;
+
+  /// Title of the sign-up page.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account'**
+  String get authRegisterTitle;
+
+  /// Line under the sign-up title.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses, income and investments in one place.'**
+  String get authRegisterSubtitle;
+
+  /// Label of the display name field (sign-up).
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get authNameLabel;
+
+  /// Button that submits the sign-up form.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authRegisterButton;
+
+  /// Title after signing up or asking for a reset link.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your inbox'**
+  String get authCheckInboxTitle;
+
+  /// Message after signing up.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a confirmation link to {email}. It works for 30 minutes. If it doesn\'t arrive, check the spam folder.'**
+  String authCheckInboxMessage(String email);
+
+  /// Title of the page that asks for a reset link.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset your password'**
+  String get authForgotTitle;
+
+  /// Line under the reset request title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your account\'s email and we\'ll send you a link.'**
+  String get authForgotSubtitle;
+
+  /// Button that asks for a reset link.
+  ///
+  /// In en, this message translates to:
+  /// **'Send link'**
+  String get authForgotButton;
+
+  /// Message after asking for a reset link (the same whether or not the account exists).
+  ///
+  /// In en, this message translates to:
+  /// **'If there is an account for {email}, a reset link is on its way. It works for 15 minutes.'**
+  String authForgotSentMessage(String email);
+
+  /// Title of the page opened from the reset link.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a new password'**
+  String get authResetTitle;
+
+  /// Line under the new password title.
+  ///
+  /// In en, this message translates to:
+  /// **'Every device will be signed out.'**
+  String get authResetSubtitle;
+
+  /// Button that saves the new password.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get authResetButton;
+
+  /// Title when a reset or confirmation link expired, was used or is broken.
+  ///
+  /// In en, this message translates to:
+  /// **'This link no longer works'**
+  String get authLinkInvalidTitle;
+
+  /// Message for a reset link that no longer works.
+  ///
+  /// In en, this message translates to:
+  /// **'It expired or was already used. Ask for a new one.'**
+  String get authResetLinkInvalidMessage;
+
+  /// Button from a dead reset link to the reset request page.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for a new link'**
+  String get authRequestNewLink;
+
+  /// Shown while the confirmation link is checked.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirming your email…'**
+  String get authVerifyingTitle;
+
+  /// Title after the confirmation link worked.
+  ///
+  /// In en, this message translates to:
+  /// **'Email confirmed'**
+  String get authVerifiedTitle;
+
+  /// Message after the confirmation link worked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is ready. Sign in to start.'**
+  String get authVerifiedMessage;
+
+  /// Message for a confirmation link that no longer works, above the resend form.
+  ///
+  /// In en, this message translates to:
+  /// **'It expired or was already used. Enter your email to get a new one.'**
+  String get authVerifyLinkInvalidMessage;
+
+  /// Button that moves on after a confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get authContinue;
+
+  /// Title at start-up when the API cannot be reached.
+  ///
+  /// In en, this message translates to:
+  /// **'We can\'t reach Monthra'**
+  String get appUnavailableTitle;
+
+  /// Button that tries a failed load again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get appRetry;
+
+  /// Title of the page for an unknown address.
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get notFoundTitle;
+
+  /// Message of the page for an unknown address.
+  ///
+  /// In en, this message translates to:
+  /// **'The address may be wrong, or the page moved.'**
+  String get notFoundMessage;
+
+  /// Button from the unknown address page to the start page.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to the start'**
+  String get notFoundHome;
+
+  /// Greeting on the start page.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name}'**
+  String homeGreeting(String name);
+
+  /// Temporary line on the start page until the dashboard lands.
+  ///
+  /// In en, this message translates to:
+  /// **'Your dashboard arrives in the next versions.'**
+  String get homeComingSoon;
+
+  /// Button that signs out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get homeSignOut;
+
+  /// Link to the design system catalog (development and staging builds only).
+  ///
+  /// In en, this message translates to:
+  /// **'Design system'**
+  String get homeDesignSystem;
+
+  /// Sign-in error: the email or the password is wrong (never says which).
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong email or password.'**
+  String get errorInvalidCredentials;
+
+  /// Error after too many attempts, with the wait the server asked for.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Try again in {seconds} s.'**
+  String errorRateLimited(int seconds);
+
+  /// Error after too many attempts, when the server gave no wait.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Try again in a moment.'**
+  String get errorRateLimitedSoon;
+
+  /// Error when the server asks for a captcha after repeated failures.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts in a row. Wait a few minutes and try again.'**
+  String get errorCaptcha;
+
+  /// Two-step error: the code is wrong or was already used.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong or already used code. Wait for the next one.'**
+  String get errorMfaCodeInvalid;
+
+  /// Error when the API cannot be reached.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to the server. Check your internet.'**
+  String get errorOffline;
+
+  /// Error when the API answered too late.
+  ///
+  /// In en, this message translates to:
+  /// **'The server took too long to answer. Try again.'**
+  String get errorTimeout;
+
+  /// Error when the API is down or failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The service is unavailable right now. Try again in a moment.'**
+  String get errorUnavailable;
+
+  /// Error when the server refused some fields.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the highlighted fields.'**
+  String get errorCheckFields;
+
+  /// Error for an unexpected failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get errorGeneric;
+
+  /// Support reference under an unexpected error (the request id).
+  ///
+  /// In en, this message translates to:
+  /// **'Reference: {id}'**
+  String errorReference(String id);
+
+  /// Field error: the field is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Required.'**
+  String get errorFieldRequired;
+
+  /// Field error: not an email address.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email.'**
+  String get errorEmailInvalid;
+
+  /// Field error: the value is not accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid value.'**
+  String get errorFieldInvalid;
+
+  /// Field error: too short.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least {min} characters.'**
+  String errorTooShort(int min);
+
+  /// Field error: too long.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at most {max} characters.'**
+  String errorTooLong(int max);
+
+  /// Field error: the password is in a list of breached passwords.
+  ///
+  /// In en, this message translates to:
+  /// **'This password appeared in data breaches. Choose another one.'**
+  String get errorPasswordBreached;
+
+  /// Field error: the authenticator code needs 6 digits.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6 digits.'**
+  String get errorMfaCodeFormat;
 }
 
 class _AppLocalizationsDelegate

@@ -1,19 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monthra/core/config/env.dart';
-import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
+import 'package:monthra/app/router.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/core/network/api_error_text.dart';
 import 'package:monthra/core/platform/boot_hint.dart' as boot_hint;
+import 'package:monthra/features/auth/application/auth_controller.dart';
+import 'package:monthra/features/auth/application/auth_state.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
 import 'package:monthra/features/settings/preferences/domain/theme_preference.dart';
-import 'package:monthra/features/settings/preferences/presentation/language_picker.dart';
-import 'package:monthra/features/settings/preferences/presentation/theme_preference_picker.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-
-/// A production build (`APP_ENV`): the catalog branch compiles away there.
-const bool _productionBuild = String.fromEnvironment('APP_ENV') == 'production';
 
 /// Saves the web boot hint (`boot_hint.dart`); tests pass a recorder.
 typedef BootHintSaver = void Function({
@@ -22,17 +19,12 @@ typedef BootHintSaver = void Function({
 });
 
 /// The root widget: applies the theme and language of [preferencesProvider]
-/// and [appLocaleProvider]. Routes arrive with the auth pull request; until
-/// then the home is the design system catalog outside production and the
-/// brand page in production.
+/// and [appLocaleProvider], and routes with [routerProvider]. Until the
+/// start-up session check settles ([AuthBooting]) only the boot screen
+/// shows: no page is built before its guard can run.
 class MonthraApp extends ConsumerStatefulWidget {
-  const new({
-    required this.env,
-    this.saveBootHint = boot_hint.saveBootHint,
-    super.key,
-  });
+  const new({this.saveBootHint = boot_hint.saveBootHint, super.key});
 
-  final Env env;
   final BootHintSaver saveBootHint;
 
   @override
@@ -66,11 +58,19 @@ class _MonthraAppState extends ConsumerState<MonthraApp> {
 
   @override
   Widget build(BuildContext context) {
-    final env = widget.env;
-    final showCatalog = !_productionBuild && !env.isProduction;
     final theme = ref.watch(preferencesProvider.select((p) => p.theme));
     final locale = ref.watch(appLocaleProvider);
-    return ShadApp(
+    final gate = ref.watch(
+      authControllerProvider.select(
+        (auth) => switch (auth) {
+          AuthBooting() => _Gate.booting,
+          AuthUnavailable() => _Gate.unavailable,
+          _ => _Gate.open,
+        },
+      ),
+    );
+    return ShadApp.router(
+      routerConfig: ref.watch(routerProvider),
       // The brand name, the same in every language.
       title: 'Monthra',
       themeMode: theme.themeMode,
@@ -81,19 +81,24 @@ class _MonthraAppState extends ConsumerState<MonthraApp> {
       supportedLocales: AppLocale.supportedLocales,
       // ShadApp adds the shadcn, Material, Cupertino and Widgets ones.
       localizationsDelegates: const [AppLocalizations.delegate],
-      home: showCatalog
-          ? DesignSystemCatalog(
-              env: env,
-              actions: const [ThemePreferencePicker(), LanguagePicker()],
-            )
-          : const PlaceholderPage(),
+      builder: (context, child) => switch (gate) {
+        _Gate.booting => const BootScreen(),
+        _Gate.unavailable => const BootUnavailable(),
+        _Gate.open => child ?? const SizedBox.shrink(),
+      },
     );
   }
 }
 
-/// The production home until the first real screens land.
-class PlaceholderPage extends StatelessWidget {
+enum _Gate { booting, unavailable, open }
+
+/// The start-up screen while the session check runs: the brand symbol on
+/// the theme's background, as the splash screens draw it, so nothing
+/// flashes between them.
+class BootScreen extends StatelessWidget {
   const new({super.key});
+
+  static const double symbolSize = 96;
 
   @override
   Widget build(BuildContext context) {
@@ -104,18 +109,47 @@ class PlaceholderPage extends StatelessWidget {
     return ColoredBox(
       color: theme.colorScheme.background,
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(symbol, width: 96, height: 96),
-            const SizedBox(height: MonthraSpacing.x6),
-            Text(
-              'Monthra',
-              style: theme.textTheme.h2.copyWith(
-                color: theme.colorScheme.foreground,
+        child: Semantics(
+          // The brand name, the same in every language.
+          label: 'Monthra',
+          image: true,
+          child: SvgPicture.asset(
+            symbol,
+            width: symbolSize,
+            height: symbolSize,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The start-up check could not reach the API: say so and offer a retry.
+class BootUnavailable extends ConsumerWidget {
+  const new({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ShadTheme.of(context);
+    final l10n = context.l10n;
+    final auth = ref.watch(authControllerProvider);
+    final error = auth is AuthUnavailable ? l10n.apiError(auth.error) : null;
+    return ColoredBox(
+      color: theme.colorScheme.background,
+      child: DefaultTextStyle(
+        style: theme.textTheme.p.copyWith(color: theme.colorScheme.foreground),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(MonthraSpacing.x6),
+              child: ErrorState(
+                title: l10n.appUnavailableTitle,
+                message: error?.message,
+                onRetry: ref.read(authControllerProvider.notifier).retry,
+                retryLabel: l10n.appRetry,
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

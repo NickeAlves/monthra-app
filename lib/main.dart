@@ -10,9 +10,10 @@ import 'package:monthra/features/settings/preferences/data/preferences_store.dar
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Clean paths on the web: the email links are /verify-email#token=… and
-  // /reset-password#token=…, with the token kept in the fragment.
-  usePathUrlStrategy();
+  // Clean paths on the web, keeping the fragment: the email links are
+  // /verify-email#token=… and /reset-password#token=… (the token never
+  // reaches a server log), and usePathUrlStrategy() would drop it.
+  setUrlStrategy(PathUrlStrategy(BrowserPlatformLocation(), true));
   LicenseRegistry.addLicense(_bundledFontLicenses);
   final env = Env.fromEnvironment();
   // Read while the splash shows, so the first frame already has the saved
@@ -21,7 +22,7 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: appOverrides(env: env, preferences: store),
-      child: MonthraApp(env: env),
+      child: const MonthraApp(),
     ),
   );
 }

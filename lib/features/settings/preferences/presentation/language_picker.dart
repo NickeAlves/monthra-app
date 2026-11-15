@@ -10,7 +10,8 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// Picks the UI language (§7.6), applied at once. Shows the language the
 /// app speaks now, chosen or matched from the device; each language is
-/// written in itself. For the login and landing screens and the settings.
+/// written in itself. For the settings (and the public landing page);
+/// the sign-in pages show none (user decision of 2026-11-15).
 class LanguagePicker extends ConsumerStatefulWidget {
   const new({super.key});
 

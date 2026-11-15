@@ -2,7 +2,7 @@
   "@@locale": "en",
   "preferencesLanguage": "Language",
   "@preferencesLanguage": {
-    "description": "Label of the language picker (login, landing and settings)."
+    "description": "Label of the language picker (settings and the public landing page)."
   },
   "preferencesTheme": "Theme",
   "@preferencesTheme": {
@@ -19,5 +19,367 @@
   "themeDark": "Dark",
   "@themeDark": {
     "description": "Theme option: always dark."
+  },
+  "authTagline": "Your finances, month by month.",
+  "@authTagline": {
+    "description": "Short brand line on the green panel beside the sign-in forms (desktop)."
+  },
+  "authSignInTitle": "Sign in",
+  "@authSignInTitle": {
+    "description": "Title of the sign-in page."
+  },
+  "authSignInSubtitle": "Welcome back.",
+  "@authSignInSubtitle": {
+    "description": "Line under the sign-in title."
+  },
+  "authEmailLabel": "Email",
+  "@authEmailLabel": {
+    "description": "Label of the email address field."
+  },
+  "authPasswordLabel": "Password",
+  "@authPasswordLabel": {
+    "description": "Label of the password field."
+  },
+  "authNewPasswordHint": "At least 10 characters.",
+  "@authNewPasswordHint": {
+    "description": "Help text under a new password field (sign-up, reset)."
+  },
+  "authShowPassword": "Show password",
+  "@authShowPassword": {
+    "description": "Accessible label of the eye button that reveals the password."
+  },
+  "authHidePassword": "Hide password",
+  "@authHidePassword": {
+    "description": "Accessible label of the eye button that hides the password again."
+  },
+  "authForgotPasswordLink": "Forgot your password?",
+  "@authForgotPasswordLink": {
+    "description": "Link from the sign-in page to the password reset request."
+  },
+  "authSignInButton": "Sign in",
+  "@authSignInButton": {
+    "description": "Button that submits the sign-in form."
+  },
+  "authNoAccount": "New to Monthra?",
+  "@authNoAccount": {
+    "description": "Text before the link to sign up, on the sign-in page."
+  },
+  "authCreateAccountLink": "Create an account",
+  "@authCreateAccountLink": {
+    "description": "Link from the sign-in page to the sign-up page."
+  },
+  "authHaveAccount": "Already have an account?",
+  "@authHaveAccount": {
+    "description": "Text before the link to sign in, on the sign-up page."
+  },
+  "authNoticeSessionExpired": "Your session ended. Sign in again.",
+  "@authNoticeSessionExpired": {
+    "description": "Notice on the sign-in page after the session ran out or was revoked."
+  },
+  "authNoticePasswordReset": "Password changed. Sign in with the new one.",
+  "@authNoticePasswordReset": {
+    "description": "Notice on the sign-in page after a password reset (every session was signed out)."
+  },
+  "authNoticeMfaExpired": "The verification step expired. Sign in again.",
+  "@authNoticeMfaExpired": {
+    "description": "Notice on the sign-in page when the two-step challenge expired or ran out of attempts."
+  },
+  "authEmailNotVerified": "Confirm your email before signing in. The link is in your inbox.",
+  "@authEmailNotVerified": {
+    "description": "Error when signing in with the right password on an unconfirmed address."
+  },
+  "authResendVerification": "Resend the email",
+  "@authResendVerification": {
+    "description": "Button that sends a new confirmation link."
+  },
+  "authResendIn": "Resend in {seconds} s",
+  "@authResendIn": {
+    "description": "Disabled resend button while waiting before another email can be sent.",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "authVerificationSent": "We sent a new link to {email}.",
+  "@authVerificationSent": {
+    "description": "Confirmation that a new confirmation link was sent.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "ana@example.com"
+      }
+    }
+  },
+  "authMfaTitle": "Two-step verification",
+  "@authMfaTitle": {
+    "description": "Title of the second sign-in step."
+  },
+  "authMfaSubtitle": "Enter the 6-digit code from your authenticator app.",
+  "@authMfaSubtitle": {
+    "description": "Line under the two-step title when asking for an authenticator code."
+  },
+  "authMfaCodeLabel": "Code",
+  "@authMfaCodeLabel": {
+    "description": "Label of the 6-digit code field."
+  },
+  "authMfaRecoverySubtitle": "Enter one of your recovery codes. Each one works once.",
+  "@authMfaRecoverySubtitle": {
+    "description": "Line under the two-step title when asking for a recovery code."
+  },
+  "authMfaRecoveryLabel": "Recovery code",
+  "@authMfaRecoveryLabel": {
+    "description": "Label of the recovery code field."
+  },
+  "authMfaUseRecovery": "Use a recovery code",
+  "@authMfaUseRecovery": {
+    "description": "Switches the two-step page to a recovery code."
+  },
+  "authMfaUseApp": "Use the authenticator app",
+  "@authMfaUseApp": {
+    "description": "Switches the two-step page back to an authenticator code."
+  },
+  "authMfaVerifyButton": "Verify",
+  "@authMfaVerifyButton": {
+    "description": "Button that submits the two-step code."
+  },
+  "authBackToSignIn": "Back to sign in",
+  "@authBackToSignIn": {
+    "description": "Link back to the sign-in page."
+  },
+  "authRegisterTitle": "Create your account",
+  "@authRegisterTitle": {
+    "description": "Title of the sign-up page."
+  },
+  "authRegisterSubtitle": "Expenses, income and investments in one place.",
+  "@authRegisterSubtitle": {
+    "description": "Line under the sign-up title."
+  },
+  "authNameLabel": "Name",
+  "@authNameLabel": {
+    "description": "Label of the display name field (sign-up)."
+  },
+  "authRegisterButton": "Create account",
+  "@authRegisterButton": {
+    "description": "Button that submits the sign-up form."
+  },
+  "authCheckInboxTitle": "Check your inbox",
+  "@authCheckInboxTitle": {
+    "description": "Title after signing up or asking for a reset link."
+  },
+  "authCheckInboxMessage": "We sent a confirmation link to {email}. It works for 30 minutes. If it doesn't arrive, check the spam folder.",
+  "@authCheckInboxMessage": {
+    "description": "Message after signing up.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "ana@example.com"
+      }
+    }
+  },
+  "authForgotTitle": "Reset your password",
+  "@authForgotTitle": {
+    "description": "Title of the page that asks for a reset link."
+  },
+  "authForgotSubtitle": "Enter your account's email and we'll send you a link.",
+  "@authForgotSubtitle": {
+    "description": "Line under the reset request title."
+  },
+  "authForgotButton": "Send link",
+  "@authForgotButton": {
+    "description": "Button that asks for a reset link."
+  },
+  "authForgotSentMessage": "If there is an account for {email}, a reset link is on its way. It works for 15 minutes.",
+  "@authForgotSentMessage": {
+    "description": "Message after asking for a reset link (the same whether or not the account exists).",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "ana@example.com"
+      }
+    }
+  },
+  "authResetTitle": "Choose a new password",
+  "@authResetTitle": {
+    "description": "Title of the page opened from the reset link."
+  },
+  "authResetSubtitle": "Every device will be signed out.",
+  "@authResetSubtitle": {
+    "description": "Line under the new password title."
+  },
+  "authResetButton": "Change password",
+  "@authResetButton": {
+    "description": "Button that saves the new password."
+  },
+  "authLinkInvalidTitle": "This link no longer works",
+  "@authLinkInvalidTitle": {
+    "description": "Title when a reset or confirmation link expired, was used or is broken."
+  },
+  "authResetLinkInvalidMessage": "It expired or was already used. Ask for a new one.",
+  "@authResetLinkInvalidMessage": {
+    "description": "Message for a reset link that no longer works."
+  },
+  "authRequestNewLink": "Ask for a new link",
+  "@authRequestNewLink": {
+    "description": "Button from a dead reset link to the reset request page."
+  },
+  "authVerifyingTitle": "Confirming your email…",
+  "@authVerifyingTitle": {
+    "description": "Shown while the confirmation link is checked."
+  },
+  "authVerifiedTitle": "Email confirmed",
+  "@authVerifiedTitle": {
+    "description": "Title after the confirmation link worked."
+  },
+  "authVerifiedMessage": "Your account is ready. Sign in to start.",
+  "@authVerifiedMessage": {
+    "description": "Message after the confirmation link worked."
+  },
+  "authVerifyLinkInvalidMessage": "It expired or was already used. Enter your email to get a new one.",
+  "@authVerifyLinkInvalidMessage": {
+    "description": "Message for a confirmation link that no longer works, above the resend form."
+  },
+  "authContinue": "Continue",
+  "@authContinue": {
+    "description": "Button that moves on after a confirmation."
+  },
+  "appUnavailableTitle": "We can't reach Monthra",
+  "@appUnavailableTitle": {
+    "description": "Title at start-up when the API cannot be reached."
+  },
+  "appRetry": "Try again",
+  "@appRetry": {
+    "description": "Button that tries a failed load again."
+  },
+  "notFoundTitle": "Page not found",
+  "@notFoundTitle": {
+    "description": "Title of the page for an unknown address."
+  },
+  "notFoundMessage": "The address may be wrong, or the page moved.",
+  "@notFoundMessage": {
+    "description": "Message of the page for an unknown address."
+  },
+  "notFoundHome": "Go to the start",
+  "@notFoundHome": {
+    "description": "Button from the unknown address page to the start page."
+  },
+  "homeGreeting": "Hello, {name}",
+  "@homeGreeting": {
+    "description": "Greeting on the start page.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ana"
+      }
+    }
+  },
+  "homeComingSoon": "Your dashboard arrives in the next versions.",
+  "@homeComingSoon": {
+    "description": "Temporary line on the start page until the dashboard lands."
+  },
+  "homeSignOut": "Sign out",
+  "@homeSignOut": {
+    "description": "Button that signs out."
+  },
+  "homeDesignSystem": "Design system",
+  "@homeDesignSystem": {
+    "description": "Link to the design system catalog (development and staging builds only)."
+  },
+  "errorInvalidCredentials": "Wrong email or password.",
+  "@errorInvalidCredentials": {
+    "description": "Sign-in error: the email or the password is wrong (never says which)."
+  },
+  "errorRateLimited": "Too many attempts. Try again in {seconds} s.",
+  "@errorRateLimited": {
+    "description": "Error after too many attempts, with the wait the server asked for.",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "errorRateLimitedSoon": "Too many attempts. Try again in a moment.",
+  "@errorRateLimitedSoon": {
+    "description": "Error after too many attempts, when the server gave no wait."
+  },
+  "errorCaptcha": "Too many attempts in a row. Wait a few minutes and try again.",
+  "@errorCaptcha": {
+    "description": "Error when the server asks for a captcha after repeated failures."
+  },
+  "errorMfaCodeInvalid": "Wrong or already used code. Wait for the next one.",
+  "@errorMfaCodeInvalid": {
+    "description": "Two-step error: the code is wrong or was already used."
+  },
+  "errorOffline": "No connection to the server. Check your internet.",
+  "@errorOffline": {
+    "description": "Error when the API cannot be reached."
+  },
+  "errorTimeout": "The server took too long to answer. Try again.",
+  "@errorTimeout": {
+    "description": "Error when the API answered too late."
+  },
+  "errorUnavailable": "The service is unavailable right now. Try again in a moment.",
+  "@errorUnavailable": {
+    "description": "Error when the API is down or failed."
+  },
+  "errorCheckFields": "Check the highlighted fields.",
+  "@errorCheckFields": {
+    "description": "Error when the server refused some fields."
+  },
+  "errorGeneric": "Something went wrong. Try again.",
+  "@errorGeneric": {
+    "description": "Error for an unexpected failure."
+  },
+  "errorReference": "Reference: {id}",
+  "@errorReference": {
+    "description": "Support reference under an unexpected error (the request id).",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "example": "4f9c2d1e8b7a6f5e4d3c2b1a0f9e8d7c"
+      }
+    }
+  },
+  "errorFieldRequired": "Required.",
+  "@errorFieldRequired": {
+    "description": "Field error: the field is empty."
+  },
+  "errorEmailInvalid": "Enter a valid email.",
+  "@errorEmailInvalid": {
+    "description": "Field error: not an email address."
+  },
+  "errorFieldInvalid": "Invalid value.",
+  "@errorFieldInvalid": {
+    "description": "Field error: the value is not accepted."
+  },
+  "errorTooShort": "Use at least {min} characters.",
+  "@errorTooShort": {
+    "description": "Field error: too short.",
+    "placeholders": {
+      "min": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "errorTooLong": "Use at most {max} characters.",
+  "@errorTooLong": {
+    "description": "Field error: too long.",
+    "placeholders": {
+      "max": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "errorPasswordBreached": "This password appeared in data breaches. Choose another one.",
+  "@errorPasswordBreached": {
+    "description": "Field error: the password is in a list of breached passwords."
+  },
+  "errorMfaCodeFormat": "Enter the 6 digits.",
+  "@errorMfaCodeFormat": {
+    "description": "Field error: the authenticator code needs 6 digits."
   }
 }
