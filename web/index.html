@@ -23,19 +23,16 @@
   <title>Monthra</title>
   <link rel="manifest" href="manifest.json">
   <!-- No inline styles or scripts: the CSP only allows files from this origin
-       and the nonce nginx writes on the bootstrap script for each response. -->
+       and the nonce nginx writes on the script tags for each response. -->
+  <!-- Synchronous on purpose: the saved theme applies before the first paint. -->
+  <script src="boot.js" nonce="__CSP_NONCE__"></script>
   <link rel="stylesheet" href="splash.css">
 </head>
 <body>
-  <!-- Painted by the browser before Flutter starts, in the system theme, so a
-       dark device never flashes white. flutter_bootstrap.js removes it on the
-       first frame. -->
-  <div id="splash" aria-hidden="true">
-    <picture>
-      <source srcset="splash/symbol-dark.svg" media="(prefers-color-scheme: dark)">
-      <img src="splash/symbol.svg" alt="" width="96" height="96">
-    </picture>
-  </div>
+  <!-- Painted by the browser before Flutter starts, in the saved or system
+       theme, so a dark choice never flashes white. flutter_bootstrap.js
+       removes it on the first frame. -->
+  <div id="splash" aria-hidden="true"><div class="symbol"></div></div>
   <script src="flutter_bootstrap.js" nonce="__CSP_NONCE__" async></script>
 </body>
 </html>

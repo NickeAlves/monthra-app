@@ -1,44 +1,90 @@
-import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monthra/core/config/env.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/core/platform/boot_hint.dart' as boot_hint;
+import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
+import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
+import 'package:monthra/features/settings/preferences/domain/theme_preference.dart';
+import 'package:monthra/features/settings/preferences/presentation/language_picker.dart';
+import 'package:monthra/features/settings/preferences/presentation/theme_preference_picker.dart';
+import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// A production build (`APP_ENV`): the catalog branch compiles away there.
 const bool _productionBuild = String.fromEnvironment('APP_ENV') == 'production';
 
-/// The root widget. Routes and localizations arrive with the i18n and auth
-/// pull requests; until then the home is the design system catalog outside
-/// production and the brand page in production.
-class MonthraApp extends StatefulWidget {
-  const new({required this.env, super.key});
+/// Saves the web boot hint (`boot_hint.dart`); tests pass a recorder.
+typedef BootHintSaver = void Function({
+  required String languageTag,
+  String? theme,
+});
+
+/// The root widget: applies the theme and language of [preferencesProvider]
+/// and [appLocaleProvider]. Routes arrive with the auth pull request; until
+/// then the home is the design system catalog outside production and the
+/// brand page in production.
+class MonthraApp extends ConsumerStatefulWidget {
+  const new({
+    required this.env,
+    this.saveBootHint = boot_hint.saveBootHint,
+    super.key,
+  });
 
   final Env env;
+  final BootHintSaver saveBootHint;
 
   @override
-  State<MonthraApp> createState() => _MonthraAppState();
+  ConsumerState<MonthraApp> createState() => _MonthraAppState();
 }
 
-class _MonthraAppState extends State<MonthraApp> {
-  // Becomes the preferencesProvider (stored and synced) in the next PR.
-  ThemeMode _themeMode = ThemeMode.system;
+class _MonthraAppState extends ConsumerState<MonthraApp> {
+  @override
+  void initState() {
+    super.initState();
+    // The next web visit opens in today's theme and language (boot.js).
+    ref
+      ..listenManual(
+        appLocaleProvider,
+        (_, _) => _saveBootHint(),
+        fireImmediately: true,
+      )
+      ..listenManual(
+        preferencesProvider.select((p) => p.theme),
+        (_, _) => _saveBootHint(),
+      );
+  }
+
+  void _saveBootHint() {
+    final theme = ref.read(preferencesProvider).theme;
+    widget.saveBootHint(
+      languageTag: ref.read(appLocaleProvider).tag,
+      theme: theme == ThemePreference.system ? null : theme.wire,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final env = widget.env;
     final showCatalog = !_productionBuild && !env.isProduction;
+    final theme = ref.watch(preferencesProvider.select((p) => p.theme));
+    final locale = ref.watch(appLocaleProvider);
     return ShadApp(
+      // The brand name, the same in every language.
       title: 'Monthra',
-      themeMode: _themeMode,
+      themeMode: theme.themeMode,
       theme: monthraTheme(Brightness.light),
       darkTheme: monthraTheme(Brightness.dark),
       themeCurve: MonthraMotion.curve,
+      locale: locale.locale,
+      supportedLocales: AppLocale.supportedLocales,
+      // ShadApp adds the shadcn, Material, Cupertino and Widgets ones.
+      localizationsDelegates: const [AppLocalizations.delegate],
       home: showCatalog
           ? DesignSystemCatalog(
               env: env,
-              themeMode: _themeMode,
-              onThemeModeChanged: (mode) => setState(() => _themeMode = mode),
+              actions: const [ThemePreferencePicker(), LanguagePicker()],
             )
           : const PlaceholderPage(),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/money/currency.dart';
 import 'package:monthra/core/money/money_format.dart';
+import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
 
 import '../../../helpers/frame.dart';
 
@@ -32,9 +33,11 @@ void main() {
   });
 
   testWidgets("follows the app's locale by default", (tester) async {
-    // No supported locales yet (i18n comes next): the app runs in en-US.
-    await tester.pumpFrame(const AmountText(123456, currency: Currency.usd));
+    const amount = AmountText(123456, currency: Currency.usd);
+    await tester.pumpFrame(amount, locale: AppLocale.enUs);
     expect(shown(tester), r'$1,234.56');
+    await tester.pumpFrame(amount);
+    expect(shown(tester), r'US$ 1.234,56');
   });
 
   testWidgets('colors and signs by kind', (tester) async {

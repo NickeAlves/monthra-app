@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 
 import 'frame.dart';
 
@@ -43,18 +44,25 @@ class TolerantGoldenFileComparator extends LocalFileComparator {
 /// image comparison runs on Linux only and is reported as skipped elsewhere.
 ///
 /// [setup] runs after the first frame, before the comparison (focus a
-/// control, hover it).
+/// control, hover it). [store] holds the preferences (pt-BR and the system
+/// theme when null, like the frame).
 void goldenTest(
   String name,
   Widget Function() build, {
   Size size = const Size(480, 480),
   Future<void> Function(WidgetTester tester)? setup,
+  PreferencesStore Function()? store,
 }) {
   group(name, () {
     for (final brightness in Brightness.values) {
       testWidgets(brightness.name, tags: ['golden'], (tester) async {
         tester.reduceMotion();
-        await tester.pumpFrame(build(), brightness: brightness, size: size);
+        await tester.pumpFrame(
+          build(),
+          brightness: brightness,
+          size: size,
+          store: store?.call(),
+        );
         await setup?.call(tester);
         await tester.pump(const Duration(milliseconds: 300));
 

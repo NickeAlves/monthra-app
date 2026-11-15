@@ -1,21 +1,16 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monthra/app/app.dart';
-import 'package:monthra/core/config/env.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/design_system/catalog/sample_categories.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
+import 'package:monthra/features/settings/preferences/domain/theme_preference.dart';
 
+import '../../helpers/app.dart';
 import '../../helpers/contrast.dart';
 import '../../helpers/frame.dart';
-
-final local = Env(
-  appEnv: AppEnv.local,
-  apiBaseUrl: Uri.parse('http://localhost:8080'),
-);
 
 Future<void> pumpCatalog(
   WidgetTester tester, {
@@ -29,7 +24,7 @@ Future<void> pumpCatalog(
   tester.platformDispatcher.platformBrightnessTestValue = brightness;
   addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
   tester.reduceMotion();
-  await tester.pumpWidget(MonthraApp(env: local));
+  await tester.pumpMonthraApp();
   await tester.pumpAndSettle();
 }
 
@@ -124,12 +119,13 @@ void main() {
     final catalog = find.byType(DesignSystemCatalog);
     expect(tester.themeAt(catalog).brightness, Brightness.light);
 
+    // The test device speaks en-US, so the picker does too.
     await tester.tap(find.text('Dark'));
     await tester.pumpAndSettle();
     expect(tester.themeAt(catalog).brightness, Brightness.dark);
     expect(
-      tester.widget<DesignSystemCatalog>(catalog).themeMode,
-      ThemeMode.dark,
+      tester.appContainer.read(preferencesProvider).theme,
+      ThemePreference.dark,
     );
 
     await tester.tap(find.text('System'));

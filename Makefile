@@ -11,8 +11,8 @@ WEB_FLAGS   := --release --csp --no-web-resources-cdn
 # Release mobile builds strip symbols into build/symbols (keep them to read crash stacks).
 OBFUSCATE   := --obfuscate --split-debug-info=build/symbols
 
-.PHONY: help deps network run-web run fmt lint analyze test cover goldens-pull outdated icons fonts \
-        build-web build-apk build-ios build smoke up down logs ps staging-up staging-down
+.PHONY: help deps network run-web run fmt gen l10n-check lint analyze test cover goldens-pull outdated \
+        icons fonts build-web build-apk build-ios build smoke up down logs ps staging-up staging-down
 
 help: ## List the available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -33,9 +33,18 @@ run: ## Run on a device or emulator (FLAVOR=dev|staging|prod; dev talks to the l
 fmt: ## Format the Dart code
 	dart format lib test tool
 
-analyze: ## Check formatting and run the analyzer (infos fail too)
+gen: ## Regenerate the committed code: localizations (lib/l10n/generated) and Riverpod providers (*.g.dart)
+	flutter gen-l10n
+	dart run build_runner build --delete-conflicting-outputs
+
+l10n-check: ## Fail when the ARB files disagree (a missing key, placeholder or description)
+	dart run tool/check_l10n.dart
+
+# dart analyze, not flutter analyze: only dart analyze runs the analyzer
+# plugins (riverpod_lint).
+analyze: l10n-check ## Check the ARB files and formatting, run the analyzer with its plugins (infos fail too)
 	dart format --output=none --set-exit-if-changed lib test tool
-	flutter analyze --fatal-infos
+	dart analyze --fatal-infos
 
 lint: analyze ## Analyzer plus the secret scan
 	gitleaks dir --no-banner --redact .
