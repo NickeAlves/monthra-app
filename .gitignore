@@ -48,3 +48,6 @@ android/key.properties
 *.jks
 *.keystore
 *.p12
+
+# Golden comparison diffs (written by failed golden tests)
+**/failures/

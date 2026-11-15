@@ -51,7 +51,7 @@ jobs:
       - name: Packages (exactly as locked)
         run: flutter pub get --enforce-lockfile
       - name: Format
-        run: dart format --output=none --set-exit-if-changed lib test
+        run: dart format --output=none --set-exit-if-changed lib test tool
       - name: Analyze (infos fail too)
         run: flutter analyze --fatal-infos
       - name: Outdated packages (informational)
@@ -70,8 +70,24 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get --enforce-lockfile
-      - name: Unit and widget tests
+      # Golden tests run here only (Linux): see "Golden tests" in the README.
+      - name: Unit, widget and golden tests
         run: flutter test --coverage
+      # A failed run renders the goldens again for review: make goldens-pull
+      # copies them into test/. pubspec.yaml roots the artifact at the repo.
+      - name: Render the goldens for review
+        if: failure()
+        run: flutter test --update-goldens --tags golden
+      - name: Upload the goldens
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: goldens
+          path: |
+            pubspec.yaml
+            test/**/goldens/*.png
+            test/**/failures/*.png
+          retention-days: 7
       - name: Coverage summary
         run: |
           awk -F: '/^LF:/ {found += $2} /^LH:/ {hit += $2}
