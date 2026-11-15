@@ -1,3 +1,6 @@
 tags:
   # Pixel comparisons: rendered and checked on Linux only (see the README).
   golden:
+  # Against the real local API: `make test-live` (see test/live/).
+  live:
+    skip: needs the local API (make test-live)

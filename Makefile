@@ -11,7 +11,7 @@ WEB_FLAGS   := --release --csp --no-web-resources-cdn
 # Release mobile builds strip symbols into build/symbols (keep them to read crash stacks).
 OBFUSCATE   := --obfuscate --split-debug-info=build/symbols
 
-.PHONY: help deps network run-web run fmt gen l10n-check lint analyze test cover goldens-pull outdated \
+.PHONY: help deps network run-web run fmt gen l10n-check lint analyze test test-live cover goldens-pull outdated \
         icons fonts build-web build-apk build-ios build smoke up down logs ps staging-up staging-down
 
 help: ## List the available targets
@@ -51,6 +51,9 @@ lint: analyze ## Analyzer plus the secret scan
 
 test: ## Run the tests (goldens only run on Linux; see the README)
 	flutter test
+
+test-live: ## Run the client against the local API (monthra-server: make up && make seed; MONTHRA_DEMO_PASSWORD=<seed password>)
+	flutter test --tags live --run-skipped test/live
 
 cover: ## Run the tests with coverage (coverage/lcov.info)
 	flutter test --coverage
