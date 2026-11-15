@@ -201,6 +201,61 @@ final class SessionEventsProvider
 
 String _$sessionEventsHash() => r'3b5ada90aa272d7c927f2316dd71344b7f34bfc7';
 
+/// How requests leave the app ([createHttpAdapter]); tests answer them with
+/// a fake.
+
+@ProviderFor(httpAdapter)
+final httpAdapterProvider = HttpAdapterProvider._();
+
+/// How requests leave the app ([createHttpAdapter]); tests answer them with
+/// a fake.
+
+final class HttpAdapterProvider
+    extends
+        $FunctionalProvider<
+          HttpClientAdapter,
+          HttpClientAdapter,
+          HttpClientAdapter
+        >
+    with $Provider<HttpClientAdapter> {
+  /// How requests leave the app ([createHttpAdapter]); tests answer them with
+  /// a fake.
+  HttpAdapterProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'httpAdapterProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$httpAdapterHash();
+
+  @$internal
+  @override
+  $ProviderElement<HttpClientAdapter> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  HttpClientAdapter create(Ref ref) {
+    return httpAdapter(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HttpClientAdapter value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HttpClientAdapter>(value),
+    );
+  }
+}
+
+String _$httpAdapterHash() => r'bb2641424f605e0ea695c39287ecb0f20ef9eab6';
+
 /// The configured `Dio` ([createApiDio]); features use [apiClientProvider].
 
 @ProviderFor(apiDio)
@@ -244,7 +299,7 @@ final class ApiDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$apiDioHash() => r'8147ef0cf9684c2603cd9f6be76d442b7e183416';
+String _$apiDioHash() => r'44f0adf9e91981dde85e0fb2bf14e78d44657dfc';
 
 @ProviderFor(apiClient)
 final apiClientProvider = ApiClientProvider._();

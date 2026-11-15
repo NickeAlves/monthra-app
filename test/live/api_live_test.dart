@@ -8,10 +8,11 @@ import 'package:monthra/core/network/api_client.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/api_problem.dart';
 import 'package:monthra/core/network/http_adapter.dart';
-import 'package:monthra/core/network/models/session.dart';
 import 'package:monthra/core/network/session_refresher.dart';
 import 'package:monthra/core/security/auth_tokens.dart';
 import 'package:monthra/core/security/token_store.dart';
+import 'package:monthra/features/auth/data/auth_api.dart';
+import 'package:monthra/features/auth/data/models/login_result.dart';
 
 /// The client against the real local API, as a device (Bearer mode):
 /// `make test-live` with the server up and seeded (monthra-server:
@@ -83,17 +84,19 @@ void main() {
       expect(password, isNotEmpty, reason: 'set MONTHRA_DEMO_PASSWORD');
       final tokens = MemoryTokenStore();
       final c = client(tokens);
-
-      final login = await c.api.post<Map<String, Object?>>(
-        '/auth/login',
-        data: {'email': email, 'password': password},
+      final auth = AuthApi(
+        api: c.api,
+        mode: SessionMode.bearer,
+        tokens: tokens,
       );
-      final signedIn = Session.fromJson(login.data!).tokens;
-      expect(signedIn, isNotNull, reason: 'a native client gets the tokens');
-      await tokens.write(signedIn!);
 
-      final me = await c.api.get<Map<String, Object?>>('/me');
-      expect(me.data!['email'], email);
+      final login = await auth.login(email: email, password: password);
+      expect(login, isA<LoginSignedIn>());
+      // A native client gets the tokens, saved before login returns.
+      final signedIn = (await tokens.read())!;
+
+      final me = await auth.me();
+      expect(me.email, email);
 
       // An access token the server refuses: five calls, one refresh.
       await tokens.write(
@@ -107,7 +110,7 @@ void main() {
       final renewed = (await tokens.read())!;
       expect(renewed.refreshToken, isNot(signedIn.refreshToken));
 
-      await c.api.post<void>('/auth/logout');
+      await auth.logout();
 
       // The session is revoked: the refresh fails and the app hears of it.
       await expectLater(

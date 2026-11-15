@@ -98,7 +98,7 @@ Release builds are obfuscated (`--obfuscate --split-debug-info=build/symbols`); 
 - **Components** (`components/`): `MonthraCard` (tappable cards get keyboard focus, hover and a focus ring), `AmountText` (minor units in the locale's format, colored and signed by kind, counting to new values), `CategoryIcon`/`CategoryBadge` (a category's Lucide icon and color, with the color moved until it reads on its tint), `EmptyState`, `ErrorState`, `Skeleton`/`SkeletonText` (pulsing in step, still under reduced motion) and `ButtonLabel` (a button label that shortens instead of overflowing at large text sizes).
 - **Money** (`lib/core/money/`): `Currency` (BRL, USD, EUR) and `MoneyFormat.format(minor, currency, locale)`: `R$ 1.234,56` / `US$ 1.234,56` in pt-BR, `1.234,56 €` in es-ES, `$1,234.56` in en-US, the typographic minus (U+2212), exact up to the API's 10^13 cents.
 - **Accessibility**: text roles read at 4.5:1 or more on every surface of both themes (`contrast_test.dart`); the catalog passes Flutter's tap target (44 px) and label guidelines, a color-based check of every text (4.5:1) and icon (3:1) against what is painted behind it (`test/helpers/contrast.dart`), and lays out at twice the text size. An icon-only button carries a label on its `Icon` (`semanticLabel`).
-- **Catalog**: `make run-web` opens on it (outside production only), with the real theme and language pickers in its header.
+- **Catalog**: `/design-system` (outside production only), with the real theme and language pickers in its header.
 
 ### Fonts
 
@@ -123,7 +123,7 @@ The UI speaks pt-BR (default), es-ES and en-US (§7.6 of CLAUDE.md). No screen w
 - **Language names** are written in themselves ("Português (Brasil)", "Español (España)", "English (US)") in every UI language, so they live in `AppLocale`, not in the ARB files.
 - **Which language:** the one the person picked, else the first device language that is Portuguese, Spanish or English whatever the region (pt-PT -> pt-BR, es-MX -> es-ES, en-GB -> en-US, the same rule as the API's `Accept-Language` matcher), else pt-BR. A change applies at once, without a restart. Numbers, money and dates take the locale from the context (`Localizations.localeOf`), never from `Intl.defaultLocale`. On the web Flutter writes `<html lang>` itself.
 - **Preferences** (`lib/features/settings/preferences/`): `preferencesProvider` (Riverpod, generated with `riverpod_generator`) holds the language (null = follow the device) and the theme (System, Light, Dark); `appLocaleProvider` is the language in effect, the one source for the UI and the API client's `Accept-Language` (read on every call). They are kept in `shared_preferences` (nothing sensitive), read in `main` before the first frame, so the app opens in the saved theme and language. The profile sync (`PATCH /me/preferences`, the server's value wins at sign-in) comes with the sign-in and settings screens.
-- **Pickers:** `LanguagePicker` and `ThemePreferencePicker`, for the login and landing screens and the settings (today in the catalog header).
+- **Pickers:** `LanguagePicker` and `ThemePreferencePicker`, for the settings and the public landing page (today in the catalog header and the provisional start page). The sign-in pages show none: before signing in the app follows the device, after it the profile.
 - **No flash on the web:** the app also saves a small hint (`localStorage` `monthra.boot`, its own key); `web/boot.js` runs before the page paints and applies the saved theme and language, so a dark choice on a light system (or the other way round) never flashes the other theme. Without a hint the splash follows `prefers-color-scheme`. The native splash screens follow the system: they cannot read the app's preferences.
 - **Generated code** (`make gen`): the localizations, the Riverpod providers and the models (`*.g.dart`, `*.freezed.dart`) are committed; CI regenerates them and fails on a difference.
 
@@ -133,12 +133,12 @@ The UI speaks pt-BR (default), es-ES and en-US (§7.6 of CLAUDE.md). No screen w
 
 | Exception | When |
 |---|---|
-| `ApiProblemException` | the API answered with a problem (`application/problem+json`): branch on `code` (`ProblemCode`), show `problem.title`/`detail` (already translated), map `problem.errors` to the form fields (`codesOf('name')`, `FieldCode`); `retryAfter` on a `429` |
+| `ApiProblemException` | the API answered with a problem (`application/problem+json`): branch on `code` (`ProblemCode`), map `problem.errors` to the form fields (`codesOf('name')`, `FieldCode`); `retryAfter` on a `429` |
 | `NetworkException` / `ApiTimeoutException` | no connection / too slow |
 | `CancelledException` | the call's `CancelToken` was cancelled |
 | `UnexpectedApiException` | an error without a problem body (a proxy page), an unreadable body, a client bug |
 
-Each one carries the `requestId` (`X-Request-ID`) to match the server's logs.
+Each one carries the `requestId` (`X-Request-ID`) to match the server's logs. Screens turn them into text with `ApiErrorText` (`l10n.apiError(e)`, `l10n.fieldError(code)`): the app's own sentence per known code, and the request id as a reference only when the failure is unexpected; never the server's `detail` as it came.
 
 **How the session travels.** The server tells a browser from a device by the `Origin` header:
 
@@ -154,6 +154,27 @@ Each one carries the `requestId` (`X-Request-ID`) to match the server's logs.
 **Against the real API:** `make test-live` runs `test/live/` (sign-in, renewal, sign-out as a device) with the server up and seeded (`make up && make seed` in monthra-server; pass the printed password as `MONTHRA_DEMO_PASSWORD`). `flutter test` skips it.
 
 **Models** use `freezed` + `json_serializable` (`build.yaml`: `checked`, `explicit_to_json`); their generated `*.freezed.dart`/`*.g.dart` are committed like the rest (`make gen`).
+
+## Routes and sign-in
+
+`lib/app/router.dart` (go_router). Paths are clean on the web and keep the fragment (`PathUrlStrategy` with `includeHash`), because the email links carry their token there:
+
+| Path | Who | Page |
+|---|---|---|
+| `/` | signed in | the start page (a greeting and sign-out until the app shell lands) |
+| `/login`, `/login/mfa`, `/register`, `/forgot-password` | signed out | sign-in, the two-step code, sign-up, the reset request |
+| `/verify-email#token=…`, `/reset-password#token=…` | anyone | the links of the account emails |
+| `/design-system` | anyone, outside production | the design system catalog (the route does not exist in production) |
+
+- **Guards** (`authRedirect`, a pure function): signed out, a page that needs a session goes to `/login?from=<path>`; signed in, the signed-out pages go on to `from` or `/`. `from` is only followed when it is a path of the app (`safeReturnPath`: no scheme, host, `//`, `\`, control characters or fragment), so a crafted link cannot send anyone elsewhere after signing in.
+- **Start-up:** while the app checks an earlier session (`GET /me`) only the boot screen shows, and no page is built. A device checks when it holds tokens; the web when `localStorage['monthra.session']` says it signed in here (a mark with no secret: the session stays in the `HttpOnly` cookies), so an anonymous visit costs no request. An unreachable API shows "try again".
+- **Session state** (`authControllerProvider`): booting, signed in (the profile, `Me`), signed out (with a notice: session ended, password changed, two-step expired), awaiting the two-step code (the challenge lives only in memory and expires with it), unavailable. Each time the profile loads, its language and theme replace the local ones (the server wins, §7.6).
+- **Email links:** `/verify-email` sends its token once when it opens; `/reset-password` asks for the new password. Both take the token out of the address bar and the browser history right after reading it (`Router.neglect`: the history entry is replaced). A dead link offers a new one.
+- **Signing out:** a device always forgets its tokens, even when the server cannot be told; a browser stays signed in and says so when the call fails, because its cookies only go away through the server.
+- **Captcha:** the server asks for Cloudflare Turnstile only when `TURNSTILE_SECRET` is set (no environment does yet); until the captcha pull request, `captcha_required` reads as "too many attempts, try again later".
+- **Deep links on devices:** the routes already handle `/verify-email#token=…`, but App Links (Android) and Universal Links (iOS) need the domain (pending with the cloud provider). Until then an email link opens the web app in the browser.
+
+**Try it locally:** with the server up (`make up && make seed` in monthra-server) and `make run-web` (or `flutter run -d web-server --web-port 3000 --dart-define-from-file=env/local.json`), sign up at `http://localhost:3000/register`; the confirmation and reset emails land in Mailpit (`http://localhost:8025`), and their links open the app on port 3000.
 
 ## Icons and splash screens
 

@@ -1,11 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monthra/app/app.dart';
+import 'package:monthra/app/not_found_page.dart';
+import 'package:monthra/app/router.dart';
 import 'package:monthra/core/config/env.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/design_system/components/amount_text.dart';
 import 'package:monthra/core/money/currency.dart';
 import 'package:monthra/core/money/money_format.dart';
+import 'package:monthra/features/auth/presentation/login_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
@@ -33,30 +35,42 @@ void main() {
 
   /// The locale the home page formats and translates with.
   Locale homeLocale(WidgetTester tester) =>
-      Localizations.localeOf(tester.element(tester.appHome));
+      Localizations.localeOf(tester.element(tester.appPage));
 
   for (final appEnv in [AppEnv.local, AppEnv.staging]) {
-    testWidgets('shows the design system catalog in ${appEnv.name}', (
+    testWidgets('serves the design system catalog in ${appEnv.name}', (
       tester,
     ) async {
       // The catalog's skeletons would keep pumpAndSettle busy.
       tester.reduceMotion();
-      await tester.pumpMonthraApp(env: envFor(appEnv));
+      await tester.pumpMonthraApp(
+        env: envFor(appEnv),
+        location: AppRoutes.designSystem,
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(DesignSystemCatalog), findsOneWidget);
       expect(find.text(appEnv.name), findsOneWidget);
-      expect(find.byType(PlaceholderPage), findsNothing);
     });
   }
 
-  testWidgets('shows the brand page in production', (tester) async {
+  testWidgets('has no catalog in production', (tester) async {
+    await tester.pumpMonthraApp(
+      env: envFor(AppEnv.production),
+      location: AppRoutes.designSystem,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NotFoundPage), findsOneWidget);
+    expect(find.byType(DesignSystemCatalog), findsNothing);
+  });
+
+  testWidgets('opens on the sign-in page when signed out', (tester) async {
     await tester.pumpMonthraApp(env: envFor(AppEnv.production));
     await tester.pumpAndSettle();
 
-    expect(find.byType(PlaceholderPage), findsOneWidget);
-    expect(find.text('Monthra'), findsOneWidget);
-    expect(find.byType(DesignSystemCatalog), findsNothing);
+    expect(find.byType(LoginPage), findsOneWidget);
+    expect(tester.appLocation.path, AppRoutes.login);
   });
 
   testWidgets('uses the Monthra theme and follows a dark system', (
@@ -66,7 +80,7 @@ void main() {
     await tester.pumpMonthraApp(env: envFor(AppEnv.production));
     await tester.pumpAndSettle();
 
-    final theme = tester.themeAt(find.byType(PlaceholderPage));
+    final theme = tester.themeAt(find.byType(LoginPage));
     expect(theme.brightness, Brightness.dark);
     expect(theme.textTheme.family, 'Inter');
     expect(theme.colorScheme.background, const Color(0xFF141414));
@@ -89,8 +103,8 @@ void main() {
           const AppPreferences(theme: ThemePreference.dark),
         ),
       );
-      // No settling: the first frame the home shows is already dark.
-      final page = find.byType(PlaceholderPage);
+      // No settling: the first frame the app shows is already dark.
+      final page = tester.appPage;
       expect(tester.themeAt(page).brightness, Brightness.dark);
       expect(
         tester.themeAt(page).colorScheme.background,
@@ -124,7 +138,7 @@ void main() {
     testWidgets('amounts follow the UI language', (tester) async {
       tester.reduceMotion();
       deviceLocales(tester, const [Locale('pt', 'BR')]);
-      await tester.pumpMonthraApp();
+      await tester.pumpMonthraApp(location: AppRoutes.designSystem);
       await tester.pumpAndSettle();
       // The catalog's "Kinds" row: an expense of R$ 129,90 (in the UI
       // language, since it names no locale).
@@ -144,7 +158,7 @@ void main() {
       await tester.appContainer
           .read(preferencesProvider.notifier)
           .setLocale(AppLocale.enUs);
-      await tester.pumpUntilLocalized(tester.appHome, AppLocale.enUs);
+      await tester.pumpUntilLocalized(tester.appPage, AppLocale.enUs);
       await tester.pumpAndSettle();
       expect(shown(), MoneyFormat.format(-12990, Currency.brl, enUS));
       expect(shown(), endsWith(r'R$129.90'));
@@ -156,7 +170,10 @@ void main() {
       tester.reduceMotion();
       deviceLocales(tester, const [Locale('pt', 'BR')]);
       final store = MemoryPreferencesStore();
-      await tester.pumpMonthraApp(store: store);
+      await tester.pumpMonthraApp(
+        store: store,
+        location: AppRoutes.designSystem,
+      );
       await tester.pumpAndSettle();
       expect(find.text('Escuro'), findsOneWidget);
       final catalog = tester.element(find.byType(DesignSystemCatalog));
@@ -164,7 +181,7 @@ void main() {
       await tester.tap(find.byType(LanguagePicker));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Español (España)').last);
-      await tester.pumpUntilLocalized(tester.appHome, AppLocale.esEs);
+      await tester.pumpUntilLocalized(tester.appPage, AppLocale.esEs);
       await tester.pumpAndSettle();
 
       expect(find.text('Oscuro'), findsOneWidget);
@@ -179,7 +196,10 @@ void main() {
       tester.reduceMotion();
       deviceLocales(tester, const [Locale('en', 'US')]);
       final hints = <SavedBootHint>[];
-      await tester.pumpMonthraApp(bootHints: hints);
+      await tester.pumpMonthraApp(
+        bootHints: hints,
+        location: AppRoutes.designSystem,
+      );
       await tester.pumpAndSettle();
       expect(hints, [(languageTag: 'en-US', theme: null)]);
 

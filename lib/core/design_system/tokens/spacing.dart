@@ -20,6 +20,11 @@ abstract final class MonthraLayout {
   /// Smallest side of anything that takes a tap (§4.4).
   static const double minTouchTarget = 44;
 
+  /// A field holding a button (show password): the button keeps a whole
+  /// touch target inside the field's 1 px border. The other fields of the
+  /// same form take this height too, so they line up.
+  static const double fieldWithButtonHeight = minTouchTarget + 2;
+
   /// Widest a centered message (empty and error states) gets.
   static const double maxMessageWidth = 360;
 }

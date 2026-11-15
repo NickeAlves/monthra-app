@@ -40,6 +40,11 @@ SessionEvents sessionEvents(Ref ref) {
   return events;
 }
 
+/// How requests leave the app ([createHttpAdapter]); tests answer them with
+/// a fake.
+@Riverpod(keepAlive: true)
+HttpClientAdapter httpAdapter(Ref ref) => createHttpAdapter();
+
 /// The configured `Dio` ([createApiDio]); features use [apiClientProvider].
 @Riverpod(keepAlive: true)
 Dio apiDio(Ref ref) {
@@ -52,7 +57,7 @@ Dio apiDio(Ref ref) {
     // Read per request: a language switch applies to the next call.
     languageTag: () => ref.read(apiLanguageProvider),
     onSessionEvent: events.add,
-    adapter: createHttpAdapter(),
+    adapter: ref.watch(httpAdapterProvider),
     log: kDebugMode ? debugPrint : null,
   );
   ref.onDispose(dio.close);
