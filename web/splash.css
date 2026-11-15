@@ -1,0 +1,28 @@
+/* Web splash, shown until Flutter paints its first frame. Same colors as the
+   native splash screens (flutter_native_splash.yaml). */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #f5f5f3;
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: #141414;
+  }
+}
+
+#splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#splash img {
+  width: 96px;
+  height: 96px;
+}

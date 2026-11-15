@@ -1,0 +1,10 @@
+# Development server of `flutter run -d chrome` (make run-web), Flutter >= 3.38.
+# Port 3000 is the web origin the server's local .env allows
+# (CORS_ALLOWED_ORIGINS, APP_PUBLIC_URL). /api goes to the API on this
+# machine, so the app calls its own origin, as behind nginx or the infra proxy.
+server:
+  host: localhost
+  port: 3000
+  proxy:
+    - target: "http://localhost:8080/"
+      prefix: "/api/"

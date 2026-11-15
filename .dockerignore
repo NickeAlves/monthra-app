@@ -1,0 +1,17 @@
+# Only what the web build needs reaches the build context.
+.git
+.github
+.dart_tool
+.idea
+.vscode
+build
+coverage
+android
+ios
+test
+integration_test
+*.md
+.env
+.env.*
+docker-compose*.yml
+Makefile

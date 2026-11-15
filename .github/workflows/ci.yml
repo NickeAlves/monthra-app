@@ -28,8 +28,154 @@ jobs:
         run: |
           file="gitleaks_${VERSION}_linux_x64.tar.gz"
           base="https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}"
-          curl -sSfLO "${base}/${file}"
-          curl -sSfL "${base}/gitleaks_${VERSION}_checksums.txt" | grep " ${file}\$" | sha256sum -c -
+          # GitHub release downloads fail with 5xx now and then: retry them.
+          curl -sSfL --retry 5 --retry-all-errors --retry-delay 10 -O "${base}/${file}"
+          curl -sSfL --retry 5 --retry-all-errors --retry-delay 10 "${base}/gitleaks_${VERSION}_checksums.txt" | grep " ${file}\$" | sha256sum -c -
           tar -xzf "${file}" gitleaks
       - name: Scan the full history
         run: ./gitleaks git --no-banner --redact --verbose .
+
+  analyze:
+    name: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The Flutter version is the one pinned in pubspec.yaml (environment.flutter).
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: pubspec.yaml
+          channel: stable
+          cache: true
+      - name: Packages (exactly as locked)
+        run: flutter pub get --enforce-lockfile
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed lib test
+      - name: Analyze (infos fail too)
+        run: flutter analyze --fatal-infos
+      - name: Outdated packages (informational)
+        run: flutter pub outdated
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: pubspec.yaml
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - name: Unit and widget tests
+        run: flutter test --coverage
+      - name: Coverage summary
+        run: |
+          awk -F: '/^LF:/ {found += $2} /^LH:/ {hit += $2}
+            END {printf "Line coverage: %.1f%% (%d of %d lines)\n", 100 * hit / found, hit, found}' \
+            coverage/lcov.info | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage
+          path: coverage/lcov.info
+          retention-days: 14
+
+  web:
+    name: web image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build the staging image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          target: runtime
+          push: false
+          load: true
+          tags: monthra-app:ci
+          build-args: |
+            FLUTTER_ENV=staging
+            VERSION=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      # Trivy runs from its pinned image instead of a third-party action.
+      - name: Trivy (HIGH and CRITICAL fail the build)
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb \
+            image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 monthra-app:ci
+      # The container runs as in compose (read-only, no capabilities); the
+      # script checks the routing, the CSP nonce and the security headers.
+      - name: Smoke test
+        run: |
+          docker run -d --name web --read-only --tmpfs /tmp --cap-drop ALL \
+            --security-opt no-new-privileges:true -p 127.0.0.1:8080:8080 monthra-app:ci
+          trap 'docker logs web' EXIT
+          for _ in $(seq 30); do
+            [ "$(docker inspect -f '{{.State.Health.Status}}' web)" = healthy ] && break
+            sleep 1
+          done
+          scripts/smoke-web.sh http://127.0.0.1:8080
+
+  android:
+    name: android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: pubspec.yaml
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - name: Debug build (dev flavor)
+        run: flutter build apk --debug --flavor dev --dart-define-from-file=env/local.json
+      - name: Release build (prod flavor, obfuscated)
+        run: |
+          flutter build apk --release --flavor prod --dart-define-from-file=env/production.json \
+            --obfuscate --split-debug-info=build/symbols
+      - name: Application ids
+        run: |
+          aapt="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/aapt"
+          check() {
+            got=$("$aapt" dump badging "$1" | grep -o "^package: name='[^']*'" | cut -d"'" -f2)
+            echo "$1: $got"
+            [ "$got" = "$2" ] || { echo "::error::$1 is $got, expected $2"; exit 1; }
+          }
+          check build/app/outputs/flutter-apk/app-dev-debug.apk com.nickealves.monthra.dev
+          check build/app/outputs/flutter-apk/app-prod-release.apk com.nickealves.monthra
+
+  ios:
+    name: ios
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: pubspec.yaml
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - name: Release build (prod flavor, obfuscated, unsigned)
+        run: |
+          flutter build ios --release --no-codesign --flavor prod --dart-define-from-file=env/production.json \
+            --obfuscate --split-debug-info=build/symbols
+      - name: Bundle id
+        run: |
+          got=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' build/ios/iphoneos/Runner.app/Info.plist)
+          echo "bundle id: $got"
+          [ "$got" = com.nickealves.monthra ] || { echo "::error::bundle id is $got"; exit 1; }

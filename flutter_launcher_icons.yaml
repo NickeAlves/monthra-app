@@ -1,0 +1,23 @@
+# Launcher icons for every flavor: `make icons` (dart run flutter_launcher_icons).
+# The adaptive, monochrome and iOS 18 layers in assets/icon/ are drawn from the
+# brand bars (see the README); the rest comes from assets/brand/ as shipped.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  min_sdk_android: 24
+  # Legacy Android icon (before adaptive icons): the rounded square.
+  image_path_android: assets/brand/monthra-icone-app-1024.png
+  adaptive_icon_background: "#1E6B52"
+  adaptive_icon_foreground: assets/icon/android-foreground.png
+  # The foreground already sits inside the safe zone.
+  adaptive_icon_foreground_inset: 0
+  adaptive_icon_monochrome: assets/icon/android-monochrome.png
+  # iOS masks the corners itself: full-bleed square, no alpha.
+  image_path_ios: assets/brand/monthra-icone-app-quadrado-1024.png
+  remove_alpha_ios: true
+  background_color_ios: "#1E6B52"
+  image_path_ios_dark_transparent: assets/icon/ios-dark.png
+  image_path_ios_tinted_grayscale: assets/icon/ios-tinted.png
+  # The web icons are copied by hand (web/icons), next to the hand-written index.html.
+  web:
+    generate: false
