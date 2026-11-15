@@ -36,12 +36,15 @@ COPY --chown=flutter . .
 ARG FLUTTER_ENV=local
 # --no-web-resources-cdn bundles CanvasKit and the fallback fonts (nothing is
 # fetched from gstatic.com); --csp keeps the JavaScript free of eval.
+# tool/prune_web_fonts.dart drops the icon font weights nothing draws with
+# (the engine would download them before the first frame).
 # Every compressible file gets a .gz twin for gzip_static, except index.html,
 # which nginx rewrites (CSP nonce). Debug symbols stay out of the image.
 RUN test -f "env/${FLUTTER_ENV}.json" \
  && flutter build web --release --csp --no-web-resources-cdn \
       --dart-define-from-file="env/${FLUTTER_ENV}.json" \
       --output /home/flutter/app/build/web \
+ && dart run tool/prune_web_fonts.dart build/web \
  && find build/web -name '*.symbols' -delete \
  && find build/web -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.wasm' -o -name '*.json' \
       -o -name '*.css' -o -name '*.svg' -o -name '*.otf' -o -name '*.ttf' -o -name 'NOTICES' \) \

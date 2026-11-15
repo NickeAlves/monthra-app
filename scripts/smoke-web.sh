@@ -39,6 +39,14 @@ curl -sS "$base/verify-email" | grep -q 'flutter_bootstrap.js' || fail "app rout
 curl -sSf "$base/flutter_bootstrap.js" | grep -q '"useLocalCanvasKit":true' || fail "CanvasKit must be bundled"
 [ "$(curl -sS -o /dev/null -w '%{content_type}' "$base/canvaskit/canvaskit.wasm")" = application/wasm ] \
   || fail "wasm content type"
+# The UI font is bundled (font-src 'self'), served as a font and compressed.
+font="$base/assets/assets/fonts/inter/Inter-Regular.ttf"
+[ "$(curl -sS -o /dev/null -w '%{content_type}' "$font")" = font/ttf ] || fail "font content type"
+curl -sS -H 'Accept-Encoding: gzip' -D - -o /dev/null "$font" | grep -qi '^content-encoding: gzip' \
+  || fail "fonts must be served compressed"
+# tool/prune_web_fonts.dart ran: the unused icon font weights are gone.
+! curl -sSf "$base/assets/FontManifest.json" | grep -q 'lucide_icons_flutter/Lucide[1-9]00' \
+  || fail "unused Lucide weights still in FontManifest.json"
 curl -sS -H 'Accept-Encoding: gzip' -D - -o /dev/null "$base/main.dart.js" | grep -qi '^content-encoding: gzip' \
   || fail "main.dart.js must be served compressed"
 
