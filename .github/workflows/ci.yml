@@ -50,10 +50,27 @@ jobs:
           cache: true
       - name: Packages (exactly as locked)
         run: flutter pub get --enforce-lockfile
+      # §7.6: every language has every key (gen-l10n only warns).
+      - name: Translations agree
+        run: dart run tool/check_l10n.dart
+      # The localizations and Riverpod providers are generated and committed:
+      # regenerate them and fail on any difference (make gen).
+      - name: Generated code is current
+        run: |
+          flutter gen-l10n
+          dart run build_runner build --delete-conflicting-outputs
+          git diff --exit-code
+          untracked=$(git status --porcelain --untracked-files=all)
+          if [ -n "$untracked" ]; then
+            echo "::error::make gen leaves files to commit:"
+            echo "$untracked"
+            exit 1
+          fi
       - name: Format
         run: dart format --output=none --set-exit-if-changed lib test tool
+      # dart analyze runs the analyzer plugins (riverpod_lint); flutter analyze does not.
       - name: Analyze (infos fail too)
-        run: flutter analyze --fatal-infos
+        run: dart analyze --fatal-infos
       - name: Outdated packages (informational)
         run: flutter pub outdated
 
