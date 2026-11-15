@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +9,7 @@ import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/design_system/catalog/sample_categories.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 
+import '../../helpers/contrast.dart';
 import '../../helpers/frame.dart';
 
 final local = Env(
@@ -30,24 +33,48 @@ Future<void> pumpCatalog(
   await tester.pumpAndSettle();
 }
 
+/// Checks [guideline] on every screen of the catalog, scrolling a viewport
+/// at a time, as a person would see it.
+Future<void> expectOnEveryScreen(
+  WidgetTester tester,
+  AccessibilityGuideline guideline,
+) async {
+  final position = tester
+      .state<ScrollableState>(find.byType(Scrollable).first)
+      .position;
+  while (true) {
+    await expectLater(tester, meetsGuideline(guideline));
+    if (position.pixels >= position.maxScrollExtent) break;
+    position.jumpTo(
+      math.min(
+        position.pixels + position.viewportDimension * 0.75,
+        position.maxScrollExtent,
+      ),
+    );
+    await tester.pump();
+  }
+}
+
 void main() {
   for (final brightness in Brightness.values) {
     group('on a phone, ${brightness.name}', () {
-      const phone = Size(390, 6000);
+      const phone = Size(390, 844);
 
       testWidgets('every tap target is at least 44 px', (tester) async {
         await pumpCatalog(tester, size: phone, brightness: brightness);
-        await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+        await expectOnEveryScreen(tester, iOSTapTargetGuideline);
       });
 
       testWidgets('every tap target has a label', (tester) async {
         await pumpCatalog(tester, size: phone, brightness: brightness);
-        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+        await expectOnEveryScreen(tester, labeledTapTargetGuideline);
       });
 
-      testWidgets('every text reads at AA contrast', (tester) async {
+      // By color, not by pixels: see helpers/contrast.dart.
+      testWidgets('every text and icon reads at AA contrast', (tester) async {
         await pumpCatalog(tester, size: phone, brightness: brightness);
-        await expectLater(tester, meetsGuideline(textContrastGuideline));
+        expect(find.byType(RichText), findsWidgets);
+        expect(contrastIssues(tester), isEmpty);
       });
     });
   }
