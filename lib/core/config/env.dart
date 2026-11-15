@@ -29,13 +29,21 @@ class EnvException implements Exception {
 /// Build-time configuration, read from `--dart-define-from-file=env/<env>.json`.
 @immutable
 class Env {
-  const new({required this.appEnv, required this.apiBaseUrl, this.sentryDsn});
+  const new({
+    required this.appEnv,
+    required this.apiBaseUrl,
+    this.sentryDsn,
+    this.appPublicUrl,
+    this.turnstileSiteKey,
+  });
 
   /// Reads the compile-time defines of this build.
   factory fromEnvironment() => Env.parse(
     appEnv: const String.fromEnvironment('APP_ENV'),
     apiBaseUrl: const String.fromEnvironment('API_BASE_URL'),
     sentryDsn: const String.fromEnvironment('SENTRY_DSN'),
+    appPublicUrl: const String.fromEnvironment('APP_PUBLIC_URL'),
+    turnstileSiteKey: const String.fromEnvironment('TURNSTILE_SITE_KEY'),
     flavor: appFlavor,
     webOrigin: kIsWeb ? Uri.base : null,
   );
@@ -50,10 +58,14 @@ class Env {
   /// are `SameSite=Strict`, and the CSP stays at `connect-src 'self'`. A
   /// proxy routes `/api` (web_dev_config.yaml locally, nginx in Docker, the
   /// infra proxy on a deployment), so `API_BASE_URL` only matters on mobile.
+  /// `APP_PUBLIC_URL` likewise: the web app is its own page origin, and a
+  /// device only needs it for the captcha page it hosts (empty = no captcha).
   factory parse({
     required String appEnv,
     required String apiBaseUrl,
     required String sentryDsn,
+    required String appPublicUrl,
+    required String turnstileSiteKey,
     required String? flavor,
     required Uri? webOrigin,
   }) {
@@ -65,12 +77,16 @@ class Env {
       );
     }
     final dsn = sentryDsn.isEmpty ? null : sentryDsn;
+    final siteKey = _parseSiteKey(turnstileSiteKey);
 
     if (webOrigin != null) {
+      final origin = Uri.parse(webOrigin.origin);
       return Env(
         appEnv: env,
-        apiBaseUrl: Uri.parse(webOrigin.origin),
+        apiBaseUrl: origin,
         sentryDsn: dsn,
+        appPublicUrl: origin,
+        turnstileSiteKey: siteKey,
       );
     }
 
@@ -80,19 +96,34 @@ class Env {
         'got ${flavor ?? 'none'}: build with --flavor ${env.flavor}',
       );
     }
-    return Env(
-      appEnv: env,
-      apiBaseUrl: _parseApiBaseUrl(env, apiBaseUrl),
-      sentryDsn: dsn,
-    );
-  }
-
-  static Uri _parseApiBaseUrl(AppEnv env, String raw) {
-    if (raw.isEmpty) {
+    if (apiBaseUrl.isEmpty) {
       throw EnvException(
         'API_BASE_URL is required on mobile (env/${env.name}.json)',
       );
     }
+    return Env(
+      appEnv: env,
+      apiBaseUrl: _parseOrigin('API_BASE_URL', env, apiBaseUrl),
+      sentryDsn: dsn,
+      appPublicUrl: appPublicUrl.isEmpty
+          ? null
+          : _parseOrigin('APP_PUBLIC_URL', env, appPublicUrl),
+      turnstileSiteKey: siteKey,
+    );
+  }
+
+  /// A Turnstile site key: public, letters, digits, `_` and `-`.
+  static final _siteKeyPattern = RegExp(r'^[0-9A-Za-z_-]{1,64}$');
+
+  static String? _parseSiteKey(String raw) {
+    if (raw.isEmpty) return null;
+    if (!_siteKeyPattern.hasMatch(raw)) {
+      throw EnvException('TURNSTILE_SITE_KEY is not a site key: "$raw"');
+    }
+    return raw;
+  }
+
+  static Uri _parseOrigin(String name, AppEnv env, String raw) {
     final uri = Uri.tryParse(raw);
     final isHttp =
         uri != null && (uri.isScheme('http') || uri.isScheme('https'));
@@ -103,12 +134,11 @@ class Env {
         uri.userInfo.isNotEmpty ||
         (uri.path.isNotEmpty && uri.path != '/')) {
       throw EnvException(
-        'API_BASE_URL must be an origin like https://api.example.com, '
-        'got "$raw"',
+        '$name must be an origin like https://app.example.com, got "$raw"',
       );
     }
     if (env != AppEnv.local && !uri.isScheme('https')) {
-      throw EnvException('API_BASE_URL must use https in ${env.name}');
+      throw EnvException('$name must use https in ${env.name}');
     }
     return Uri.parse(uri.origin);
   }
@@ -124,6 +154,22 @@ class Env {
   /// Error reporting, unused until a provider is wired.
   final String? sentryDsn;
 
+  /// The web app's origin: the page origin on the web, `APP_PUBLIC_URL` on a
+  /// device (null when unset). It serves the captcha page.
+  final Uri? appPublicUrl;
+
+  /// The Cloudflare Turnstile site key (public), null when the build has none.
+  final String? turnstileSiteKey;
+
+  /// The captcha page (`web/turnstile.html` as served by the web app), or
+  /// null when this build cannot show one: then a captcha request reads as
+  /// "try again later".
+  Uri? get captchaPage {
+    final origin = appPublicUrl;
+    if (origin == null || turnstileSiteKey == null) return null;
+    return origin.replace(path: '/turnstile.html');
+  }
+
   bool get isProduction => appEnv == AppEnv.production;
 
   @override
@@ -131,8 +177,16 @@ class Env {
       other is Env &&
       other.appEnv == appEnv &&
       other.apiBaseUrl == apiBaseUrl &&
-      other.sentryDsn == sentryDsn;
+      other.sentryDsn == sentryDsn &&
+      other.appPublicUrl == appPublicUrl &&
+      other.turnstileSiteKey == turnstileSiteKey;
 
   @override
-  int get hashCode => Object.hash(appEnv, apiBaseUrl, sentryDsn);
+  int get hashCode => Object.hash(
+    appEnv,
+    apiBaseUrl,
+    sentryDsn,
+    appPublicUrl,
+    turnstileSiteKey,
+  );
 }
