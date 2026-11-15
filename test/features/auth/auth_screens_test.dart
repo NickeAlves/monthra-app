@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/app/app.dart';
 import 'package:monthra/app/router.dart';
+import 'package:monthra/features/auth/captcha/captcha_message.dart';
 import 'package:monthra/features/auth/presentation/mfa_page.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
@@ -11,6 +12,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../../helpers/app.dart';
 import '../../helpers/auth_fixtures.dart';
+import '../../helpers/captcha.dart';
 import '../../helpers/contrast.dart';
 import '../../helpers/fake_api.dart';
 import '../../helpers/frame.dart';
@@ -129,4 +131,80 @@ void main() {
       }
     });
   }
+
+  group('login with the security check', () {
+    /// The sign-in page after the server asked for a check, the widget on
+    /// screen (a stand-in: tests have no webview).
+    Future<void> pumpCaptcha(
+      WidgetTester tester, {
+      required Size size,
+      Brightness brightness = Brightness.light,
+    }) async {
+      tester.view
+        ..physicalSize = size
+        ..devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      tester.platformDispatcher.platformBrightnessTestValue = brightness;
+      addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+      tester.reduceMotion();
+      final captcha = FakeCaptcha();
+      await tester.pumpMonthraApp(
+        env: captchaEnv,
+        captcha: captcha,
+        store: MemoryPreferencesStore(
+          const AppPreferences(locale: AppLocale.ptBr),
+        ),
+        api: FakeAdapter(
+          (r) => r.path.endsWith('/auth/login')
+              ? Reply.problem(403, 'captcha_required')
+              : Reply.problem(404, 'not_found'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(EditableText).first, 'a@b.co');
+      await tester.enterText(find.byType(EditableText).last, 'a password');
+      await tester.tap(find.widgetWithText(ShadButton, pt.authSignInButton));
+      await tester.pumpAndSettle();
+      captcha.post(const CaptchaReady());
+      await tester.pumpAndSettle();
+      expect(find.text(pt.authCaptchaLabel), findsOneWidget);
+    }
+
+    for (final brightness in Brightness.values) {
+      testWidgets('on a phone, ${brightness.name}: 44 px labeled targets and '
+          'AA contrast', (tester) async {
+        final semantics = tester.ensureSemantics();
+        await pumpCaptcha(tester, size: tallPhone, brightness: brightness);
+        await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+        expect(contrastIssues(tester), isEmpty);
+        semantics.dispose();
+      });
+
+      testWidgets('golden ${brightness.name}', tags: ['golden'], (
+        tester,
+      ) async {
+        await pumpCaptcha(tester, size: tallPhone, brightness: brightness);
+        if (!goldensRunHere) {
+          markTestSkipped('image comparison runs on Linux only (see README)');
+          return;
+        }
+        await expectLater(
+          find.byType(MonthraApp),
+          matchesGoldenFile(
+            'goldens/login_captcha_phone_${brightness.name}.png',
+          ),
+        );
+      });
+    }
+
+    testWidgets('copes with twice the text size and a narrow phone', (
+      tester,
+    ) async {
+      tester.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      await pumpCaptcha(tester, size: const Size(320, 1400));
+      expect(tester.takeException(), isNull);
+    });
+  });
 }

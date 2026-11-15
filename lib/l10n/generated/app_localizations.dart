@@ -502,11 +502,47 @@ abstract class AppLocalizations {
   /// **'Too many attempts. Try again in a moment.'**
   String get errorRateLimitedSoon;
 
-  /// Error when the server asks for a captcha after repeated failures.
+  /// Error when the server asks for a captcha after repeated failures and this build has no captcha to show (no site key).
   ///
   /// In en, this message translates to:
   /// **'Too many attempts in a row. Wait a few minutes and try again.'**
   String get errorCaptcha;
+
+  /// Label above the Cloudflare Turnstile widget, also the frame title read by screen readers.
+  ///
+  /// In en, this message translates to:
+  /// **'Security check'**
+  String get authCaptchaLabel;
+
+  /// Alert when the server asks for a captcha; the form is sent again by itself once the check passes.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts in a row. Complete the security check below to go on.'**
+  String get authCaptchaPrompt;
+
+  /// Alert when the server refused the captcha token (captcha_invalid); a new check starts below.
+  ///
+  /// In en, this message translates to:
+  /// **'The security check wasn\'t accepted. Try it again below.'**
+  String get authCaptchaRejected;
+
+  /// Error in place of the captcha widget when it failed to load, above a retry button.
+  ///
+  /// In en, this message translates to:
+  /// **'The security check couldn\'t load. Check your connection and try again.'**
+  String get authCaptchaFailed;
+
+  /// Error in place of the captcha widget when the browser or webview cannot run Cloudflare Turnstile.
+  ///
+  /// In en, this message translates to:
+  /// **'This browser can\'t run the security check. Update it or use another one.'**
+  String get authCaptchaUnsupported;
+
+  /// Note under the captcha widget while the form waits for it (the send button is off meanwhile).
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the security check…'**
+  String get authCaptchaHint;
 
   /// Two-step error: the code is wrong or was already used.
   ///

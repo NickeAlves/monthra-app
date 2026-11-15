@@ -306,7 +306,31 @@
   },
   "errorCaptcha": "Too many attempts in a row. Wait a few minutes and try again.",
   "@errorCaptcha": {
-    "description": "Error when the server asks for a captcha after repeated failures."
+    "description": "Error when the server asks for a captcha after repeated failures and this build has no captcha to show (no site key)."
+  },
+  "authCaptchaLabel": "Security check",
+  "@authCaptchaLabel": {
+    "description": "Label above the Cloudflare Turnstile widget, also the frame title read by screen readers."
+  },
+  "authCaptchaPrompt": "Too many attempts in a row. Complete the security check below to go on.",
+  "@authCaptchaPrompt": {
+    "description": "Alert when the server asks for a captcha; the form is sent again by itself once the check passes."
+  },
+  "authCaptchaRejected": "The security check wasn't accepted. Try it again below.",
+  "@authCaptchaRejected": {
+    "description": "Alert when the server refused the captcha token (captcha_invalid); a new check starts below."
+  },
+  "authCaptchaFailed": "The security check couldn't load. Check your connection and try again.",
+  "@authCaptchaFailed": {
+    "description": "Error in place of the captcha widget when it failed to load, above a retry button."
+  },
+  "authCaptchaUnsupported": "This browser can't run the security check. Update it or use another one.",
+  "@authCaptchaUnsupported": {
+    "description": "Error in place of the captcha widget when the browser or webview cannot run Cloudflare Turnstile."
+  },
+  "authCaptchaHint": "Waiting for the security check…",
+  "@authCaptchaHint": {
+    "description": "Note under the captcha widget while the form waits for it (the send button is off meanwhile)."
   },
   "errorMfaCodeInvalid": "Wrong or already used code. Wait for the next one.",
   "@errorMfaCodeInvalid": {

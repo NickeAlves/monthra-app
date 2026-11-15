@@ -5,9 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/router.dart';
+import 'package:monthra/core/config/env_provider.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/network/api_error_text.dart';
 import 'package:monthra/core/network/api_exception.dart';
+import 'package:monthra/features/auth/captcha/captcha_field.dart';
+import 'package:monthra/features/auth/captcha/captcha_gate.dart';
+import 'package:monthra/features/auth/captcha/captcha_request.dart';
 import 'package:monthra/features/auth/data/auth_api.dart';
 import 'package:monthra/features/auth/presentation/auth_layout.dart';
 import 'package:monthra/features/auth/presentation/widgets/auth_fields.dart';
@@ -19,7 +23,8 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// Name, email and password. The answer is the same whether or not the
 /// address is taken (no enumeration), so the page always moves on to
-/// "check your inbox".
+/// "check your inbox". After a few sign-ups from one address the server asks
+/// for a security check: the page shows it and sends again once it passes.
 class RegisterPage extends ConsumerStatefulWidget {
   const new({super.key});
 
@@ -33,6 +38,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _resendWait = Countdown();
+  late final CaptchaGate _captcha;
 
   bool _busy = false;
   ApiException? _error;
@@ -40,13 +46,25 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   bool _resent = false;
 
   @override
+  void initState() {
+    super.initState();
+    _captcha = CaptchaGate(available: ref.read(envProvider).captchaPage != null)
+      ..addListener(_onCaptchaChanged);
+  }
+
+  @override
   void dispose() {
     _name.dispose();
     _email.dispose();
     _password.dispose();
     _resendWait.dispose();
+    _captcha
+      ..removeListener(_onCaptchaChanged)
+      ..dispose();
     super.dispose();
   }
+
+  void _onCaptchaChanged() => setState(() {});
 
   ApiProblemException? get _problem => switch (_error) {
     final ApiProblemException p => p,
@@ -54,10 +72,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   };
 
   Future<void> _submit() async {
-    if (_busy) return;
+    if (_busy || _captcha.waitingForToken) return;
     setState(() => _error = null);
     if (!(_form.currentState?.validate() ?? false)) return;
     final email = _email.text.trim();
+    final captchaToken = _captcha.take();
     setState(() => _busy = true);
     try {
       await ref
@@ -66,6 +85,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             name: _name.text.trim(),
             email: email,
             password: _password.text,
+            captchaToken: captchaToken,
           );
       TextInput.finishAutofillContext();
       if (!mounted) return;
@@ -73,7 +93,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       _resendWait.start(resendCooldown);
       setState(() => _sentTo = email);
     } on ApiException catch (e) {
-      if (mounted) setState(() => _error = e);
+      if (!mounted) return;
+      _captcha.onError(e);
+      setState(() => _error = e);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -116,6 +138,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final l10n = context.l10n;
     final error = _error;
     final problem = _problem?.problem;
+    final captcha = captchaAlert(l10n, _captcha, error);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -123,7 +146,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           title: l10n.authRegisterTitle,
           subtitle: l10n.authRegisterSubtitle,
         ),
-        if (error != null) ...[
+        if (captcha != null) ...[
+          captcha,
+          const SizedBox(height: MonthraSpacing.x6),
+        ] else if (error != null) ...[
           FormAlert.error(l10n.apiError(error)),
           const SizedBox(height: MonthraSpacing.x6),
         ],
@@ -179,8 +205,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           ),
         ),
         const SizedBox(height: MonthraSpacing.x6),
+        if (_captcha.needed) ...[
+          CaptchaField(
+            gate: _captcha,
+            action: CaptchaAction.register,
+            onResend: () => unawaited(_submit()),
+          ),
+          const SizedBox(height: MonthraSpacing.x4),
+        ],
         ShadButton(
-          enabled: !_busy,
+          enabled: !_busy && !_captcha.waitingForToken,
           onPressed: _submit,
           child: ButtonLabel(l10n.authRegisterButton),
         ),
