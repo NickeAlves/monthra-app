@@ -83,7 +83,7 @@ Release builds are obfuscated (`--obfuscate --split-debug-info=build/symbols`); 
 
 `Dockerfile` builds the web app with Flutter 3.47.8 from its git tag (checked against the release commit, since no maintained image ships 3.47) and serves it with `nginxinc/nginx-unprivileged` (non-root, port 8080, read-only filesystem). `nginx/nginx.conf`:
 
-- **CSP without `unsafe-inline`:** nginx writes a fresh nonce (the request id) on the bootstrap script of every `index.html`; `web/flutter_bootstrap.js` hands it to the engine, which tags the styles and scripts it creates. CanvasKit and the fallback fonts are bundled (`--no-web-resources-cdn`), so nothing loads from another origin; `--csp` keeps the JavaScript free of `eval`; Trusted Types are enforced.
+- **CSP without `unsafe-inline`:** nginx writes a fresh nonce (the request id) on the script tags of every `index.html` (`boot.js` and the bootstrap); `web/flutter_bootstrap.js` hands it to the engine, which tags the styles and scripts it creates. CanvasKit and the fallback fonts are bundled (`--no-web-resources-cdn`), so nothing loads from another origin; `--csp` keeps the JavaScript free of `eval`; Trusted Types are enforced.
 - HSTS, `nosniff`, `frame-ancestors 'none'` / `X-Frame-Options: DENY`, `Referrer-Policy`, a restrictive `Permissions-Policy`, COOP/CORP, no nginx version.
 - SPA routing: paths without an extension serve the app (`/verify-email`, `/budgets`), a missing file is a 404.
 - `no-cache` with ETag revalidation everywhere: Flutter 3.47 builds carry no content hash (`--web-content-hash` needs 3.50).
@@ -98,7 +98,7 @@ Release builds are obfuscated (`--obfuscate --split-debug-info=build/symbols`); 
 - **Components** (`components/`): `MonthraCard` (tappable cards get keyboard focus, hover and a focus ring), `AmountText` (minor units in the locale's format, colored and signed by kind, counting to new values), `CategoryIcon`/`CategoryBadge` (a category's Lucide icon and color, with the color moved until it reads on its tint), `EmptyState`, `ErrorState`, `Skeleton`/`SkeletonText` (pulsing in step, still under reduced motion) and `ButtonLabel` (a button label that shortens instead of overflowing at large text sizes).
 - **Money** (`lib/core/money/`): `Currency` (BRL, USD, EUR) and `MoneyFormat.format(minor, currency, locale)`: `R$ 1.234,56` / `US$ 1.234,56` in pt-BR, `1.234,56 €` in es-ES, `$1,234.56` in en-US, the typographic minus (U+2212), exact up to the API's 10^13 cents.
 - **Accessibility**: text roles read at 4.5:1 or more on every surface of both themes (`contrast_test.dart`); the catalog passes Flutter's tap target (44 px) and label guidelines, a color-based check of every text (4.5:1) and icon (3:1) against what is painted behind it (`test/helpers/contrast.dart`), and lays out at twice the text size. An icon-only button carries a label on its `Icon` (`semanticLabel`).
-- **Catalog**: `make run-web` opens on it (outside production only), with a theme switch.
+- **Catalog**: `make run-web` opens on it (outside production only), with the real theme and language pickers in its header.
 
 ### Fonts
 
@@ -106,7 +106,7 @@ Inter 4.1, subset to Latin (latin + latin-ext, the minus sign, the currency bloc
 
 ### Golden tests
 
-Every component has golden images in both themes (`test/core/design_system/goldens/`). Font rasterization differs between macOS and Linux, so goldens are compared on Linux only: on a Mac, `make test` still lays every subject out (an overflow fails) and reports the comparison as skipped; CI is the reference. When a change moves pixels:
+Every component has golden images in both themes (`test/core/design_system/goldens/`, `test/features/**/goldens/`). Font rasterization differs between macOS and Linux, so goldens are compared on Linux only: on a Mac, `make test` still lays every subject out (an overflow fails) and reports the comparison as skipped; CI is the reference. When a change moves pixels:
 
 1. Push. The CI `test` job fails on the goldens, renders them again and uploads them as the `goldens` artifact (with the diff images of the failures).
 2. `make goldens-pull` (or `make goldens-pull RUN=<run id>`) copies them into `test/`.
@@ -114,9 +114,22 @@ Every component has golden images in both themes (`test/core/design_system/golde
 
 The comparison tolerates 0.1% of differing pixels (antialiasing noise between runners).
 
+## Languages and preferences
+
+The UI speaks pt-BR (default), es-ES and en-US (§7.6 of CLAUDE.md). No screen writes a UI string by hand.
+
+- **Strings:** `lib/l10n/app_pt.arb`, `app_es.arb` and `app_en.arb`, one file per language. `app_en.arb` is the template: each message has an `@key` entry with a `description` (and its `placeholders`). Keys are camelCase with an area prefix (`preferencesTheme`, `themeDark`). Read them with `context.l10n.themeDark` (`lib/l10n/l10n.dart`).
+- **Adding a string:** add it to the three files (description in `app_en.arb` only), run `make gen` and commit the generated `lib/l10n/generated/`. `make l10n-check` (also in `make lint` and CI) fails on a key missing from a language, a key only one language has, a missing description, a dropped placeholder or an empty message; CI also fails when the generated code is stale.
+- **Language names** are written in themselves ("Português (Brasil)", "Español (España)", "English (US)") in every UI language, so they live in `AppLocale`, not in the ARB files.
+- **Which language:** the one the person picked, else the first device language that is Portuguese, Spanish or English whatever the region (pt-PT -> pt-BR, es-MX -> es-ES, en-GB -> en-US, the same rule as the API's `Accept-Language` matcher), else pt-BR. A change applies at once, without a restart. Numbers, money and dates take the locale from the context (`Localizations.localeOf`), never from `Intl.defaultLocale`. On the web Flutter writes `<html lang>` itself.
+- **Preferences** (`lib/features/settings/preferences/`): `preferencesProvider` (Riverpod, generated with `riverpod_generator`) holds the language (null = follow the device) and the theme (System, Light, Dark); `appLocaleProvider` is the language in effect, the one source for the UI and, with the API client, `Accept-Language`. They are kept in `shared_preferences` (nothing sensitive), read in `main` before the first frame, so the app opens in the saved theme and language. The profile sync (`PATCH /me/preferences`, the server's value wins at sign-in) comes with the API client and the settings screen.
+- **Pickers:** `LanguagePicker` and `ThemePreferencePicker`, for the login and landing screens and the settings (today in the catalog header).
+- **No flash on the web:** the app also saves a small hint (`localStorage` `monthra.boot`, its own key); `web/boot.js` runs before the page paints and applies the saved theme and language, so a dark choice on a light system (or the other way round) never flashes the other theme. Without a hint the splash follows `prefers-color-scheme`. The native splash screens follow the system: they cannot read the app's preferences.
+- **Generated code** (`make gen`): the localizations and the Riverpod providers (`*.g.dart`) are committed; CI regenerates them and fails on a difference.
+
 ## Icons and splash screens
 
-`make icons` regenerates them from `assets/brand/` (the brand pack) and `assets/icon/` (layers the pack lacks, drawn from the logo's bars: the Android adaptive foreground and monochrome, the iOS 18 dark and tinted icons, the Android 12 splash logos). The web icons in `web/icons/` and the web splash (`web/index.html`, `web/splash.css`) are kept by hand. Every splash follows the system theme (`#F5F5F3` light, `#141414` dark), so a dark device never flashes white.
+`make icons` regenerates them from `assets/brand/` (the brand pack) and `assets/icon/` (layers the pack lacks, drawn from the logo's bars: the Android adaptive foreground and monochrome, the iOS 18 dark and tinted icons, the Android 12 splash logos). The web icons in `web/icons/` and the web splash (`web/index.html`, `web/splash.css`, `web/boot.js`) are kept by hand. Every splash follows the system theme (`#F5F5F3` light, `#141414` dark), so a dark device never flashes white; the web splash follows the theme the person chose, when there is one.
 
 ## Related repositories
 
