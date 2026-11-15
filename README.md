@@ -106,7 +106,7 @@ Inter 4.1, subset to Latin (latin + latin-ext, the minus sign, the currency bloc
 
 ### Golden tests
 
-Every component has golden images in both themes (`test/core/design_system/goldens/`). Font rasterization differs between macOS and Linux, so goldens are rendered and compared on Linux only: `make test` skips them on a Mac, and CI is the reference. When a change moves pixels:
+Every component has golden images in both themes (`test/core/design_system/goldens/`). Font rasterization differs between macOS and Linux, so goldens are compared on Linux only: on a Mac, `make test` still lays every subject out (an overflow fails) and reports the comparison as skipped; CI is the reference. When a change moves pixels:
 
 1. Push. The CI `test` job fails on the goldens, renders them again and uploads them as the `goldens` artifact (with the diff images of the failures).
 2. `make goldens-pull` (or `make goldens-pull RUN=<run id>`) copies them into `test/`.

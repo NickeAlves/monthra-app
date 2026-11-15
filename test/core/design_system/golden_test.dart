@@ -241,7 +241,7 @@ void main() {
 
   goldenTest(
     'categories',
-    size: const Size(480, 300),
+    size: const Size(480, 420),
     () => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -269,7 +269,7 @@ void main() {
 
   goldenTest(
     'states',
-    size: const Size(480, 560),
+    size: const Size(480, 680),
     () => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -300,7 +300,7 @@ void main() {
 
   goldenTest(
     'skeleton',
-    size: const Size(480, 200),
+    size: const Size(480, 176),
     () => MonthraCard(
       child: Column(
         children: [

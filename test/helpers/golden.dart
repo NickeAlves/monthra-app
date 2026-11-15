@@ -39,6 +39,9 @@ class TolerantGoldenFileComparator extends LocalFileComparator {
 /// pixel ratio of 1, with animations off (skeletons hold still). Images go
 /// to `goldens/<name>_<brightness>.png` next to the test file.
 ///
+/// The subject is laid out on every OS, so an overflow fails anywhere; the
+/// image comparison runs on Linux only and is reported as skipped elsewhere.
+///
 /// [setup] runs after the first frame, before the comparison (focus a
 /// control, hover it).
 void goldenTest(
@@ -47,23 +50,23 @@ void goldenTest(
   Size size = const Size(480, 480),
   Future<void> Function(WidgetTester tester)? setup,
 }) {
-  group(
-    name,
-    skip: goldensRunHere ? null : 'goldens run on Linux only (see README)',
-    () {
-      for (final brightness in Brightness.values) {
-        testWidgets(brightness.name, tags: ['golden'], (tester) async {
-          tester.reduceMotion();
-          await tester.pumpFrame(build(), brightness: brightness, size: size);
-          await setup?.call(tester);
-          await tester.pump(const Duration(milliseconds: 300));
+  group(name, () {
+    for (final brightness in Brightness.values) {
+      testWidgets(brightness.name, tags: ['golden'], (tester) async {
+        tester.reduceMotion();
+        await tester.pumpFrame(build(), brightness: brightness, size: size);
+        await setup?.call(tester);
+        await tester.pump(const Duration(milliseconds: 300));
 
-          await expectLater(
-            find.byType(TestFrame),
-            matchesGoldenFile('goldens/${name}_${brightness.name}.png'),
-          );
-        });
-      }
-    },
-  );
+        if (!goldensRunHere) {
+          markTestSkipped('image comparison runs on Linux only (see README)');
+          return;
+        }
+        await expectLater(
+          find.byType(TestFrame),
+          matchesGoldenFile('goldens/${name}_${brightness.name}.png'),
+        );
+      });
+    }
+  });
 }
