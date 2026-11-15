@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Nested models serialize as JSON, not as their Dart objects.
+          explicit_to_json: true
+          # A wrong or missing field names the key in the error.
+          checked: true

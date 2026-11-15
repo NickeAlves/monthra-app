@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:monthra/app/app.dart';
+import 'package:monthra/app/overrides.dart';
 import 'package:monthra/core/config/env.dart';
-import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 
 Future<void> main() async {
@@ -20,7 +20,7 @@ Future<void> main() async {
   final store = await PreferencesStore.open();
   runApp(
     ProviderScope(
-      overrides: [preferencesStoreProvider.overrideWithValue(store)],
+      overrides: appOverrides(env: env, preferences: store),
       child: MonthraApp(env: env),
     ),
   );

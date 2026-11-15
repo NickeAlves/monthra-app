@@ -2,7 +2,7 @@
 
 The Monthra app: personal finance for **web, Android and iOS** from a single **Flutter** codebase, built on `shadcn_ui` and Lucide icons.
 
-> Status: design system. i18n, the API client and the screens arrive one pull request at a time (roadmap in [CLAUDE.md](CLAUDE.md)). Until the first screens, local and staging builds open on the design system catalog; production shows the brand page.
+> Status: design system, languages and preferences, API client. The screens arrive one pull request at a time (roadmap in [CLAUDE.md](CLAUDE.md)). Until the first screens, local and staging builds open on the design system catalog; production shows the brand page.
 
 ## Requirements
 
@@ -122,10 +122,38 @@ The UI speaks pt-BR (default), es-ES and en-US (§7.6 of CLAUDE.md). No screen w
 - **Adding a string:** add it to the three files (description in `app_en.arb` only), run `make gen` and commit the generated `lib/l10n/generated/`. `make l10n-check` (also in `make lint` and CI) fails on a key missing from a language, a key only one language has, a missing description, a dropped placeholder or an empty message; CI also fails when the generated code is stale.
 - **Language names** are written in themselves ("Português (Brasil)", "Español (España)", "English (US)") in every UI language, so they live in `AppLocale`, not in the ARB files.
 - **Which language:** the one the person picked, else the first device language that is Portuguese, Spanish or English whatever the region (pt-PT -> pt-BR, es-MX -> es-ES, en-GB -> en-US, the same rule as the API's `Accept-Language` matcher), else pt-BR. A change applies at once, without a restart. Numbers, money and dates take the locale from the context (`Localizations.localeOf`), never from `Intl.defaultLocale`. On the web Flutter writes `<html lang>` itself.
-- **Preferences** (`lib/features/settings/preferences/`): `preferencesProvider` (Riverpod, generated with `riverpod_generator`) holds the language (null = follow the device) and the theme (System, Light, Dark); `appLocaleProvider` is the language in effect, the one source for the UI and, with the API client, `Accept-Language`. They are kept in `shared_preferences` (nothing sensitive), read in `main` before the first frame, so the app opens in the saved theme and language. The profile sync (`PATCH /me/preferences`, the server's value wins at sign-in) comes with the API client and the settings screen.
+- **Preferences** (`lib/features/settings/preferences/`): `preferencesProvider` (Riverpod, generated with `riverpod_generator`) holds the language (null = follow the device) and the theme (System, Light, Dark); `appLocaleProvider` is the language in effect, the one source for the UI and the API client's `Accept-Language` (read on every call). They are kept in `shared_preferences` (nothing sensitive), read in `main` before the first frame, so the app opens in the saved theme and language. The profile sync (`PATCH /me/preferences`, the server's value wins at sign-in) comes with the sign-in and settings screens.
 - **Pickers:** `LanguagePicker` and `ThemePreferencePicker`, for the login and landing screens and the settings (today in the catalog header).
 - **No flash on the web:** the app also saves a small hint (`localStorage` `monthra.boot`, its own key); `web/boot.js` runs before the page paints and applies the saved theme and language, so a dark choice on a light system (or the other way round) never flashes the other theme. Without a hint the splash follows `prefers-color-scheme`. The native splash screens follow the system: they cannot read the app's preferences.
-- **Generated code** (`make gen`): the localizations and the Riverpod providers (`*.g.dart`) are committed; CI regenerates them and fails on a difference.
+- **Generated code** (`make gen`): the localizations, the Riverpod providers and the models (`*.g.dart`, `*.freezed.dart`) are committed; CI regenerates them and fails on a difference.
+
+## API client
+
+`lib/core/network/` talks to the API under `/api/v1` (`Env.apiRoot`). Features read `apiClientProvider` and call `get`/`post`/`patch`/`delete` with the OpenAPI paths (`/accounts`); every failure is an `ApiException`, never a dio type:
+
+| Exception | When |
+|---|---|
+| `ApiProblemException` | the API answered with a problem (`application/problem+json`): branch on `code` (`ProblemCode`), show `problem.title`/`detail` (already translated), map `problem.errors` to the form fields (`codesOf('name')`, `FieldCode`); `retryAfter` on a `429` |
+| `NetworkException` / `ApiTimeoutException` | no connection / too slow |
+| `CancelledException` | the call's `CancelToken` was cancelled |
+| `UnexpectedApiException` | an error without a problem body (a proxy page), an unreadable body, a client bug |
+
+Each one carries the `requestId` (`X-Request-ID`) to match the server's logs.
+
+**How the session travels.** The server tells a browser from a device by the `Origin` header:
+
+- **Web:** cookies (`HttpOnly`, `SameSite=Strict`) the app never sees. Every POST/PATCH/PUT/DELETE, sign-in and refresh included, carries `X-CSRF-Token`, fetched once from `GET /auth/csrf` and again only after a `403 csrf_invalid` (the call is then sent once more).
+- **Android and iOS:** `Authorization: Bearer`, with the token pair in `flutter_secure_storage` (one entry; Keychain "after first unlock, this device only"). The client never sends `Origin`.
+
+**Renewal.** A `401` on a route that needs a session runs `POST /auth/refresh` once for every call waiting on it (single flight: the refresh token rotates, and the server revokes the session when an old one comes back), then sends those calls again. On the web a `409 refresh_conflict` means another tab renewed first: the call just goes again. When the session cannot be renewed the tokens are cleared and `sessionEventsProvider` emits `SessionEvent.expired` (the sign-in flow listens). The public routes (`ApiRoutes.public`: login, register, password reset...) take no token, and their `401` is the answer.
+
+**Retries.** Only GET and HEAD go again by themselves (the server takes no `Idempotency-Key`): after a connection error or timeout, a `502`/`503`/`504`, or a `429`/`503` with a `Retry-After` of 10 s or less; waits of 300 ms and 1.2 s with jitter.
+
+**Logs.** Debug builds print one line per call (`[api] GET /api/v1/me -> 200 12 ms (<request id>)`); never headers, query strings or bodies, and nothing in release builds.
+
+**Against the real API:** `make test-live` runs `test/live/` (sign-in, renewal, sign-out as a device) with the server up and seeded (`make up && make seed` in monthra-server; pass the printed password as `MONTHRA_DEMO_PASSWORD`). `flutter test` skips it.
+
+**Models** use `freezed` + `json_serializable` (`build.yaml`: `checked`, `explicit_to_json`); their generated `*.freezed.dart`/`*.g.dart` are committed like the rest (`make gen`).
 
 ## Icons and splash screens
 

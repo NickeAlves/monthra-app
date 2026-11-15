@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/app/app.dart';
+import 'package:monthra/app/overrides.dart';
 import 'package:monthra/core/config/env.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
@@ -26,11 +27,10 @@ extension PumpMonthraApp on WidgetTester {
   }) async {
     await pumpWidget(
       ProviderScope(
-        overrides: [
-          preferencesStoreProvider.overrideWithValue(
-            store ?? MemoryPreferencesStore(),
-          ),
-        ],
+        overrides: appOverrides(
+          env: env ?? localEnv,
+          preferences: store ?? MemoryPreferencesStore(),
+        ),
         child: MonthraApp(
           env: env ?? localEnv,
           saveBootHint: ({required languageTag, theme}) =>
