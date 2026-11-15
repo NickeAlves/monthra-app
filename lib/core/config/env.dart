@@ -115,8 +115,11 @@ class Env {
 
   final AppEnv appEnv;
 
-  /// The API origin; every route lives under `/api/v1`.
+  /// The API origin; every route lives under `/api/v1` ([apiRoot]).
   final Uri apiBaseUrl;
+
+  /// The base of every API route.
+  Uri get apiRoot => apiBaseUrl.replace(path: '/api/v1');
 
   /// Error reporting, unused until a provider is wired.
   final String? sentryDsn;

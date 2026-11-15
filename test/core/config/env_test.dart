@@ -37,6 +37,7 @@ void main() {
 
       expect(env.appEnv, AppEnv.local);
       expect(env.apiBaseUrl, Uri.parse('http://localhost:8080'));
+      expect(env.apiRoot, Uri.parse('http://localhost:8080/api/v1'));
       expect(env.sentryDsn, isNull);
       expect(env.isProduction, isFalse);
     });
@@ -139,6 +140,7 @@ void main() {
       );
 
       expect(env.apiBaseUrl, Uri.parse('https://app.example.com'));
+      expect(env.apiRoot, Uri.parse('https://app.example.com/api/v1'));
     });
 
     test('needs no flavor and no API address', () {
