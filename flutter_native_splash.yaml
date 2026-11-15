@@ -1,0 +1,17 @@
+# Native splash screens: `make icons` (dart run flutter_native_splash:create).
+# Light and dark follow the system theme, so a dark device never flashes white.
+# The web splash is hand-written (web/index.html + web/splash.css) to keep the
+# page free of inline styles and scripts for the CSP.
+flutter_native_splash:
+  color: "#F5F5F3"
+  color_dark: "#141414"
+  image: assets/brand/monthra-simbolo-512.png
+  image_dark: assets/brand/monthra-simbolo-branco-512.png
+  android_min_sdk: 24
+  web: false
+
+  android_12:
+    color: "#F5F5F3"
+    color_dark: "#141414"
+    image: assets/icon/splash-android12.png
+    image_dark: assets/icon/splash-android12-dark.png
