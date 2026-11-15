@@ -1,36 +1,53 @@
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/config/env.dart';
+import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
+import 'package:monthra/core/design_system/design_system.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// The root widget. The brand theme, routes and localizations arrive with
-/// the design system, i18n and auth pull requests.
-class MonthraApp extends StatelessWidget {
+/// A production build (`APP_ENV`): the catalog branch compiles away there.
+const bool _productionBuild = String.fromEnvironment('APP_ENV') == 'production';
+
+/// The root widget. Routes and localizations arrive with the i18n and auth
+/// pull requests; until then the home is the design system catalog outside
+/// production and the brand page in production.
+class MonthraApp extends StatefulWidget {
   const new({required this.env, super.key});
 
   final Env env;
 
   @override
+  State<MonthraApp> createState() => _MonthraAppState();
+}
+
+class _MonthraAppState extends State<MonthraApp> {
+  // Becomes the preferencesProvider (stored and synced) in the next PR.
+  ThemeMode _themeMode = ThemeMode.system;
+
+  @override
   Widget build(BuildContext context) {
+    final env = widget.env;
+    final showCatalog = !_productionBuild && !env.isProduction;
     return ShadApp(
       title: 'Monthra',
-      theme: ShadThemeData(
-        brightness: Brightness.light,
-        colorScheme: const ShadZincColorScheme.light(),
-      ),
-      darkTheme: ShadThemeData(
-        brightness: Brightness.dark,
-        colorScheme: const ShadZincColorScheme.dark(),
-      ),
-      home: PlaceholderPage(env: env),
+      themeMode: _themeMode,
+      theme: monthraTheme(Brightness.light),
+      darkTheme: monthraTheme(Brightness.dark),
+      themeCurve: MonthraMotion.curve,
+      home: showCatalog
+          ? DesignSystemCatalog(
+              env: env,
+              themeMode: _themeMode,
+              onThemeModeChanged: (mode) => setState(() => _themeMode = mode),
+            )
+          : const PlaceholderPage(),
     );
   }
 }
 
-/// Shown until the first real screens land.
+/// The production home until the first real screens land.
 class PlaceholderPage extends StatelessWidget {
-  const new({required this.env, super.key});
-
-  final Env env;
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +62,13 @@ class PlaceholderPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(symbol, width: 96, height: 96),
-            const SizedBox(height: 24),
-            Text('Monthra', style: theme.textTheme.h2),
-            if (!env.isProduction) ...[
-              const SizedBox(height: 12),
-              ShadBadge.secondary(child: Text(env.appEnv.name)),
-            ],
+            const SizedBox(height: MonthraSpacing.x6),
+            Text(
+              'Monthra',
+              style: theme.textTheme.h2.copyWith(
+                color: theme.colorScheme.foreground,
+              ),
+            ),
           ],
         ),
       ),

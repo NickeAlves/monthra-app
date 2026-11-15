@@ -11,7 +11,7 @@ WEB_FLAGS   := --release --csp --no-web-resources-cdn
 # Release mobile builds strip symbols into build/symbols (keep them to read crash stacks).
 OBFUSCATE   := --obfuscate --split-debug-info=build/symbols
 
-.PHONY: help deps network run-web run fmt lint analyze test cover outdated icons \
+.PHONY: help deps network run-web run fmt lint analyze test cover goldens-pull outdated icons fonts \
         build-web build-apk build-ios build smoke up down logs ps staging-up staging-down
 
 help: ## List the available targets
@@ -31,30 +31,37 @@ run: ## Run on a device or emulator (FLAVOR=dev|staging|prod; dev talks to the l
 	flutter run --flavor $(FLAVOR) --dart-define-from-file=$(ENV_FILE)
 
 fmt: ## Format the Dart code
-	dart format lib test
+	dart format lib test tool
 
 analyze: ## Check formatting and run the analyzer (infos fail too)
-	dart format --output=none --set-exit-if-changed lib test
+	dart format --output=none --set-exit-if-changed lib test tool
 	flutter analyze --fatal-infos
 
 lint: analyze ## Analyzer plus the secret scan
 	gitleaks dir --no-banner --redact .
 
-test: ## Run the unit and widget tests
+test: ## Run the tests (goldens only run on Linux; see the README)
 	flutter test
 
 cover: ## Run the tests with coverage (coverage/lcov.info)
 	flutter test --coverage
 
+goldens-pull: ## Copy the goldens CI rendered for this branch into test/ (RUN=<id> optional)
+	scripts/pull-goldens.sh $(RUN)
+
 outdated: ## List outdated packages
 	flutter pub outdated
+
+fonts: ## Regenerate the Inter subset in assets/fonts/inter
+	scripts/subset-inter.sh
 
 icons: ## Regenerate the launcher icons and native splash screens
 	dart run flutter_launcher_icons
 	dart run flutter_native_splash:create
 
-build-web: ## Build the web app for production (APP_ENV=production)
-	flutter build web $(WEB_FLAGS) --dart-define-from-file=env/production.json
+build-web: ## Build the web app for production (APP_ENV=production) into build/web
+	flutter build web $(WEB_FLAGS) --dart-define-from-file=env/production.json --output build/web
+	dart run tool/prune_web_fonts.dart build/web
 
 build-apk: ## Build a release APK (FLAVOR=dev|staging|prod)
 	flutter build apk --release --flavor $(FLAVOR) --dart-define-from-file=$(ENV_FILE) $(OBFUSCATE)
