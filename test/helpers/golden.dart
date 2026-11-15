@@ -1,0 +1,69 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'frame.dart';
+
+/// Share of pixels a golden may differ by (antialiasing noise between CI
+/// machines); anything visible is far above it.
+const double goldenTolerance = 0.001;
+
+/// Font rasterization differs between macOS and Linux, so goldens are
+/// rendered and compared on Linux only: CI is the reference (README,
+/// "Golden tests").
+final bool goldensRunHere = Platform.isLinux;
+
+/// A [LocalFileComparator] that passes images within [goldenTolerance].
+class TolerantGoldenFileComparator extends LocalFileComparator {
+  new(super.testFile);
+
+  @override
+  Future<bool> compare(Uint8List imageBytes, Uri golden) async {
+    final result = await GoldenFileComparator.compareLists(
+      imageBytes,
+      await getGoldenBytes(golden),
+    );
+    if (result.passed || result.diffPercent <= goldenTolerance) {
+      result.dispose();
+      return true;
+    }
+    final error = await generateFailureOutput(result, golden, basedir);
+    result.dispose();
+    throw FlutterError(error);
+  }
+}
+
+/// Golden tests of [build] in the light and dark themes, at [size] and a
+/// pixel ratio of 1, with animations off (skeletons hold still). Images go
+/// to `goldens/<name>_<brightness>.png` next to the test file.
+///
+/// [setup] runs after the first frame, before the comparison (focus a
+/// control, hover it).
+void goldenTest(
+  String name,
+  Widget Function() build, {
+  Size size = const Size(480, 480),
+  Future<void> Function(WidgetTester tester)? setup,
+}) {
+  group(
+    name,
+    skip: goldensRunHere ? null : 'goldens run on Linux only (see README)',
+    () {
+      for (final brightness in Brightness.values) {
+        testWidgets(brightness.name, tags: ['golden'], (tester) async {
+          tester.reduceMotion();
+          await tester.pumpFrame(build(), brightness: brightness, size: size);
+          await setup?.call(tester);
+          await tester.pump(const Duration(milliseconds: 300));
+
+          await expectLater(
+            find.byType(TestFrame),
+            matchesGoldenFile('goldens/${name}_${brightness.name}.png'),
+          );
+        });
+      }
+    },
+  );
+}
