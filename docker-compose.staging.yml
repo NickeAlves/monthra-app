@@ -1,0 +1,10 @@
+# Homologation override: the staging build (env/staging.json). TLS terminates
+# at the monthra-infra proxy, which also routes /api on a real deployment.
+#   docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+services:
+  web:
+    build:
+      args:
+        FLUTTER_ENV: staging
+        VERSION: ${IMAGE_TAG:-staging-local}
+    image: ghcr.io/nickealves/monthra-app:${IMAGE_TAG:-staging-local}
