@@ -2,7 +2,7 @@
 
 The Monthra app: personal finance for **web, Android and iOS** from a single **Flutter** codebase, built on `shadcn_ui` and Lucide icons.
 
-> Status: scaffold. The design system, i18n, API client and the screens arrive one pull request at a time (roadmap in [CLAUDE.md](CLAUDE.md)).
+> Status: design system. i18n, the API client and the screens arrive one pull request at a time (roadmap in [CLAUDE.md](CLAUDE.md)). Until the first screens, local and staging builds open on the design system catalog; production shows the brand page.
 
 ## Requirements
 
@@ -88,6 +88,31 @@ Release builds are obfuscated (`--obfuscate --split-debug-info=build/symbols`); 
 - SPA routing: paths without an extension serve the app (`/verify-email`, `/budgets`), a missing file is a 404.
 - `no-cache` with ETag revalidation everywhere: Flutter 3.47 builds carry no content hash (`--web-content-hash` needs 3.50).
 - Precompressed `.gz` files (`gzip_static`); a JSON access log without query strings.
+
+## Design system
+
+`lib/core/design_system/` (import `design_system.dart`) holds everything a screen draws with. Screens never write a color, size, radius or duration by hand.
+
+- **Tokens** (`tokens/`): the brand palette and the color roles of both themes (`MonthraColorSchemes`, plus `income`, `expense`, `warning`, `accentText` and `skeleton` through the `MonthraColors` extension on `ShadColorScheme`), spacing on a 4 px grid (`MonthraSpacing`), radii 8 to 12 (`MonthraRadii`), barely-there shadows, motion (150 to 250 ms, `easeOutCubic`, zero when the platform asks for less motion), breakpoints (mobile < 640 <= tablet <= 1024 < desktop) and the type scale (`MonthraTypography`: Inter 400/500/600, Inter's dynamic tracking, tabular figures for amounts).
+- **Theme** (`theme.dart`): `monthraTheme(brightness)` builds the light and dark `ShadThemeData`. Controls are at least 44 px tall; the `sm` button size (36 px) is for pointer layouts only. The primary button is the brand green with white text in both themes; in the dark one, links, focus rings and accent text use the lifted green `#3FA37F`.
+- **Components** (`components/`): `MonthraCard` (tappable cards get keyboard focus, hover and a focus ring), `AmountText` (minor units in the locale's format, colored and signed by kind, counting to new values), `CategoryIcon`/`CategoryBadge` (a category's Lucide icon and color, with the color moved until it reads on its tint), `EmptyState`, `ErrorState`, `Skeleton`/`SkeletonText` (pulsing in step, still under reduced motion) and `ButtonLabel` (a button label that shortens instead of overflowing at large text sizes).
+- **Money** (`lib/core/money/`): `Currency` (BRL, USD, EUR) and `MoneyFormat.format(minor, currency, locale)`: `R$ 1.234,56` / `US$ 1.234,56` in pt-BR, `1.234,56 €` in es-ES, `$1,234.56` in en-US, the typographic minus (U+2212), exact up to the API's 10^13 cents.
+- **Accessibility**: text roles read at 4.5:1 or more on every surface of both themes (`contrast_test.dart`); the catalog passes Flutter's tap target (44 px), label and text contrast guidelines and lays out at twice the text size. An icon-only button carries a label on its `Icon` (`semanticLabel`).
+- **Catalog**: `make run-web` opens on it (outside production only), with a theme switch.
+
+### Fonts
+
+Inter 4.1, subset to Latin (latin + latin-ext, the minus sign, the currency block) with every OpenType feature kept: about 135 KB per weight instead of 410 KB. `make fonts` downloads the release, checks its hash and regenerates `assets/fonts/inter/` (needs `python3`; fonttools goes into a throwaway venv). The OFL license ships next to the fonts and in the app's license list. Nothing is fetched at runtime (CSP `font-src 'self'`).
+
+### Golden tests
+
+Every component has golden images in both themes (`test/core/design_system/goldens/`). Font rasterization differs between macOS and Linux, so goldens are rendered and compared on Linux only: `make test` skips them on a Mac, and CI is the reference. When a change moves pixels:
+
+1. Push. The CI `test` job fails on the goldens, renders them again and uploads them as the `goldens` artifact (with the diff images of the failures).
+2. `make goldens-pull` (or `make goldens-pull RUN=<run id>`) copies them into `test/`.
+3. Look at every changed image, then commit them.
+
+The comparison tolerates 0.1% of differing pixels (antialiasing noise between runners).
 
 ## Icons and splash screens
 
