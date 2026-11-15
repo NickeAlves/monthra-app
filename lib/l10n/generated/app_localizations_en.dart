@@ -237,6 +237,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Too many attempts in a row. Wait a few minutes and try again.';
 
   @override
+  String get authCaptchaLabel => 'Security check';
+
+  @override
+  String get authCaptchaPrompt =>
+      'Too many attempts in a row. Complete the security check below to go on.';
+
+  @override
+  String get authCaptchaRejected =>
+      'The security check wasn\'t accepted. Try it again below.';
+
+  @override
+  String get authCaptchaFailed =>
+      'The security check couldn\'t load. Check your connection and try again.';
+
+  @override
+  String get authCaptchaUnsupported =>
+      'This browser can\'t run the security check. Update it or use another one.';
+
+  @override
+  String get authCaptchaHint => 'Waiting for the security check…';
+
+  @override
   String get errorMfaCodeInvalid =>
       'Wrong or already used code. Wait for the next one.';
 

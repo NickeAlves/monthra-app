@@ -34,10 +34,15 @@ class AuthApi {
   Future<LoginResult> login({
     required String email,
     required String password,
+    String? captchaToken,
   }) async {
     final response = await _api.post<Map<String, Object?>>(
       '/auth/login',
-      data: {'email': email, 'password': password},
+      data: {
+        'email': email,
+        'password': password,
+        'captchaToken': ?captchaToken,
+      },
     );
     final result = _read(response.data, LoginResult.fromJson);
     if (result is LoginSignedIn) await _open(result.session);
@@ -61,9 +66,15 @@ class AuthApi {
     required String name,
     required String email,
     required String password,
+    String? captchaToken,
   }) => _api.post<void>(
     '/auth/register',
-    data: {'name': name, 'email': email, 'password': password},
+    data: {
+      'name': name,
+      'email': email,
+      'password': password,
+      'captchaToken': ?captchaToken,
+    },
   );
 
   Future<void> verifyEmail(String token) =>

@@ -27,7 +27,9 @@ Each build reads one file of `env/` through `--dart-define-from-file` (no secret
 | `staging` | `env/staging.json` | `staging` | `com.nickealves.monthra.staging` ("Monthra Staging") |
 | `production` | `env/production.json` | `prod` | `com.nickealves.monthra` ("Monthra") |
 
-The app refuses to start on a mismatch (unknown `APP_ENV`, a flavor of another environment, a mobile build without `API_BASE_URL`, or http outside local).
+Besides `APP_ENV`, `API_BASE_URL` and `SENTRY_DSN`, each file holds `APP_PUBLIC_URL` (the web app's origin, which serves the captcha page devices load) and `TURNSTILE_SITE_KEY` (Cloudflare Turnstile, public). Locally they are `http://localhost:3000` and Cloudflare's testing key `1x00000000000000000000AA`; staging and production stay empty until the Cloudflare account and the domains exist, and without them a captcha request reads as "try again later".
+
+The app refuses to start on a mismatch (unknown `APP_ENV`, a flavor of another environment, a mobile build without `API_BASE_URL`, an address that is not an origin, a malformed site key, or http outside local).
 
 - **Web** always calls the API on its own origin (`/api/v1`), so the auth cookies (`SameSite=Strict`) work and the CSP keeps `connect-src 'self'`. Something in front routes `/api`: `web_dev_config.yaml` under `flutter run`, nginx in Docker, the monthra-infra proxy on a deployment. `API_BASE_URL` is ignored on the web.
 - **Mobile** uses `API_BASE_URL`. The staging and production values stay empty until the domains exist (step 5, infra).
@@ -47,7 +49,7 @@ make run                       # dev flavor, env/local.json
 make run FLAVOR=staging        # other flavors
 ```
 
-The Android emulator reaches the host as `10.0.2.2`: `flutter run --flavor dev --dart-define-from-file=env/local.json --dart-define=API_BASE_URL=http://10.0.2.2:8080`. Only the `dev` flavor allows cleartext http (to `localhost`, `127.0.0.1` and `10.0.2.2`).
+The Android emulator reaches the host as `10.0.2.2`: `flutter run --flavor dev --dart-define-from-file=env/local.json --dart-define=API_BASE_URL=http://10.0.2.2:8080 --dart-define=APP_PUBLIC_URL=http://10.0.2.2:3000`. Only the `dev` flavor allows cleartext http (to `localhost`, `127.0.0.1` and `10.0.2.2`).
 
 **Docker** (the nginx image, as deployed):
 
@@ -171,10 +173,12 @@ Each one carries the `requestId` (`X-Request-ID`) to match the server's logs. Sc
 - **Session state** (`authControllerProvider`): booting, signed in (the profile, `Me`), signed out (with a notice: session ended, password changed, two-step expired), awaiting the two-step code (the challenge lives only in memory and expires with it), unavailable. Each time the profile loads, its language and theme replace the local ones (the server wins, §7.6).
 - **Email links:** `/verify-email` sends its token once when it opens; `/reset-password` asks for the new password. Both take the token out of the address bar and the browser history right after reading it (`Router.neglect`: the history entry is replaced). A dead link offers a new one.
 - **Signing out:** a device always forgets its tokens, even when the server cannot be told; a browser stays signed in and says so when the call fails, because its cookies only go away through the server.
-- **Captcha:** the server asks for Cloudflare Turnstile only when `TURNSTILE_SECRET` is set (no environment does yet); until the captcha pull request, `captcha_required` reads as "too many attempts, try again later".
+- **Captcha** (`lib/features/auth/captcha/`): after repeated failed sign-ins (3 per address, 10 per IP) or sign-ups (3 per IP and hour), a server with `TURNSTILE_SECRET` answers `captcha_required`. The sign-in and sign-up pages then show Cloudflare Turnstile above the button and send the form again by themselves once it passes (`captchaToken`). A token works once, so every later attempt takes a fresh check; after a refused token (`captcha_invalid`) the person sends again, so a server refusing every token never loops. The widget lives in a page of its own, `web/turnstile.html` (+ `turnstile.js`, `turnstile.css`), with its own CSP: Cloudflare's script and frame only, no inline code, framed by the app's origin only. The web app shows it in an iframe (the app's CSP adds `frame-src 'self'` and nothing of Cloudflare's); devices load the same page from `APP_PUBLIC_URL` in `webview_flutter`, which may only show that page and Cloudflare's frames. The page reads its settings from the query string (site key, `action` `login`/`register`, theme, language, size, background) and only posts messages to the app, never reads any. A build without a site key (staging and production for now) keeps "too many attempts, try again later".
 - **Deep links on devices:** the routes already handle `/verify-email#token=…`, but App Links (Android) and Universal Links (iOS) need the domain (pending with the cloud provider). Until then an email link opens the web app in the browser.
 
 **Try it locally:** with the server up (`make up && make seed` in monthra-server) and `make run-web` (or `flutter run -d web-server --web-port 3000 --dart-define-from-file=env/local.json`), sign up at `http://localhost:3000/register`; the confirmation and reset emails land in Mailpit (`http://localhost:8025`), and their links open the app on port 3000.
+
+**Try the captcha:** set `TURNSTILE_SECRET=1x0000000000000000000000000000000AA` (Cloudflare's testing secret, always passes) in monthra-server's `.env` and restart it, then sign in with a wrong password three times. The check appears and, with the testing key, passes by itself. `--dart-define=TURNSTILE_SITE_KEY=3x00000000000000000000FF` forces the interactive challenge, `2x00000000000000000000AB` makes it fail, and the secret `2x0000000000000000000000000000000AA` makes the server refuse every token. `make run-web` serves `turnstile.html` without the CSP; `make up` (nginx) shows the real headers. On a device the page comes from the web app, so keep `make run-web` or `make up` running.
 
 ## Icons and splash screens
 

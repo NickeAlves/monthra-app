@@ -5,12 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/router.dart';
+import 'package:monthra/core/config/env_provider.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/network/api_error_text.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/api_problem.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/application/auth_state.dart';
+import 'package:monthra/features/auth/captcha/captcha_field.dart';
+import 'package:monthra/features/auth/captcha/captcha_gate.dart';
+import 'package:monthra/features/auth/captcha/captcha_request.dart';
 import 'package:monthra/features/auth/data/auth_api.dart';
 import 'package:monthra/features/auth/presentation/auth_layout.dart';
 import 'package:monthra/features/auth/presentation/widgets/auth_fields.dart';
@@ -21,7 +25,9 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// Email and password. A right password on an account with two-step
 /// verification moves on to the MFA page; signed in, the router goes on to
-/// [from] (a path of this app, checked by the router) or home.
+/// [from] (a path of this app, checked by the router) or home. After
+/// repeated failures the server asks for a security check: the page shows
+/// it and signs in again by itself once it passes.
 class LoginPage extends ConsumerStatefulWidget {
   const new({this.from, super.key});
 
@@ -40,6 +46,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   /// The wait a `429` asked for: the button stays off until it ends.
   final _locked = Countdown();
   final _resendWait = Countdown();
+  late final CaptchaGate _captcha;
 
   bool _busy = false;
   ApiException? _error;
@@ -49,6 +56,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void initState() {
     super.initState();
     _locked.addListener(_onLockChanged);
+    _captcha = CaptchaGate(available: ref.read(envProvider).captchaPage != null)
+      ..addListener(_onCaptchaChanged);
   }
 
   @override
@@ -60,8 +69,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ..removeListener(_onLockChanged)
       ..dispose();
     _resendWait.dispose();
+    _captcha
+      ..removeListener(_onCaptchaChanged)
+      ..dispose();
     super.dispose();
   }
+
+  void _onCaptchaChanged() => setState(() {});
 
   void _onLockChanged() {
     // The wait is over: the "try again in N s" alert goes with it.
@@ -71,8 +85,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _submit() async {
-    if (_busy || _locked.running) return;
+    if (_busy || _locked.running || _captcha.waitingForToken) return;
     if (!(_form.currentState?.validate() ?? false)) return;
+    final captchaToken = _captcha.take();
     setState(() {
       _busy = true;
       _error = null;
@@ -81,7 +96,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     try {
       await ref
           .read(authControllerProvider.notifier)
-          .signIn(email: _email.text.trim(), password: _password.text);
+          .signIn(
+            email: _email.text.trim(),
+            password: _password.text,
+            captchaToken: captchaToken,
+          );
       // The password was right: let the password manager save it.
       TextInput.finishAutofillContext();
       if (!mounted) return;
@@ -92,6 +111,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       // Signed in: the router already moves on.
     } on ApiException catch (e) {
       if (!mounted) return;
+      _captcha.onError(e);
       setState(() => _error = e);
       if (e is ApiProblemException && e.code == ProblemCode.rateLimited) {
         final wait = e.retryAfter;
@@ -167,10 +187,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
           const SizedBox(height: MonthraSpacing.x2),
+          if (_captcha.needed) ...[
+            CaptchaField(
+              gate: _captcha,
+              action: CaptchaAction.login,
+              onResend: () => unawaited(_submit()),
+            ),
+            const SizedBox(height: MonthraSpacing.x4),
+          ],
           ValueListenableBuilder(
             valueListenable: _locked,
             builder: (context, _, _) => ShadButton(
-              enabled: !_busy && !_locked.running,
+              enabled: !_busy && !_locked.running && !_captcha.waitingForToken,
               onPressed: _submit,
               child: ButtonLabel(l10n.authSignInButton),
             ),
@@ -190,7 +218,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final error = _error;
     final resentTo = _resentTo;
     final Widget alert;
-    if (error != null) {
+    final captcha = captchaAlert(l10n, _captcha, error);
+    if (captcha != null) {
+      alert = captcha;
+    } else if (error != null) {
       final unverified =
           error is ApiProblemException &&
           error.code == ProblemCode.emailNotVerified;

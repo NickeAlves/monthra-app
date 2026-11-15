@@ -38,6 +38,22 @@ for h in strict-transport-security x-content-type-options x-frame-options referr
 done
 ! grep -qi '^server: nginx/' "$tmp/headers" || fail "nginx version exposed"
 
+[[ "$csp" == *"frame-src 'self'"* ]] || fail "CSP frame-src (the captcha frame): $csp"
+[ "$(header x-frame-options < "$tmp/headers")" = DENY ] || fail "the app must not be framed"
+
+# The captcha page: its own policy, framed by this origin only, no inline code.
+curl -sS -D "$tmp/captcha-headers" -o "$tmp/turnstile.html" "$base/turnstile.html"
+grep -q 'HTTP/[0-9.]* 200' "$tmp/captcha-headers" || fail "turnstile.html must be served"
+captcha_csp=$(header content-security-policy < "$tmp/captcha-headers")
+[[ "$captcha_csp" == *"script-src 'self' https://challenges.cloudflare.com"* ]] || fail "turnstile.html CSP script-src: $captcha_csp"
+[[ "$captcha_csp" == *"frame-src https://challenges.cloudflare.com"* ]] || fail "turnstile.html CSP frame-src: $captcha_csp"
+[[ "$captcha_csp" == *"frame-ancestors 'self'"* ]] || fail "turnstile.html CSP frame-ancestors: $captcha_csp"
+[[ "$captcha_csp" != *"'unsafe-inline'"* && "$captcha_csp" != *"'unsafe-eval'"* ]] || fail "turnstile.html CSP allows inline code or eval: $captcha_csp"
+[ "$(header x-frame-options < "$tmp/captcha-headers")" = SAMEORIGIN ] || fail "turnstile.html X-Frame-Options"
+grep -q '<script src="turnstile.js">' "$tmp/turnstile.html" || fail "turnstile.html must load turnstile.js"
+[ "$(curl -sS -o /dev/null -w '%{content_type}' "$base/turnstile.js")" = application/javascript ] \
+  || fail "turnstile.js content type"
+
 curl -sS -o "$tmp/second.html" "$base/"
 [ "$(page_nonce "$tmp/second.html")" != "$nonce" ] || fail "the nonce must change on every response"
 

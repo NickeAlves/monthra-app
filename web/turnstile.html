@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- The Cloudflare Turnstile widget, apart from the app: the web app frames
+       this page (/turnstile.html, same origin) and the mobile webview loads it
+       from APP_PUBLIC_URL. nginx gives it its own CSP: Cloudflare's script and
+       frame, no inline code, framed by this origin only. The page reads its
+       settings from the query string, and posts what happens to the app
+       (lib/features/auth/captcha/); it never listens to messages. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Monthra</title>
+  <link rel="stylesheet" href="turnstile.css">
+  <script src="turnstile.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=monthraTurnstileLoaded" async></script>
+</head>
+<body>
+  <div id="widget"></div>
+</body>
+</html>

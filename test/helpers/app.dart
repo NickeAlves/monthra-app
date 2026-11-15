@@ -10,12 +10,14 @@ import 'package:monthra/core/network/api_providers.dart';
 import 'package:monthra/core/network/session_refresher.dart';
 import 'package:monthra/core/security/token_store.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
+import 'package:monthra/features/auth/captcha/captcha_view.dart';
 import 'package:monthra/features/auth/data/session_hint.dart';
 import 'package:monthra/features/auth/presentation/auth_layout.dart';
 import 'package:monthra/features/home/presentation/home_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 
+import 'captcha.dart';
 import 'fake_api.dart';
 import 'frame.dart';
 
@@ -36,7 +38,8 @@ extension PumpMonthraApp on WidgetTester {
   /// [location] (the platform's initial route, as a browser address or a
   /// deep link gives it). The session travels as [mode] says, from [tokens]
   /// on a device and [hint] on the web; the web boot hints it saves go to
-  /// [bootHints].
+  /// [bootHints]. The captcha page is [captcha] (a [FakeCaptcha] that never
+  /// posts by default); it only shows with an [env] like [captchaEnv].
   Future<void> pumpMonthraApp({
     Env? env,
     PreferencesStore? store,
@@ -46,6 +49,7 @@ extension PumpMonthraApp on WidgetTester {
     TokenStore? tokens,
     SessionHint? hint,
     String? location,
+    FakeCaptcha? captcha,
   }) async {
     if (location != null) {
       platformDispatcher.defaultRouteNameTestValue = location;
@@ -62,6 +66,9 @@ extension PumpMonthraApp on WidgetTester {
           sessionModeProvider.overrideWithValue(mode),
           tokenStoreProvider.overrideWithValue(tokens ?? MemoryTokenStore()),
           sessionHintProvider.overrideWithValue(hint ?? MemorySessionHint()),
+          captchaViewBuilderProvider.overrideWithValue(
+            (captcha ?? FakeCaptcha()).builder,
+          ),
         ],
         child: MonthraApp(
           saveBootHint: ({required languageTag, theme}) =>

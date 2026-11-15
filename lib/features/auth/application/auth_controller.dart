@@ -68,9 +68,17 @@ class AuthController extends _$AuthController {
 
   /// Checks the password. Signs in, or moves to [AwaitingMfa]; a refusal
   /// throws its [ApiException] (wrong credentials, unverified address,
-  /// rate limited...).
-  Future<void> signIn({required String email, required String password}) async {
-    final result = await _api.login(email: email, password: password);
+  /// rate limited...). [captchaToken] answers a `captcha_required`.
+  Future<void> signIn({
+    required String email,
+    required String password,
+    String? captchaToken,
+  }) async {
+    final result = await _api.login(
+      email: email,
+      password: password,
+      captchaToken: captchaToken,
+    );
     if (!ref.mounted) return;
     switch (result) {
       case LoginMfaRequired(:final challenge):

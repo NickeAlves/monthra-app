@@ -6,10 +6,14 @@ Env mobile({
   required String apiBaseUrl,
   required String? flavor,
   String sentryDsn = '',
+  String appPublicUrl = '',
+  String turnstileSiteKey = '',
 }) => Env.parse(
   appEnv: appEnv,
   apiBaseUrl: apiBaseUrl,
   sentryDsn: sentryDsn,
+  appPublicUrl: appPublicUrl,
+  turnstileSiteKey: turnstileSiteKey,
   flavor: flavor,
   webOrigin: null,
 );
@@ -18,13 +22,19 @@ Env web({
   required String appEnv,
   required String page,
   String apiBaseUrl = '',
+  String appPublicUrl = '',
+  String turnstileSiteKey = '',
 }) => Env.parse(
   appEnv: appEnv,
   apiBaseUrl: apiBaseUrl,
   sentryDsn: '',
+  appPublicUrl: appPublicUrl,
+  turnstileSiteKey: turnstileSiteKey,
   flavor: null,
   webOrigin: Uri.parse(page),
 );
+
+const testSiteKey = '1x00000000000000000000AA';
 
 void main() {
   group('Env.parse on mobile', () {
@@ -126,6 +136,95 @@ void main() {
           () => mobile(appEnv: 'local', apiBaseUrl: raw, flavor: 'dev'),
           throwsA(isA<EnvException>()),
           reason: raw,
+        );
+      }
+    });
+  });
+
+  group('the captcha page', () {
+    test('a device loads it from APP_PUBLIC_URL', () {
+      final env = mobile(
+        appEnv: 'production',
+        apiBaseUrl: 'https://api.example.com',
+        flavor: 'prod',
+        appPublicUrl: 'https://app.example.com/',
+        turnstileSiteKey: '0x4AAAAAAAB_c-d',
+      );
+
+      expect(env.appPublicUrl, Uri.parse('https://app.example.com'));
+      expect(env.turnstileSiteKey, '0x4AAAAAAAB_c-d');
+      expect(
+        env.captchaPage,
+        Uri.parse('https://app.example.com/turnstile.html'),
+      );
+    });
+
+    test('the web serves it from the page origin', () {
+      final env = web(
+        appEnv: 'staging',
+        page: 'https://app.example.com/login?from=%2F',
+        appPublicUrl: 'https://elsewhere.example',
+        turnstileSiteKey: testSiteKey,
+      );
+
+      expect(
+        env.captchaPage,
+        Uri.parse('https://app.example.com/turnstile.html'),
+      );
+    });
+
+    test('is absent without a site key or, on a device, an address', () {
+      expect(
+        web(appEnv: 'local', page: 'http://localhost:3000/').captchaPage,
+        isNull,
+      );
+      final noAddress = mobile(
+        appEnv: 'local',
+        apiBaseUrl: 'http://localhost:8080',
+        flavor: 'dev',
+        turnstileSiteKey: testSiteKey,
+      );
+      expect(noAddress.appPublicUrl, isNull);
+      expect(noAddress.captchaPage, isNull);
+    });
+
+    test('refuses a malformed site key', () {
+      for (final key in ['has space', 'quote"', 'x' * 65]) {
+        expect(
+          () => web(
+            appEnv: 'local',
+            page: 'http://localhost:3000/',
+            turnstileSiteKey: key,
+          ),
+          throwsA(isA<EnvException>()),
+          reason: key,
+        );
+      }
+    });
+
+    test('APP_PUBLIC_URL follows the origin rules', () {
+      for (final (appEnv, flavor, url) in [
+        ('production', 'prod', 'http://app.example.com'),
+        ('local', 'dev', 'http://localhost:3000/login'),
+        ('local', 'dev', 'localhost:3000'),
+      ]) {
+        expect(
+          () => mobile(
+            appEnv: appEnv,
+            apiBaseUrl: appEnv == 'local'
+                ? 'http://localhost:8080'
+                : 'https://api.example.com',
+            flavor: flavor,
+            appPublicUrl: url,
+          ),
+          throwsA(
+            isA<EnvException>().having(
+              (e) => e.message,
+              'message',
+              contains('APP_PUBLIC_URL'),
+            ),
+          ),
+          reason: url,
         );
       }
     });

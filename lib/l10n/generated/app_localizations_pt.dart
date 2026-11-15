@@ -238,6 +238,28 @@ class AppLocalizationsPt extends AppLocalizations {
       'Muitas tentativas seguidas. Espere alguns minutos e tente de novo.';
 
   @override
+  String get authCaptchaLabel => 'Verificação de segurança';
+
+  @override
+  String get authCaptchaPrompt =>
+      'Muitas tentativas seguidas. Complete a verificação de segurança abaixo para continuar.';
+
+  @override
+  String get authCaptchaRejected =>
+      'A verificação de segurança não foi aceita. Faça de novo abaixo.';
+
+  @override
+  String get authCaptchaFailed =>
+      'Não foi possível carregar a verificação de segurança. Confira sua conexão e tente de novo.';
+
+  @override
+  String get authCaptchaUnsupported =>
+      'Este navegador não consegue fazer a verificação de segurança. Atualize-o ou use outro.';
+
+  @override
+  String get authCaptchaHint => 'Aguardando a verificação de segurança…';
+
+  @override
   String get errorMfaCodeInvalid =>
       'Código incorreto ou já usado. Espere o próximo.';
 

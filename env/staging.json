@@ -1,5 +1,7 @@
 {
   "APP_ENV": "staging",
   "API_BASE_URL": "",
-  "SENTRY_DSN": ""
+  "SENTRY_DSN": "",
+  "APP_PUBLIC_URL": "",
+  "TURNSTILE_SITE_KEY": ""
 }

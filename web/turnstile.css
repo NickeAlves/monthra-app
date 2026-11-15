@@ -1,0 +1,21 @@
+/* The captcha page fills the box the app gives it (65 px tall for the normal
+   and flexible widgets, 140 px for the compact one) and paints the color the
+   app passes (bg), so the frame never shows a backdrop of its own. */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#widget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* A flexible widget takes the container's width (Turnstile's minimum is 300 px). */
+#widget.flexible > * {
+  width: 100%;
+}
