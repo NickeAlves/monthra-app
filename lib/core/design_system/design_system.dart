@@ -8,6 +8,7 @@ export 'components/button_label.dart';
 export 'components/category_badge.dart';
 export 'components/category_icons.dart';
 export 'components/monthra_card.dart';
+export 'components/monthra_confirm.dart';
 export 'components/monthra_page.dart';
 export 'components/monthra_toast.dart';
 export 'components/qr_code_view.dart';

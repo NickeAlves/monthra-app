@@ -681,6 +681,25 @@ class _Pages extends StatelessWidget {
               leading: const Icon(LucideIcons.bell),
               child: const ButtonLabel('Toast'),
             ),
+            ShadButton.outline(
+              onPressed: () async {
+                final confirmed = await showMonthraConfirm(
+                  context,
+                  title: 'Encerrar as outras sessões?',
+                  description:
+                      'Os outros dispositivos vão pedir para entrar de novo.',
+                  confirmLabel: 'Encerrar sessões',
+                  cancelLabel: 'Cancelar',
+                  barrierLabel: 'Fechar',
+                  destructive: true,
+                );
+                if (context.mounted) {
+                  _toast(context, confirmed ? 'Confirmed' : 'Cancelled');
+                }
+              },
+              leading: const Icon(LucideIcons.messageSquareWarning),
+              child: const ButtonLabel('Confirm'),
+            ),
             ShadButton.destructive(
               onPressed: () => _toast(
                 context,
