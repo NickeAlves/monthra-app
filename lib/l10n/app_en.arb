@@ -567,5 +567,195 @@
   "errorPasswordIncorrect": "That is not your current password.",
   "@errorPasswordIncorrect": {
     "description": "Error under a password field asked again before a sensitive change, when it is wrong."
+  },
+  "settingsMfaLabel": "Two-step verification",
+  "@settingsMfaLabel": {
+    "description": "Title of the two-step verification row in the security settings."
+  },
+  "settingsMfaOn": "On",
+  "@settingsMfaOn": {
+    "description": "Badge beside the two-step verification title when it is on."
+  },
+  "settingsMfaOff": "Off",
+  "@settingsMfaOff": {
+    "description": "Badge beside the two-step verification title when it is off."
+  },
+  "settingsMfaOnDescription": "Signing in also asks for a code from your authenticator app.",
+  "@settingsMfaOnDescription": {
+    "description": "Description of the two-step verification row while it is on."
+  },
+  "settingsMfaOffDescription": "Ask for a code from an authenticator app when signing in, besides the password.",
+  "@settingsMfaOffDescription": {
+    "description": "Description of the two-step verification row while it is off."
+  },
+  "settingsMfaTurnOn": "Turn on",
+  "@settingsMfaTurnOn": {
+    "description": "Button that starts turning two-step verification on."
+  },
+  "settingsMfaTurnOff": "Turn off",
+  "@settingsMfaTurnOff": {
+    "description": "Button that leads to turning two-step verification off."
+  },
+  "settingsRecoveryCodesLabel": "Recovery codes",
+  "@settingsRecoveryCodesLabel": {
+    "description": "Title of the recovery codes row in the security settings."
+  },
+  "settingsRecoveryCodesLeft": "{count, plural, =0{No codes left.} =1{1 code left.} other{{count} codes left.}} Each one signs you in once without the app.",
+  "@settingsRecoveryCodesLeft": {
+    "description": "How many recovery codes are left, in the security settings.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "settingsRecoveryCodesLow": "Create new ones before they run out.",
+  "@settingsRecoveryCodesLow": {
+    "description": "Warning under the recovery codes when three or fewer are left."
+  },
+  "settingsRecoveryCodesNew": "Create new codes",
+  "@settingsRecoveryCodesNew": {
+    "description": "Button that leads to replacing the recovery codes, and title of that page."
+  },
+  "mfaEnableTitle": "Turn on two-step verification",
+  "@mfaEnableTitle": {
+    "description": "Title of the page that turns two-step verification on."
+  },
+  "mfaEnablePasswordDescription": "Confirm your password to start.",
+  "@mfaEnablePasswordDescription": {
+    "description": "Description of the first step of turning two-step verification on."
+  },
+  "mfaContinue": "Continue",
+  "@mfaContinue": {
+    "description": "Button that moves to the next step of turning two-step verification on."
+  },
+  "mfaScanDescription": "Add Monthra to your authenticator app, then type the code it shows.",
+  "@mfaScanDescription": {
+    "description": "Description of the step where the person adds the account to the authenticator app."
+  },
+  "mfaScanStep": "Scan this QR code with the app.",
+  "@mfaScanStep": {
+    "description": "Instruction above the QR code."
+  },
+  "mfaQrLabel": "QR code to add Monthra to your authenticator app",
+  "@mfaQrLabel": {
+    "description": "Read by screen readers for the QR code image."
+  },
+  "mfaOpenAuthenticator": "Open in the authenticator app",
+  "@mfaOpenAuthenticator": {
+    "description": "Button (phones and tablets) that adds the account to an authenticator app on the same device."
+  },
+  "mfaNoAuthenticator": "No authenticator app opened. Type the key instead.",
+  "@mfaNoAuthenticator": {
+    "description": "Message when no app could open the authenticator link."
+  },
+  "mfaSecretLabel": "Or type this key in the app",
+  "@mfaSecretLabel": {
+    "description": "Label above the setup key, for an app that cannot scan."
+  },
+  "mfaCopySecret": "Copy key",
+  "@mfaCopySecret": {
+    "description": "Button that copies the setup key."
+  },
+  "mfaSecretCopied": "Key copied.",
+  "@mfaSecretCopied": {
+    "description": "Message after the setup key was copied."
+  },
+  "mfaConfirmStep": "Then type the 6-digit code the app shows.",
+  "@mfaConfirmStep": {
+    "description": "Instruction above the field that confirms the setup with a first code."
+  },
+  "mfaEnableSubmit": "Turn on",
+  "@mfaEnableSubmit": {
+    "description": "Button that confirms the setup with the code and turns two-step verification on."
+  },
+  "mfaSetupExpired": "The setup expired. Start again.",
+  "@mfaSetupExpired": {
+    "description": "Notice when the 15 minutes to confirm the setup ran out."
+  },
+  "mfaAlreadyOn": "Two-step verification is already on.",
+  "@mfaAlreadyOn": {
+    "description": "Message on the turn-on page when it is already on (from another device, say)."
+  },
+  "mfaAlreadyOff": "Two-step verification is off.",
+  "@mfaAlreadyOff": {
+    "description": "Message on the pages that need it on, when it is off."
+  },
+  "mfaEnabledToast": "Two-step verification turned on",
+  "@mfaEnabledToast": {
+    "description": "Message after two-step verification was turned on."
+  },
+  "mfaDisableTitle": "Turn off two-step verification",
+  "@mfaDisableTitle": {
+    "description": "Title of the page that turns two-step verification off."
+  },
+  "mfaDisableDescription": "Signing in will ask only for your email and password. Confirm with your password and a code.",
+  "@mfaDisableDescription": {
+    "description": "Description of the page that turns two-step verification off."
+  },
+  "mfaDisableSubmit": "Turn off",
+  "@mfaDisableSubmit": {
+    "description": "Button that turns two-step verification off."
+  },
+  "mfaDisabledToast": "Two-step verification turned off",
+  "@mfaDisabledToast": {
+    "description": "Message after two-step verification was turned off."
+  },
+  "recoveryRegenerateDescription": "The codes you have now stop working. Confirm with your password and a code.",
+  "@recoveryRegenerateDescription": {
+    "description": "Description of the page that replaces the recovery codes."
+  },
+  "recoveryRegenerateSubmit": "Create new codes",
+  "@recoveryRegenerateSubmit": {
+    "description": "Button that replaces the recovery codes."
+  },
+  "recoveryCodesTitle": "Save your recovery codes",
+  "@recoveryCodesTitle": {
+    "description": "Title of the card that shows new recovery codes."
+  },
+  "recoveryCodesDescription": "Each code signs you in once if you lose the authenticator app. They are shown only now: keep them somewhere safe, like a password manager.",
+  "@recoveryCodesDescription": {
+    "description": "Explanation above new recovery codes."
+  },
+  "recoveryCodesListLabel": "Recovery codes",
+  "@recoveryCodesListLabel": {
+    "description": "Read by screen readers for the list of recovery codes."
+  },
+  "recoveryCodesCopy": "Copy all",
+  "@recoveryCodesCopy": {
+    "description": "Button that copies every recovery code, one per line."
+  },
+  "recoveryCodesCopied": "Codes copied.",
+  "@recoveryCodesCopied": {
+    "description": "Message after the recovery codes were copied."
+  },
+  "recoveryCodesSaved": "I saved these codes somewhere safe",
+  "@recoveryCodesSaved": {
+    "description": "Checkbox to tick before leaving new recovery codes."
+  },
+  "recoveryCodesDone": "Done",
+  "@recoveryCodesDone": {
+    "description": "Button that leaves new recovery codes once saved."
+  },
+  "recoveryCodesLeaveTitle": "Leave without saving the codes?",
+  "@recoveryCodesLeaveTitle": {
+    "description": "Title of the question when leaving new recovery codes unsaved."
+  },
+  "recoveryCodesLeaveDescription": "They will not be shown again. You can create new ones in Settings.",
+  "@recoveryCodesLeaveDescription": {
+    "description": "Explanation of the question when leaving new recovery codes unsaved."
+  },
+  "recoveryCodesLeave": "Leave",
+  "@recoveryCodesLeave": {
+    "description": "Button that leaves new recovery codes unsaved."
+  },
+  "recoveryCodesStay": "Stay",
+  "@recoveryCodesStay": {
+    "description": "Button that stays with new recovery codes."
+  },
+  "recoveryCodesNewToast": "New recovery codes created",
+  "@recoveryCodesNewToast": {
+    "description": "Message after the recovery codes were replaced."
   }
 }

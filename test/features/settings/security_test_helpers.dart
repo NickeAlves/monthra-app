@@ -1,4 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/app/shell/app_shell.dart';
 import 'package:monthra/core/security/token_store.dart';
@@ -25,6 +27,7 @@ Future<ProfileServer> pumpSignedIn(
   ProfileServer? server,
   Size size = desktop,
   Brightness brightness = Brightness.light,
+  List<Override> overrides = const [],
 }) async {
   final api = server ?? ProfileServer(me: meJson(theme: brightness.name));
   tester.view
@@ -37,6 +40,7 @@ Future<ProfileServer> pumpSignedIn(
     tokens: MemoryTokenStore(savedTokens),
     hint: MemorySessionHint(present: true),
     location: location,
+    overrides: overrides,
     store: MemoryPreferencesStore(
       AppPreferences(
         theme: ThemePreference.fromWire(api.preferences['theme']! as String)!,
@@ -95,4 +99,34 @@ Future<void> expectGuidelines(
   );
   await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
   expect(contrastIssues(tester), isEmpty);
+}
+
+/// What the app copies, as the platform gets it.
+List<String> watchClipboard(WidgetTester tester) {
+  final copied = <String>[];
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (call) async {
+      if (call.method == 'Clipboard.setData') {
+        copied.add(
+          (call.arguments as Map<Object?, Object?>)['text']! as String,
+        );
+      }
+      return null;
+    },
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      null,
+    ),
+  );
+  return copied;
+}
+
+/// Waits until the toasts are gone: on a desktop they sit at the bottom
+/// right, over whatever is below them.
+Future<void> waitOutToasts(WidgetTester tester) async {
+  await tester.pump(const Duration(seconds: 7));
+  await tester.pumpAndSettle();
 }

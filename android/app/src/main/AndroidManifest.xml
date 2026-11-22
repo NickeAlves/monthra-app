@@ -49,5 +49,10 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- Authenticator apps, for "Open in the authenticator app" (MFA setup). -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="otpauth"/>
+        </intent>
     </queries>
 </manifest>

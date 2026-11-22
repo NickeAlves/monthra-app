@@ -9,11 +9,15 @@ class SettingsRow extends StatelessWidget {
     required this.title,
     required this.control,
     this.description,
+    this.badge,
     this.controlLabeled = false,
     super.key,
   });
 
   final String title;
+
+  /// A state beside the title (on, off).
+  final Widget? badge;
   final String? description;
   final Widget control;
 
@@ -28,17 +32,27 @@ class SettingsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
     final description = this.description;
+    final badge = this.badge;
+    final heading = Text(
+      title,
+      style: theme.textTheme.p.copyWith(
+        fontWeight: FontWeight.w500,
+        color: theme.colorScheme.foreground,
+      ),
+    );
     Widget text = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          title,
-          style: theme.textTheme.p.copyWith(
-            fontWeight: FontWeight.w500,
-            color: theme.colorScheme.foreground,
+        if (badge == null)
+          heading
+        else
+          Wrap(
+            spacing: MonthraSpacing.x2,
+            runSpacing: MonthraSpacing.x1,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [heading, badge],
           ),
-        ),
         if (description != null) ...[
           const SizedBox(height: MonthraSpacing.x1),
           Text(

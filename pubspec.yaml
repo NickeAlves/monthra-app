@@ -27,6 +27,7 @@ dependencies:
   riverpod_annotation: ^4.0.8
   shadcn_ui: ^0.59.0
   shared_preferences: ^2.5.6
+  url_launcher: ^6.3.3
   web: ^1.1.2
   webview_flutter: ^4.14.1
 

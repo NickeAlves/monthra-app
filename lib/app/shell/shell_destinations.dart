@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:monthra/app/routes.dart';
 import 'package:monthra/features/home/presentation/home_page.dart';
 import 'package:monthra/features/settings/presentation/security/change_password_page.dart';
+import 'package:monthra/features/settings/presentation/security/disable_mfa_page.dart';
+import 'package:monthra/features/settings/presentation/security/enable_mfa_page.dart';
+import 'package:monthra/features/settings/presentation/security/recovery_codes_exit.dart';
+import 'package:monthra/features/settings/presentation/security/regenerate_recovery_codes_page.dart';
 import 'package:monthra/features/settings/presentation/settings_page.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -48,6 +52,21 @@ enum ShellDestination {
       GoRoute(
         path: _under(AppRoutes.settingsPassword),
         builder: (_, _) => const ChangePasswordPage(),
+      ),
+      // Both show recovery codes once: leaving them unsaved asks first.
+      GoRoute(
+        path: _under(AppRoutes.settingsMfaEnable),
+        onExit: confirmLeavingRecoveryCodes,
+        builder: (_, _) => const EnableMfaPage(),
+      ),
+      GoRoute(
+        path: _under(AppRoutes.settingsMfaDisable),
+        builder: (_, _) => const DisableMfaPage(),
+      ),
+      GoRoute(
+        path: _under(AppRoutes.settingsRecoveryCodes),
+        onExit: confirmLeavingRecoveryCodes,
+        builder: (_, _) => const RegenerateRecoveryCodesPage(),
       ),
     ],
   };

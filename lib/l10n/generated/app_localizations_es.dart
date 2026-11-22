@@ -439,4 +439,164 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorPasswordIncorrect => 'Esa no es tu contraseña actual.';
+
+  @override
+  String get settingsMfaLabel => 'Verificación en dos pasos';
+
+  @override
+  String get settingsMfaOn => 'Activada';
+
+  @override
+  String get settingsMfaOff => 'Desactivada';
+
+  @override
+  String get settingsMfaOnDescription =>
+      'El inicio de sesión también pide un código de tu app de autenticación.';
+
+  @override
+  String get settingsMfaOffDescription =>
+      'Pide un código de una app de autenticación al iniciar sesión, además de la contraseña.';
+
+  @override
+  String get settingsMfaTurnOn => 'Activar';
+
+  @override
+  String get settingsMfaTurnOff => 'Desactivar';
+
+  @override
+  String get settingsRecoveryCodesLabel => 'Códigos de recuperación';
+
+  @override
+  String settingsRecoveryCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Quedan $count códigos.',
+      one: 'Queda 1 código.',
+      zero: 'No quedan códigos.',
+    );
+    return '$_temp0 Cada uno inicia sesión una vez sin la app.';
+  }
+
+  @override
+  String get settingsRecoveryCodesLow =>
+      'Genera nuevos antes de que se acaben.';
+
+  @override
+  String get settingsRecoveryCodesNew => 'Generar nuevos códigos';
+
+  @override
+  String get mfaEnableTitle => 'Activar la verificación en dos pasos';
+
+  @override
+  String get mfaEnablePasswordDescription =>
+      'Confirma tu contraseña para empezar.';
+
+  @override
+  String get mfaContinue => 'Continuar';
+
+  @override
+  String get mfaScanDescription =>
+      'Agrega Monthra a tu app de autenticación y escribe el código que muestre.';
+
+  @override
+  String get mfaScanStep => 'Escanea este código QR con la app.';
+
+  @override
+  String get mfaQrLabel =>
+      'Código QR para agregar Monthra a la app de autenticación';
+
+  @override
+  String get mfaOpenAuthenticator => 'Abrir en la app de autenticación';
+
+  @override
+  String get mfaNoAuthenticator =>
+      'No se abrió ninguna app de autenticación. Escribe la clave.';
+
+  @override
+  String get mfaSecretLabel => 'O escribe esta clave en la app';
+
+  @override
+  String get mfaCopySecret => 'Copiar clave';
+
+  @override
+  String get mfaSecretCopied => 'Clave copiada.';
+
+  @override
+  String get mfaConfirmStep =>
+      'Luego escribe el código de 6 dígitos que muestre la app.';
+
+  @override
+  String get mfaEnableSubmit => 'Activar';
+
+  @override
+  String get mfaSetupExpired => 'La configuración caducó. Empieza de nuevo.';
+
+  @override
+  String get mfaAlreadyOn => 'La verificación en dos pasos ya está activada.';
+
+  @override
+  String get mfaAlreadyOff => 'La verificación en dos pasos está desactivada.';
+
+  @override
+  String get mfaEnabledToast => 'Verificación en dos pasos activada';
+
+  @override
+  String get mfaDisableTitle => 'Desactivar la verificación en dos pasos';
+
+  @override
+  String get mfaDisableDescription =>
+      'El inicio de sesión pedirá solo el correo y la contraseña. Confirma con tu contraseña y un código.';
+
+  @override
+  String get mfaDisableSubmit => 'Desactivar';
+
+  @override
+  String get mfaDisabledToast => 'Verificación en dos pasos desactivada';
+
+  @override
+  String get recoveryRegenerateDescription =>
+      'Los códigos que tienes ahora dejan de funcionar. Confirma con tu contraseña y un código.';
+
+  @override
+  String get recoveryRegenerateSubmit => 'Generar nuevos códigos';
+
+  @override
+  String get recoveryCodesTitle => 'Guarda tus códigos de recuperación';
+
+  @override
+  String get recoveryCodesDescription =>
+      'Cada código inicia sesión una vez si pierdes la app de autenticación. Solo se muestran ahora: guárdalos en un lugar seguro, como un gestor de contraseñas.';
+
+  @override
+  String get recoveryCodesListLabel => 'Códigos de recuperación';
+
+  @override
+  String get recoveryCodesCopy => 'Copiar todos';
+
+  @override
+  String get recoveryCodesCopied => 'Códigos copiados.';
+
+  @override
+  String get recoveryCodesSaved => 'Guardé estos códigos en un lugar seguro';
+
+  @override
+  String get recoveryCodesDone => 'Listo';
+
+  @override
+  String get recoveryCodesLeaveTitle => '¿Salir sin guardar los códigos?';
+
+  @override
+  String get recoveryCodesLeaveDescription =>
+      'No se volverán a mostrar. Puedes generar nuevos en Ajustes.';
+
+  @override
+  String get recoveryCodesLeave => 'Salir de todos modos';
+
+  @override
+  String get recoveryCodesStay => 'Quedarme';
+
+  @override
+  String get recoveryCodesNewToast =>
+      'Nuevos códigos de recuperación generados';
 }

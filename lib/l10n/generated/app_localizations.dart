@@ -861,6 +861,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That is not your current password.'**
   String get errorPasswordIncorrect;
+
+  /// Title of the two-step verification row in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification'**
+  String get settingsMfaLabel;
+
+  /// Badge beside the two-step verification title when it is on.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get settingsMfaOn;
+
+  /// Badge beside the two-step verification title when it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsMfaOff;
+
+  /// Description of the two-step verification row while it is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in also asks for a code from your authenticator app.'**
+  String get settingsMfaOnDescription;
+
+  /// Description of the two-step verification row while it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for a code from an authenticator app when signing in, besides the password.'**
+  String get settingsMfaOffDescription;
+
+  /// Button that starts turning two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get settingsMfaTurnOn;
+
+  /// Button that leads to turning two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get settingsMfaTurnOff;
+
+  /// Title of the recovery codes row in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery codes'**
+  String get settingsRecoveryCodesLabel;
+
+  /// How many recovery codes are left, in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No codes left.} =1{1 code left.} other{{count} codes left.}} Each one signs you in once without the app.'**
+  String settingsRecoveryCodesLeft(int count);
+
+  /// Warning under the recovery codes when three or fewer are left.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new ones before they run out.'**
+  String get settingsRecoveryCodesLow;
+
+  /// Button that leads to replacing the recovery codes, and title of that page.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new codes'**
+  String get settingsRecoveryCodesNew;
+
+  /// Title of the page that turns two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on two-step verification'**
+  String get mfaEnableTitle;
+
+  /// Description of the first step of turning two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your password to start.'**
+  String get mfaEnablePasswordDescription;
+
+  /// Button that moves to the next step of turning two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get mfaContinue;
+
+  /// Description of the step where the person adds the account to the authenticator app.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Monthra to your authenticator app, then type the code it shows.'**
+  String get mfaScanDescription;
+
+  /// Instruction above the QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan this QR code with the app.'**
+  String get mfaScanStep;
+
+  /// Read by screen readers for the QR code image.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code to add Monthra to your authenticator app'**
+  String get mfaQrLabel;
+
+  /// Button (phones and tablets) that adds the account to an authenticator app on the same device.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in the authenticator app'**
+  String get mfaOpenAuthenticator;
+
+  /// Message when no app could open the authenticator link.
+  ///
+  /// In en, this message translates to:
+  /// **'No authenticator app opened. Type the key instead.'**
+  String get mfaNoAuthenticator;
+
+  /// Label above the setup key, for an app that cannot scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type this key in the app'**
+  String get mfaSecretLabel;
+
+  /// Button that copies the setup key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy key'**
+  String get mfaCopySecret;
+
+  /// Message after the setup key was copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Key copied.'**
+  String get mfaSecretCopied;
+
+  /// Instruction above the field that confirms the setup with a first code.
+  ///
+  /// In en, this message translates to:
+  /// **'Then type the 6-digit code the app shows.'**
+  String get mfaConfirmStep;
+
+  /// Button that confirms the setup with the code and turns two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get mfaEnableSubmit;
+
+  /// Notice when the 15 minutes to confirm the setup ran out.
+  ///
+  /// In en, this message translates to:
+  /// **'The setup expired. Start again.'**
+  String get mfaSetupExpired;
+
+  /// Message on the turn-on page when it is already on (from another device, say).
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification is already on.'**
+  String get mfaAlreadyOn;
+
+  /// Message on the pages that need it on, when it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification is off.'**
+  String get mfaAlreadyOff;
+
+  /// Message after two-step verification was turned on.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification turned on'**
+  String get mfaEnabledToast;
+
+  /// Title of the page that turns two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off two-step verification'**
+  String get mfaDisableTitle;
+
+  /// Description of the page that turns two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in will ask only for your email and password. Confirm with your password and a code.'**
+  String get mfaDisableDescription;
+
+  /// Button that turns two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get mfaDisableSubmit;
+
+  /// Message after two-step verification was turned off.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification turned off'**
+  String get mfaDisabledToast;
+
+  /// Description of the page that replaces the recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'The codes you have now stop working. Confirm with your password and a code.'**
+  String get recoveryRegenerateDescription;
+
+  /// Button that replaces the recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new codes'**
+  String get recoveryRegenerateSubmit;
+
+  /// Title of the card that shows new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your recovery codes'**
+  String get recoveryCodesTitle;
+
+  /// Explanation above new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Each code signs you in once if you lose the authenticator app. They are shown only now: keep them somewhere safe, like a password manager.'**
+  String get recoveryCodesDescription;
+
+  /// Read by screen readers for the list of recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery codes'**
+  String get recoveryCodesListLabel;
+
+  /// Button that copies every recovery code, one per line.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy all'**
+  String get recoveryCodesCopy;
+
+  /// Message after the recovery codes were copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Codes copied.'**
+  String get recoveryCodesCopied;
+
+  /// Checkbox to tick before leaving new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'I saved these codes somewhere safe'**
+  String get recoveryCodesSaved;
+
+  /// Button that leaves new recovery codes once saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get recoveryCodesDone;
+
+  /// Title of the question when leaving new recovery codes unsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave without saving the codes?'**
+  String get recoveryCodesLeaveTitle;
+
+  /// Explanation of the question when leaving new recovery codes unsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'They will not be shown again. You can create new ones in Settings.'**
+  String get recoveryCodesLeaveDescription;
+
+  /// Button that leaves new recovery codes unsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get recoveryCodesLeave;
+
+  /// Button that stays with new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get recoveryCodesStay;
+
+  /// Message after the recovery codes were replaced.
+  ///
+  /// In en, this message translates to:
+  /// **'New recovery codes created'**
+  String get recoveryCodesNewToast;
 }
 
 class _AppLocalizationsDelegate

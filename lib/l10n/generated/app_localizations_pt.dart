@@ -438,4 +438,161 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get errorPasswordIncorrect => 'Essa não é a sua senha atual.';
+
+  @override
+  String get settingsMfaLabel => 'Verificação em duas etapas';
+
+  @override
+  String get settingsMfaOn => 'Ativada';
+
+  @override
+  String get settingsMfaOff => 'Desativada';
+
+  @override
+  String get settingsMfaOnDescription =>
+      'O login também pede um código do seu app autenticador.';
+
+  @override
+  String get settingsMfaOffDescription =>
+      'Peça um código de um app autenticador no login, além da senha.';
+
+  @override
+  String get settingsMfaTurnOn => 'Ativar';
+
+  @override
+  String get settingsMfaTurnOff => 'Desativar';
+
+  @override
+  String get settingsRecoveryCodesLabel => 'Códigos de recuperação';
+
+  @override
+  String settingsRecoveryCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count códigos restantes.',
+      one: '1 código restante.',
+      zero: 'Nenhum código restante.',
+    );
+    return '$_temp0 Cada um faz login uma vez sem o app.';
+  }
+
+  @override
+  String get settingsRecoveryCodesLow => 'Gere novos antes que acabem.';
+
+  @override
+  String get settingsRecoveryCodesNew => 'Gerar novos códigos';
+
+  @override
+  String get mfaEnableTitle => 'Ativar a verificação em duas etapas';
+
+  @override
+  String get mfaEnablePasswordDescription => 'Confirme sua senha para começar.';
+
+  @override
+  String get mfaContinue => 'Continuar';
+
+  @override
+  String get mfaScanDescription =>
+      'Adicione o Monthra ao seu app autenticador e digite o código que ele mostrar.';
+
+  @override
+  String get mfaScanStep => 'Escaneie este código QR com o app.';
+
+  @override
+  String get mfaQrLabel =>
+      'Código QR para adicionar o Monthra ao app autenticador';
+
+  @override
+  String get mfaOpenAuthenticator => 'Abrir no app autenticador';
+
+  @override
+  String get mfaNoAuthenticator =>
+      'Nenhum app autenticador abriu. Digite a chave.';
+
+  @override
+  String get mfaSecretLabel => 'Ou digite esta chave no app';
+
+  @override
+  String get mfaCopySecret => 'Copiar chave';
+
+  @override
+  String get mfaSecretCopied => 'Chave copiada.';
+
+  @override
+  String get mfaConfirmStep =>
+      'Depois digite o código de 6 dígitos que o app mostrar.';
+
+  @override
+  String get mfaEnableSubmit => 'Ativar';
+
+  @override
+  String get mfaSetupExpired => 'A configuração expirou. Comece de novo.';
+
+  @override
+  String get mfaAlreadyOn => 'A verificação em duas etapas já está ativada.';
+
+  @override
+  String get mfaAlreadyOff => 'A verificação em duas etapas está desativada.';
+
+  @override
+  String get mfaEnabledToast => 'Verificação em duas etapas ativada';
+
+  @override
+  String get mfaDisableTitle => 'Desativar a verificação em duas etapas';
+
+  @override
+  String get mfaDisableDescription =>
+      'O login vai pedir só o e-mail e a senha. Confirme com a sua senha e um código.';
+
+  @override
+  String get mfaDisableSubmit => 'Desativar';
+
+  @override
+  String get mfaDisabledToast => 'Verificação em duas etapas desativada';
+
+  @override
+  String get recoveryRegenerateDescription =>
+      'Os códigos que você tem agora deixam de valer. Confirme com a sua senha e um código.';
+
+  @override
+  String get recoveryRegenerateSubmit => 'Gerar novos códigos';
+
+  @override
+  String get recoveryCodesTitle => 'Guarde seus códigos de recuperação';
+
+  @override
+  String get recoveryCodesDescription =>
+      'Cada código faz login uma vez se você perder o app autenticador. Eles só aparecem agora: guarde-os num lugar seguro, como um gerenciador de senhas.';
+
+  @override
+  String get recoveryCodesListLabel => 'Códigos de recuperação';
+
+  @override
+  String get recoveryCodesCopy => 'Copiar todos';
+
+  @override
+  String get recoveryCodesCopied => 'Códigos copiados.';
+
+  @override
+  String get recoveryCodesSaved => 'Guardei estes códigos num lugar seguro';
+
+  @override
+  String get recoveryCodesDone => 'Concluir';
+
+  @override
+  String get recoveryCodesLeaveTitle => 'Sair sem guardar os códigos?';
+
+  @override
+  String get recoveryCodesLeaveDescription =>
+      'Eles não vão aparecer de novo. Você pode gerar novos em Configurações.';
+
+  @override
+  String get recoveryCodesLeave => 'Sair mesmo assim';
+
+  @override
+  String get recoveryCodesStay => 'Ficar';
+
+  @override
+  String get recoveryCodesNewToast => 'Novos códigos de recuperação gerados';
 }
