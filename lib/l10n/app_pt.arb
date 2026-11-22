@@ -62,8 +62,6 @@
   "notFoundHome": "Ir para o início",
   "homeGreeting": "Olá, {name}",
   "homeComingSoon": "Seu painel chega nas próximas versões.",
-  "homeSignOut": "Sair",
-  "homeDesignSystem": "Design system",
   "errorInvalidCredentials": "E-mail ou senha incorretos.",
   "errorRateLimited": "Muitas tentativas. Tente de novo em {seconds} s.",
   "errorRateLimitedSoon": "Muitas tentativas. Tente de novo daqui a pouco.",
@@ -108,5 +106,13 @@
   "settingsSaveFailed": "Sua alteração não foi salva",
   "currencyBrl": "Real brasileiro (BRL)",
   "currencyUsd": "Dólar americano (USD)",
-  "currencyEur": "Euro (EUR)"
+  "currencyEur": "Euro (EUR)",
+  "navDashboard": "Painel",
+  "navSettings": "Configurações",
+  "navMore": "Mais",
+  "shellNavigationLabel": "Navegação principal",
+  "shellSignOut": "Sair",
+  "shellSignOutFailed": "Você continua conectado",
+  "shellDesignSystem": "Design system",
+  "shellSignedInAs": "Conectado como {name}"
 }

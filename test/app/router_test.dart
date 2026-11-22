@@ -28,6 +28,13 @@ void main() {
         '/budgets?month=2026-11',
         '/login?from=%2Fbudgets%3Fmonth%3D2026-11',
       ),
+      (
+        'signed out on the settings',
+        signedOut,
+        '/settings',
+        '/login?from=%2Fsettings',
+      ),
+      ('signed in on the settings', signedIn, '/settings', null),
       ('signed out on the sign-in page', signedOut, '/login', null),
       ('signed out on sign-up', signedOut, '/register', null),
       ('signed out on forgot password', signedOut, '/forgot-password', null),
@@ -119,5 +126,26 @@ void main() {
         expect(linkToken(Uri.parse(location)), isNull);
       });
     }
+  });
+
+  group('SessionKind', () {
+    test('notifies the guards only when the kind of session changes', () {
+      var notified = 0;
+      final kind = SessionKind(const AuthBooting())
+        ..addListener(() => notified++)
+        ..update(SignedIn(me()));
+      addTearDown(kind.dispose);
+      expect(notified, 1);
+      // A newer profile (a rename): the guards would say the same.
+      kind.update(SignedIn(me(name: 'Bia')));
+      expect(notified, 1);
+      expect((kind.state as SignedIn).me.name, 'Bia');
+
+      kind
+        ..update(const SignedOut())
+        ..update(const SignedOut(notice: AuthNotice.sessionExpired));
+      expect(notified, 2);
+      expect((kind.state as SignedOut).notice, AuthNotice.sessionExpired);
+    });
   });
 }

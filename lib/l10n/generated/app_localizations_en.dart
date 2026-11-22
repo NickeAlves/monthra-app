@@ -215,12 +215,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeComingSoon => 'Your dashboard arrives in the next versions.';
 
   @override
-  String get homeSignOut => 'Sign out';
-
-  @override
-  String get homeDesignSystem => 'Design system';
-
-  @override
   String get errorInvalidCredentials => 'Wrong email or password.';
 
   @override
@@ -376,4 +370,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get currencyEur => 'Euro (EUR)';
+
+  @override
+  String get navDashboard => 'Dashboard';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get navMore => 'More';
+
+  @override
+  String get shellNavigationLabel => 'Main navigation';
+
+  @override
+  String get shellSignOut => 'Sign out';
+
+  @override
+  String get shellSignOutFailed => 'You\'re still signed in';
+
+  @override
+  String get shellDesignSystem => 'Design system';
+
+  @override
+  String shellSignedInAs(String name) {
+    return 'Signed in as $name';
+  }
 }

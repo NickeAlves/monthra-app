@@ -62,8 +62,6 @@
   "notFoundHome": "Ir al inicio",
   "homeGreeting": "Hola, {name}",
   "homeComingSoon": "Tu panel llega en las próximas versiones.",
-  "homeSignOut": "Cerrar sesión",
-  "homeDesignSystem": "Sistema de diseño",
   "errorInvalidCredentials": "Correo o contraseña incorrectos.",
   "errorRateLimited": "Demasiados intentos. Vuelve a intentarlo en {seconds} s.",
   "errorRateLimitedSoon": "Demasiados intentos. Vuelve a intentarlo en un momento.",
@@ -108,5 +106,13 @@
   "settingsSaveFailed": "Tu cambio no se guardó",
   "currencyBrl": "Real brasileño (BRL)",
   "currencyUsd": "Dólar estadounidense (USD)",
-  "currencyEur": "Euro (EUR)"
+  "currencyEur": "Euro (EUR)",
+  "navDashboard": "Panel",
+  "navSettings": "Ajustes",
+  "navMore": "Más",
+  "shellNavigationLabel": "Navegación principal",
+  "shellSignOut": "Cerrar sesión",
+  "shellSignOutFailed": "Sigues con la sesión iniciada",
+  "shellDesignSystem": "Sistema de diseño",
+  "shellSignedInAs": "Sesión iniciada como {name}"
 }

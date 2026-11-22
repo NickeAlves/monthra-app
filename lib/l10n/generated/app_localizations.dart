@@ -472,18 +472,6 @@ abstract class AppLocalizations {
   /// **'Your dashboard arrives in the next versions.'**
   String get homeComingSoon;
 
-  /// Button that signs out.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out'**
-  String get homeSignOut;
-
-  /// Link to the design system catalog (development and staging builds only).
-  ///
-  /// In en, this message translates to:
-  /// **'Design system'**
-  String get homeDesignSystem;
-
   /// Sign-in error: the email or the password is wrong (never says which).
   ///
   /// In en, this message translates to:
@@ -753,6 +741,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Euro (EUR)'**
   String get currencyEur;
+
+  /// Menu entry of the dashboard (the start page).
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get navDashboard;
+
+  /// Menu entry of the settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navSettings;
+
+  /// Last entry of the phone's bottom bar: opens a list with the other pages and signing out.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get navMore;
+
+  /// Name of the app's menu for screen readers (sidebar or bottom bar).
+  ///
+  /// In en, this message translates to:
+  /// **'Main navigation'**
+  String get shellNavigationLabel;
+
+  /// Button that signs out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get shellSignOut;
+
+  /// Title of the message shown when signing out failed on the web (the session stays).
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re still signed in'**
+  String get shellSignOutFailed;
+
+  /// Link to the design system catalog (development and staging builds only).
+  ///
+  /// In en, this message translates to:
+  /// **'Design system'**
+  String get shellDesignSystem;
+
+  /// Read by screen readers for the account avatar of the collapsed sidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {name}'**
+  String shellSignedInAs(String name);
 }
 
 class _AppLocalizationsDelegate

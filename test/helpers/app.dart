@@ -16,6 +16,7 @@ import 'package:monthra/features/auth/presentation/auth_layout.dart';
 import 'package:monthra/features/home/presentation/home_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
+import 'package:monthra/features/settings/presentation/settings_page.dart';
 
 import 'captcha.dart';
 import 'env.dart';
@@ -80,6 +81,7 @@ extension PumpMonthraApp on WidgetTester {
     (w) =>
         w is AuthLayout ||
         w is HomePage ||
+        w is SettingsPage ||
         w is NotFoundPage ||
         w is DesignSystemCatalog ||
         w is BootScreen ||

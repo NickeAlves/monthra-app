@@ -219,12 +219,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeComingSoon => 'Tu panel llega en las próximas versiones.';
 
   @override
-  String get homeSignOut => 'Cerrar sesión';
-
-  @override
-  String get homeDesignSystem => 'Sistema de diseño';
-
-  @override
   String get errorInvalidCredentials => 'Correo o contraseña incorrectos.';
 
   @override
@@ -380,4 +374,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get currencyEur => 'Euro (EUR)';
+
+  @override
+  String get navDashboard => 'Panel';
+
+  @override
+  String get navSettings => 'Ajustes';
+
+  @override
+  String get navMore => 'Más';
+
+  @override
+  String get shellNavigationLabel => 'Navegación principal';
+
+  @override
+  String get shellSignOut => 'Cerrar sesión';
+
+  @override
+  String get shellSignOutFailed => 'Sigues con la sesión iniciada';
+
+  @override
+  String get shellDesignSystem => 'Sistema de diseño';
+
+  @override
+  String shellSignedInAs(String name) {
+    return 'Sesión iniciada como $name';
+  }
 }

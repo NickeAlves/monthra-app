@@ -278,14 +278,6 @@
   "@homeComingSoon": {
     "description": "Temporary line on the start page until the dashboard lands."
   },
-  "homeSignOut": "Sign out",
-  "@homeSignOut": {
-    "description": "Button that signs out."
-  },
-  "homeDesignSystem": "Design system",
-  "@homeDesignSystem": {
-    "description": "Link to the design system catalog (development and staging builds only)."
-  },
   "errorInvalidCredentials": "Wrong email or password.",
   "@errorInvalidCredentials": {
     "description": "Sign-in error: the email or the password is wrong (never says which)."
@@ -489,5 +481,43 @@
   "currencyEur": "Euro (EUR)",
   "@currencyEur": {
     "description": "Name of the currency EUR, with its code."
+  },
+  "navDashboard": "Dashboard",
+  "@navDashboard": {
+    "description": "Menu entry of the dashboard (the start page)."
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Menu entry of the settings page."
+  },
+  "navMore": "More",
+  "@navMore": {
+    "description": "Last entry of the phone's bottom bar: opens a list with the other pages and signing out."
+  },
+  "shellNavigationLabel": "Main navigation",
+  "@shellNavigationLabel": {
+    "description": "Name of the app's menu for screen readers (sidebar or bottom bar)."
+  },
+  "shellSignOut": "Sign out",
+  "@shellSignOut": {
+    "description": "Button that signs out."
+  },
+  "shellSignOutFailed": "You're still signed in",
+  "@shellSignOutFailed": {
+    "description": "Title of the message shown when signing out failed on the web (the session stays)."
+  },
+  "shellDesignSystem": "Design system",
+  "@shellDesignSystem": {
+    "description": "Link to the design system catalog (development and staging builds only)."
+  },
+  "shellSignedInAs": "Signed in as {name}",
+  "@shellSignedInAs": {
+    "description": "Read by screen readers for the account avatar of the collapsed sidebar.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ana"
+      }
+    }
   }
 }
