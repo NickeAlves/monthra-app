@@ -757,5 +757,123 @@
   "recoveryCodesNewToast": "New recovery codes created",
   "@recoveryCodesNewToast": {
     "description": "Message after the recovery codes were replaced."
+  },
+  "appCancel": "Cancel",
+  "@appCancel": {
+    "description": "Button that closes a question without doing anything."
+  },
+  "sessionsTitle": "Sessions",
+  "@sessionsTitle": {
+    "description": "Title of the settings card listing the signed-in devices."
+  },
+  "sessionsDescription": "Devices signed in to your account. Sign out any you don't recognize.",
+  "@sessionsDescription": {
+    "description": "Description of the sessions card."
+  },
+  "sessionsThisDevice": "This device",
+  "@sessionsThisDevice": {
+    "description": "Badge beside the session of the device in use."
+  },
+  "sessionsActiveNow": "In use now",
+  "@sessionsActiveNow": {
+    "description": "Line under the session of the device in use."
+  },
+  "sessionsLastActive": "Last active {date}",
+  "@sessionsLastActive": {
+    "description": "Line under another session: when it was last used.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "21 Nov 2026, 08:15"
+      }
+    }
+  },
+  "sessionsIp": "IP {ip}",
+  "@sessionsIp": {
+    "description": "The network address a session was last seen from.",
+    "placeholders": {
+      "ip": {
+        "type": "String",
+        "example": "203.0.113.7"
+      }
+    }
+  },
+  "sessionsDevice": "{browser} on {os}",
+  "@sessionsDevice": {
+    "description": "A session's device: a browser on a system (brand names, never translated).",
+    "placeholders": {
+      "browser": {
+        "type": "String",
+        "example": "Chrome"
+      },
+      "os": {
+        "type": "String",
+        "example": "macOS"
+      }
+    }
+  },
+  "sessionsApp": "Monthra app on {os}",
+  "@sessionsApp": {
+    "description": "A session of the Monthra phone app.",
+    "placeholders": {
+      "os": {
+        "type": "String",
+        "example": "iOS"
+      }
+    }
+  },
+  "sessionsUnknownDevice": "Unknown device",
+  "@sessionsUnknownDevice": {
+    "description": "A session whose device could not be told."
+  },
+  "sessionsRevoke": "Sign out",
+  "@sessionsRevoke": {
+    "description": "Button that signs out one session (another device)."
+  },
+  "sessionsRevokeLabel": "Sign out {device}",
+  "@sessionsRevokeLabel": {
+    "description": "Read by screen readers for the button that signs out one session.",
+    "placeholders": {
+      "device": {
+        "type": "String",
+        "example": "Chrome on macOS"
+      }
+    }
+  },
+  "sessionsRevoked": "Session signed out.",
+  "@sessionsRevoked": {
+    "description": "Message after one session was signed out."
+  },
+  "sessionsRevokeOthers": "Sign out of all other sessions",
+  "@sessionsRevokeOthers": {
+    "description": "Button that signs out every session but this one."
+  },
+  "sessionsRevokeOthersTitle": "Sign out of every other session?",
+  "@sessionsRevokeOthersTitle": {
+    "description": "Question before signing out every other session."
+  },
+  "sessionsRevokeOthersDescription": "The other devices will have to sign in again. This one stays signed in.",
+  "@sessionsRevokeOthersDescription": {
+    "description": "Explanation of the question before signing out every other session."
+  },
+  "sessionsRevokeOthersConfirm": "Sign out others",
+  "@sessionsRevokeOthersConfirm": {
+    "description": "Button that confirms signing out every other session."
+  },
+  "sessionsOthersRevoked": "Other sessions signed out.",
+  "@sessionsOthersRevoked": {
+    "description": "Message after every other session was signed out."
+  },
+  "sessionsNoOthers": "No other device is signed in.",
+  "@sessionsNoOthers": {
+    "description": "Line when this device is the only session."
+  },
+  "sessionsLoadFailed": "Couldn't load the sessions",
+  "@sessionsLoadFailed": {
+    "description": "Title when the session list could not be loaded."
+  },
+  "sessionsRevokeFailed": "The session was not signed out",
+  "@sessionsRevokeFailed": {
+    "description": "Title of the error message when signing out a session failed."
   }
 }

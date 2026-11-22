@@ -40,8 +40,8 @@ void main() {
     await fill(tester);
     await tapAndSettle(tester, button(save));
 
-    final sent = server.adapter.sent.last;
-    expect('${sent.method} ${sent.path}', 'POST /api/v1/me/password');
+    final sent = server.adapter.sent.lastWhere((r) => r.method == 'POST');
+    expect(sent.path, '/api/v1/me/password');
     expect(sent.data, {
       'currentPassword': testPassword,
       'newPassword': 'a brand new password',

@@ -5,11 +5,21 @@ import 'package:flutter/widgets.dart';
 /// overflowing. The button puts its child straight into a `Row`, so this
 /// can be [Flexible]; assistive technologies still read the whole text.
 class ButtonLabel extends StatelessWidget {
-  const new(this.text, {super.key});
+  const new(this.text, {this.semanticsLabel, super.key});
 
   final String text;
 
+  /// What assistive technologies read instead of [text], when the short
+  /// text needs its context ("Sign out" -> "Sign out Chrome on macOS").
+  final String? semanticsLabel;
+
   @override
-  Widget build(BuildContext context) =>
-      Flexible(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis));
+  Widget build(BuildContext context) => Flexible(
+    child: Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      semanticsLabel: semanticsLabel,
+    ),
+  );
 }

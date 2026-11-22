@@ -591,4 +591,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recoveryCodesNewToast => 'New recovery codes created';
+
+  @override
+  String get appCancel => 'Cancel';
+
+  @override
+  String get sessionsTitle => 'Sessions';
+
+  @override
+  String get sessionsDescription =>
+      'Devices signed in to your account. Sign out any you don\'t recognize.';
+
+  @override
+  String get sessionsThisDevice => 'This device';
+
+  @override
+  String get sessionsActiveNow => 'In use now';
+
+  @override
+  String sessionsLastActive(String date) {
+    return 'Last active $date';
+  }
+
+  @override
+  String sessionsIp(String ip) {
+    return 'IP $ip';
+  }
+
+  @override
+  String sessionsDevice(String browser, String os) {
+    return '$browser on $os';
+  }
+
+  @override
+  String sessionsApp(String os) {
+    return 'Monthra app on $os';
+  }
+
+  @override
+  String get sessionsUnknownDevice => 'Unknown device';
+
+  @override
+  String get sessionsRevoke => 'Sign out';
+
+  @override
+  String sessionsRevokeLabel(String device) {
+    return 'Sign out $device';
+  }
+
+  @override
+  String get sessionsRevoked => 'Session signed out.';
+
+  @override
+  String get sessionsRevokeOthers => 'Sign out of all other sessions';
+
+  @override
+  String get sessionsRevokeOthersTitle => 'Sign out of every other session?';
+
+  @override
+  String get sessionsRevokeOthersDescription =>
+      'The other devices will have to sign in again. This one stays signed in.';
+
+  @override
+  String get sessionsRevokeOthersConfirm => 'Sign out others';
+
+  @override
+  String get sessionsOthersRevoked => 'Other sessions signed out.';
+
+  @override
+  String get sessionsNoOthers => 'No other device is signed in.';
+
+  @override
+  String get sessionsLoadFailed => 'Couldn\'t load the sessions';
+
+  @override
+  String get sessionsRevokeFailed => 'The session was not signed out';
 }

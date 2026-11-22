@@ -92,6 +92,16 @@ final class ProfileServer {
     return gate;
   }
 
+  /// The next `GET /me/sessions` waits until the returned completer
+  /// completes.
+  Completer<void> holdReads() {
+    final gate = Completer<void>();
+    _readGates.add(gate);
+    return gate;
+  }
+
+  final List<Completer<void>> _readGates = [];
+
   /// The next request to [path] (`/api/v1/...`) gets [reply] instead.
   void fail(String path, Reply reply) => (_failures[path] ??= []).add(reply);
 
@@ -215,6 +225,11 @@ final class ProfileServer {
   Future<Reply> _handle(SentRequest r) async {
     if (r.method == 'PATCH' && _gates.isNotEmpty) {
       await _gates.removeAt(0).future;
+    }
+    if (r.method == 'GET' &&
+        r.path == '/api/v1/me/sessions' &&
+        _readGates.isNotEmpty) {
+      await _readGates.removeAt(0).future;
     }
     final failures = _failures[r.path];
     if (failures != null && failures.isNotEmpty) return failures.removeAt(0);

@@ -595,4 +595,79 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get recoveryCodesNewToast => 'Novos códigos de recuperação gerados';
+
+  @override
+  String get appCancel => 'Cancelar';
+
+  @override
+  String get sessionsTitle => 'Sessões';
+
+  @override
+  String get sessionsDescription =>
+      'Dispositivos conectados à sua conta. Encerre os que você não reconhecer.';
+
+  @override
+  String get sessionsThisDevice => 'Este dispositivo';
+
+  @override
+  String get sessionsActiveNow => 'Em uso agora';
+
+  @override
+  String sessionsLastActive(String date) {
+    return 'Ativa por último em $date';
+  }
+
+  @override
+  String sessionsIp(String ip) {
+    return 'IP $ip';
+  }
+
+  @override
+  String sessionsDevice(String browser, String os) {
+    return '$browser no $os';
+  }
+
+  @override
+  String sessionsApp(String os) {
+    return 'App Monthra no $os';
+  }
+
+  @override
+  String get sessionsUnknownDevice => 'Dispositivo desconhecido';
+
+  @override
+  String get sessionsRevoke => 'Encerrar';
+
+  @override
+  String sessionsRevokeLabel(String device) {
+    return 'Encerrar $device';
+  }
+
+  @override
+  String get sessionsRevoked => 'Sessão encerrada.';
+
+  @override
+  String get sessionsRevokeOthers => 'Encerrar todas as outras sessões';
+
+  @override
+  String get sessionsRevokeOthersTitle => 'Encerrar todas as outras sessões?';
+
+  @override
+  String get sessionsRevokeOthersDescription =>
+      'Os outros dispositivos vão precisar entrar de novo. Este continua conectado.';
+
+  @override
+  String get sessionsRevokeOthersConfirm => 'Encerrar as outras';
+
+  @override
+  String get sessionsOthersRevoked => 'Outras sessões encerradas.';
+
+  @override
+  String get sessionsNoOthers => 'Nenhum outro dispositivo está conectado.';
+
+  @override
+  String get sessionsLoadFailed => 'Não foi possível carregar as sessões';
+
+  @override
+  String get sessionsRevokeFailed => 'A sessão não foi encerrada';
 }

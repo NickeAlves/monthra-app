@@ -1137,6 +1137,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New recovery codes created'**
   String get recoveryCodesNewToast;
+
+  /// Button that closes a question without doing anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get appCancel;
+
+  /// Title of the settings card listing the signed-in devices.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get sessionsTitle;
+
+  /// Description of the sessions card.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices signed in to your account. Sign out any you don\'t recognize.'**
+  String get sessionsDescription;
+
+  /// Badge beside the session of the device in use.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get sessionsThisDevice;
+
+  /// Line under the session of the device in use.
+  ///
+  /// In en, this message translates to:
+  /// **'In use now'**
+  String get sessionsActiveNow;
+
+  /// Line under another session: when it was last used.
+  ///
+  /// In en, this message translates to:
+  /// **'Last active {date}'**
+  String sessionsLastActive(String date);
+
+  /// The network address a session was last seen from.
+  ///
+  /// In en, this message translates to:
+  /// **'IP {ip}'**
+  String sessionsIp(String ip);
+
+  /// A session's device: a browser on a system (brand names, never translated).
+  ///
+  /// In en, this message translates to:
+  /// **'{browser} on {os}'**
+  String sessionsDevice(String browser, String os);
+
+  /// A session of the Monthra phone app.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthra app on {os}'**
+  String sessionsApp(String os);
+
+  /// A session whose device could not be told.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get sessionsUnknownDevice;
+
+  /// Button that signs out one session (another device).
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get sessionsRevoke;
+
+  /// Read by screen readers for the button that signs out one session.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out {device}'**
+  String sessionsRevokeLabel(String device);
+
+  /// Message after one session was signed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Session signed out.'**
+  String get sessionsRevoked;
+
+  /// Button that signs out every session but this one.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of all other sessions'**
+  String get sessionsRevokeOthers;
+
+  /// Question before signing out every other session.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of every other session?'**
+  String get sessionsRevokeOthersTitle;
+
+  /// Explanation of the question before signing out every other session.
+  ///
+  /// In en, this message translates to:
+  /// **'The other devices will have to sign in again. This one stays signed in.'**
+  String get sessionsRevokeOthersDescription;
+
+  /// Button that confirms signing out every other session.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out others'**
+  String get sessionsRevokeOthersConfirm;
+
+  /// Message after every other session was signed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Other sessions signed out.'**
+  String get sessionsOthersRevoked;
+
+  /// Line when this device is the only session.
+  ///
+  /// In en, this message translates to:
+  /// **'No other device is signed in.'**
+  String get sessionsNoOthers;
+
+  /// Title when the session list could not be loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the sessions'**
+  String get sessionsLoadFailed;
+
+  /// Title of the error message when signing out a session failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The session was not signed out'**
+  String get sessionsRevokeFailed;
 }
 
 class _AppLocalizationsDelegate
