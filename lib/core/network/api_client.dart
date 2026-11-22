@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/interceptors/auth_interceptor.dart';
 import 'package:monthra/core/network/interceptors/csrf_interceptor.dart';
@@ -23,6 +24,8 @@ import 'package:monthra/core/security/token_store.dart';
 ///
 /// Errors go through them in the same order. The client never sends an
 /// `Origin` header: the server would take a native call for a browser's.
+/// Native clients name themselves ([nativeUserAgent]); a browser sends its
+/// own `User-Agent` (scripts cannot set it).
 Dio createApiDio({
   required Uri apiRoot,
   required SessionMode mode,
@@ -39,7 +42,10 @@ Dio createApiDio({
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
       contentType: Headers.jsonContentType,
-      headers: {'accept': 'application/json, application/problem+json'},
+      headers: {
+        'accept': 'application/json, application/problem+json',
+        if (mode == SessionMode.bearer) 'user-agent': nativeUserAgent(),
+      },
     ),
   )..httpClientAdapter = adapter;
   final refresher = SessionRefresher(
@@ -58,6 +64,20 @@ Dio createApiDio({
   ]);
   return dio;
 }
+
+/// The `User-Agent` of the native apps (`Monthra (iOS)`), which the server
+/// keeps with each session, so the session list can say which device it is.
+/// dart:io's own (`Dart/3.x (dart:io)`) says nothing of it. No version or
+/// device model: nothing to fingerprint beyond the platform.
+String nativeUserAgent([TargetPlatform? platform]) =>
+    'Monthra (${switch (platform ?? defaultTargetPlatform) {
+      TargetPlatform.iOS => 'iOS',
+      TargetPlatform.android => 'Android',
+      TargetPlatform.macOS => 'macOS',
+      TargetPlatform.windows => 'Windows',
+      TargetPlatform.linux => 'Linux',
+      TargetPlatform.fuchsia => 'Fuchsia',
+    }})';
 
 /// The calls features make to the API, under `/api/v1` (paths start with
 /// `/`, as in the OpenAPI). Every failure is an [ApiException].

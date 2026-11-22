@@ -14,18 +14,21 @@ import '../helpers/golden.dart';
 import '../helpers/profile_server.dart';
 
 /// Goldens (pt-BR, motion off) of the shell at each breakpoint and of the
-/// settings page, signed in with the profile's theme.
+/// whole settings page (two-step verification off, then on with few
+/// recovery codes left), signed in with the profile's theme.
 void main() {
   const scenes = [
-    ('shell_desktop', Size(1280, 800), '/', false),
-    ('shell_tablet', Size(800, 1024), '/', false),
-    ('shell_phone', Size(390, 844), '/', false),
-    ('shell_phone_more', Size(390, 844), '/', true),
-    ('settings_desktop', Size(1280, 1000), '/settings', false),
-    ('settings_phone', Size(390, 1400), '/settings', false),
+    ('shell_desktop', Size(1280, 800), '/', false, false),
+    ('shell_tablet', Size(800, 1024), '/', false, false),
+    ('shell_phone', Size(390, 844), '/', false, false),
+    ('shell_phone_more', Size(390, 844), '/', true, false),
+    ('settings_desktop', Size(1280, 1900), '/settings', false, false),
+    ('settings_phone', Size(390, 2900), '/settings', false, false),
+    ('settings_mfa_desktop', Size(1280, 1900), '/settings', false, true),
+    ('settings_mfa_phone', Size(390, 2900), '/settings', false, true),
   ];
 
-  for (final (name, size, location, more) in scenes) {
+  for (final (name, size, location, more, mfa) in scenes) {
     group(name, () {
       for (final brightness in Brightness.values) {
         testWidgets(brightness.name, tags: ['golden'], (tester) async {
@@ -35,8 +38,16 @@ void main() {
           addTearDown(tester.view.reset);
           tester.reduceMotion();
           final theme = ThemePreference.fromWire(brightness.name)!;
+          final me = meJson(theme: brightness.name);
           await tester.pumpMonthraApp(
-            api: ProfileServer(me: meJson(theme: brightness.name)).adapter,
+            api: ProfileServer(
+              me: mfa
+                  ? {
+                      ...me,
+                      'mfa': {'enabled': true, 'recoveryCodesRemaining': 2},
+                    }
+                  : me,
+            ).adapter,
             tokens: MemoryTokenStore(savedTokens),
             location: location,
             store: MemoryPreferencesStore(AppPreferences(theme: theme)),

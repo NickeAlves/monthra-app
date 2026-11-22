@@ -42,8 +42,16 @@ Future<ProfileServer> pumpSettings(
       ),
     ),
   );
+  // The sessions card loads its list.
+  await tester.pumpAndSettle();
   return api;
 }
+
+/// What the page sent but reads (the sessions list).
+List<SentRequest> writes(ProfileServer server) => [
+  for (final r in server.adapter.sent)
+    if (r.method != 'GET') r,
+];
 
 Me signedInMe(WidgetTester tester) =>
     (tester.frameContainer.read(authControllerProvider) as SignedIn).me;
@@ -108,7 +116,7 @@ void main() {
       await tester.tap(find.text('Salvar nome'));
       await tester.pumpAndSettle();
       expect(find.text('Obrigatório.'), findsOneWidget);
-      expect(server.adapter.sent, isEmpty);
+      expect(writes(server), isEmpty);
     });
 
     testWidgets("the server's field error shows under the field until the "
@@ -128,7 +136,7 @@ void main() {
       await tester.pump();
       await tester.tap(find.text('Salvar nome'));
       await tester.pumpAndSettle();
-      expect(server.adapter.sent, hasLength(1));
+      expect(writes(server), hasLength(1));
       expect(find.text('Valor inválido.'), findsOneWidget);
 
       await tester.enterText(nameField(), 'Bia');

@@ -399,4 +399,275 @@ class AppLocalizationsPt extends AppLocalizations {
   String shellSignedInAs(String name) {
     return 'Conectado como $name';
   }
+
+  @override
+  String get settingsSecurityTitle => 'Segurança';
+
+  @override
+  String get settingsSecurityDescription =>
+      'Sua senha e a verificação em duas etapas.';
+
+  @override
+  String get settingsPasswordLabel => 'Senha';
+
+  @override
+  String get settingsPasswordDescription =>
+      'Ao trocar, suas outras sessões são encerradas.';
+
+  @override
+  String get settingsPasswordChange => 'Alterar senha';
+
+  @override
+  String get passwordPageDescription => 'Digite a senha atual e depois a nova.';
+
+  @override
+  String get passwordCurrentLabel => 'Senha atual';
+
+  @override
+  String get passwordNewLabel => 'Nova senha';
+
+  @override
+  String get passwordSubmit => 'Salvar nova senha';
+
+  @override
+  String get passwordChanged => 'Senha alterada';
+
+  @override
+  String get passwordChangedDescription =>
+      'Suas outras sessões foram encerradas.';
+
+  @override
+  String get errorPasswordIncorrect => 'Essa não é a sua senha atual.';
+
+  @override
+  String get settingsMfaLabel => 'Verificação em duas etapas';
+
+  @override
+  String get settingsMfaOn => 'Ativada';
+
+  @override
+  String get settingsMfaOff => 'Desativada';
+
+  @override
+  String get settingsMfaOnDescription =>
+      'O login também pede um código do seu app autenticador.';
+
+  @override
+  String get settingsMfaOffDescription =>
+      'Peça um código de um app autenticador no login, além da senha.';
+
+  @override
+  String get settingsMfaTurnOn => 'Ativar';
+
+  @override
+  String get settingsMfaTurnOff => 'Desativar';
+
+  @override
+  String get settingsRecoveryCodesLabel => 'Códigos de recuperação';
+
+  @override
+  String settingsRecoveryCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count códigos restantes.',
+      one: '1 código restante.',
+      zero: 'Nenhum código restante.',
+    );
+    return '$_temp0 Cada um faz login uma vez sem o app.';
+  }
+
+  @override
+  String get settingsRecoveryCodesLow => 'Gere novos antes que acabem.';
+
+  @override
+  String get settingsRecoveryCodesNew => 'Gerar novos códigos';
+
+  @override
+  String get mfaEnableTitle => 'Ativar a verificação em duas etapas';
+
+  @override
+  String get mfaEnablePasswordDescription => 'Confirme sua senha para começar.';
+
+  @override
+  String get mfaContinue => 'Continuar';
+
+  @override
+  String get mfaScanDescription =>
+      'Adicione o Monthra ao seu app autenticador e digite o código que ele mostrar.';
+
+  @override
+  String get mfaScanStep => 'Escaneie este código QR com o app.';
+
+  @override
+  String get mfaQrLabel =>
+      'Código QR para adicionar o Monthra ao app autenticador';
+
+  @override
+  String get mfaOpenAuthenticator => 'Abrir no app autenticador';
+
+  @override
+  String get mfaNoAuthenticator =>
+      'Nenhum app autenticador abriu. Digite a chave.';
+
+  @override
+  String get mfaSecretLabel => 'Ou digite esta chave no app';
+
+  @override
+  String get mfaCopySecret => 'Copiar chave';
+
+  @override
+  String get mfaSecretCopied => 'Chave copiada.';
+
+  @override
+  String get mfaConfirmStep =>
+      'Depois digite o código de 6 dígitos que o app mostrar.';
+
+  @override
+  String get mfaEnableSubmit => 'Ativar';
+
+  @override
+  String get mfaSetupExpired => 'A configuração expirou. Comece de novo.';
+
+  @override
+  String get mfaAlreadyOn => 'A verificação em duas etapas já está ativada.';
+
+  @override
+  String get mfaAlreadyOff => 'A verificação em duas etapas está desativada.';
+
+  @override
+  String get mfaEnabledToast => 'Verificação em duas etapas ativada';
+
+  @override
+  String get mfaDisableTitle => 'Desativar a verificação em duas etapas';
+
+  @override
+  String get mfaDisableDescription =>
+      'O login vai pedir só o e-mail e a senha. Confirme com a sua senha e um código.';
+
+  @override
+  String get mfaDisableSubmit => 'Desativar';
+
+  @override
+  String get mfaDisabledToast => 'Verificação em duas etapas desativada';
+
+  @override
+  String get recoveryRegenerateDescription =>
+      'Os códigos que você tem agora deixam de valer. Confirme com a sua senha e um código.';
+
+  @override
+  String get recoveryRegenerateSubmit => 'Gerar novos códigos';
+
+  @override
+  String get recoveryCodesTitle => 'Guarde seus códigos de recuperação';
+
+  @override
+  String get recoveryCodesDescription =>
+      'Cada código faz login uma vez se você perder o app autenticador. Eles só aparecem agora: guarde-os num lugar seguro, como um gerenciador de senhas.';
+
+  @override
+  String get recoveryCodesListLabel => 'Códigos de recuperação';
+
+  @override
+  String get recoveryCodesCopy => 'Copiar todos';
+
+  @override
+  String get recoveryCodesCopied => 'Códigos copiados.';
+
+  @override
+  String get recoveryCodesSaved => 'Guardei estes códigos num lugar seguro';
+
+  @override
+  String get recoveryCodesDone => 'Concluir';
+
+  @override
+  String get recoveryCodesLeaveTitle => 'Sair sem guardar os códigos?';
+
+  @override
+  String get recoveryCodesLeaveDescription =>
+      'Eles não vão aparecer de novo. Você pode gerar novos em Configurações.';
+
+  @override
+  String get recoveryCodesLeave => 'Sair mesmo assim';
+
+  @override
+  String get recoveryCodesStay => 'Ficar';
+
+  @override
+  String get recoveryCodesNewToast => 'Novos códigos de recuperação gerados';
+
+  @override
+  String get appCancel => 'Cancelar';
+
+  @override
+  String get sessionsTitle => 'Sessões';
+
+  @override
+  String get sessionsDescription =>
+      'Dispositivos conectados à sua conta. Encerre os que você não reconhecer.';
+
+  @override
+  String get sessionsThisDevice => 'Este dispositivo';
+
+  @override
+  String get sessionsActiveNow => 'Em uso agora';
+
+  @override
+  String sessionsLastActive(String date) {
+    return 'Ativa por último em $date';
+  }
+
+  @override
+  String sessionsIp(String ip) {
+    return 'IP $ip';
+  }
+
+  @override
+  String sessionsDevice(String browser, String os) {
+    return '$browser no $os';
+  }
+
+  @override
+  String sessionsApp(String os) {
+    return 'App Monthra no $os';
+  }
+
+  @override
+  String get sessionsUnknownDevice => 'Dispositivo desconhecido';
+
+  @override
+  String get sessionsRevoke => 'Encerrar';
+
+  @override
+  String sessionsRevokeLabel(String device) {
+    return 'Encerrar $device';
+  }
+
+  @override
+  String get sessionsRevoked => 'Sessão encerrada.';
+
+  @override
+  String get sessionsRevokeOthers => 'Encerrar todas as outras sessões';
+
+  @override
+  String get sessionsRevokeOthersTitle => 'Encerrar todas as outras sessões?';
+
+  @override
+  String get sessionsRevokeOthersDescription =>
+      'Os outros dispositivos vão precisar entrar de novo. Este continua conectado.';
+
+  @override
+  String get sessionsRevokeOthersConfirm => 'Encerrar as outras';
+
+  @override
+  String get sessionsOthersRevoked => 'Outras sessões encerradas.';
+
+  @override
+  String get sessionsNoOthers => 'Nenhum outro dispositivo está conectado.';
+
+  @override
+  String get sessionsLoadFailed => 'Não foi possível carregar as sessões';
+
+  @override
+  String get sessionsRevokeFailed => 'A sessão não foi encerrada';
 }

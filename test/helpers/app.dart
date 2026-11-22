@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/app/app.dart';
 import 'package:monthra/app/not_found_page.dart';
@@ -37,6 +38,7 @@ extension PumpMonthraApp on WidgetTester {
   /// on a device and [hint] on the web; the web boot hints it saves go to
   /// [bootHints]. The captcha page is [captcha] (a [FakeCaptcha] that never
   /// posts by default); it only shows with an [env] like [captchaEnv].
+  /// [overrides] come last (a fake of a device service, say).
   Future<void> pumpMonthraApp({
     Env? env,
     PreferencesStore? store,
@@ -47,6 +49,7 @@ extension PumpMonthraApp on WidgetTester {
     SessionHint? hint,
     String? location,
     FakeCaptcha? captcha,
+    List<Override> overrides = const [],
   }) async {
     if (location != null) {
       platformDispatcher.defaultRouteNameTestValue = location;
@@ -66,6 +69,7 @@ extension PumpMonthraApp on WidgetTester {
           captchaViewBuilderProvider.overrideWithValue(
             (captcha ?? FakeCaptcha()).builder,
           ),
+          ...overrides,
         ],
         child: MonthraApp(
           saveBootHint: ({required languageTag, theme}) =>

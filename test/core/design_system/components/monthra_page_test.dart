@@ -43,6 +43,35 @@ void main() {
     });
   }
 
+  testWidgets('a page under another has its way back above the title', (
+    tester,
+  ) async {
+    var back = 0;
+    final semantics = tester.ensureSemantics();
+    await tester.pumpFrame(
+      MonthraPage(
+        title: 'Alterar senha',
+        back: MonthraPageBack(label: 'Configurações', onPressed: () => back++),
+        child: const SizedBox(height: 40),
+      ),
+      size: const Size(390, 844),
+    );
+    final link = find.widgetWithText(ShadButton, 'Configurações');
+    expect(
+      tester.getBottomLeft(link).dy,
+      lessThan(tester.getTopLeft(find.text('Alterar senha')).dy),
+    );
+    expect(tester.getSize(link).height, greaterThanOrEqualTo(44));
+    expect(
+      tester.getTopLeft(link).dx,
+      tester.getTopLeft(find.text('Alterar senha')).dx,
+      reason: 'the arrow lines up with the title',
+    );
+    await tester.tap(link);
+    expect(back, 1);
+    semantics.dispose();
+  });
+
   testWidgets('holds its width on a wide window', (tester) async {
     await tester.pumpFrame(
       const MonthraPage(

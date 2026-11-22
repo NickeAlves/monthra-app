@@ -789,6 +789,480 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Signed in as {name}'**
   String shellSignedInAs(String name);
+
+  /// Title of the settings card with the password and two-step verification.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get settingsSecurityTitle;
+
+  /// Description of the security card in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password and two-step verification.'**
+  String get settingsSecurityDescription;
+
+  /// Title of the password row in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get settingsPasswordLabel;
+
+  /// Description of the password row: a change signs out the other devices.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing it signs out your other sessions.'**
+  String get settingsPasswordDescription;
+
+  /// Button of the password row, and title of the page that changes it.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get settingsPasswordChange;
+
+  /// Description under the title of the change password page.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your current password, then the new one.'**
+  String get passwordPageDescription;
+
+  /// Label of the field with the password in use now.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get passwordCurrentLabel;
+
+  /// Label of the field with the password to set.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get passwordNewLabel;
+
+  /// Button that sets the new password.
+  ///
+  /// In en, this message translates to:
+  /// **'Save new password'**
+  String get passwordSubmit;
+
+  /// Message after the password was changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed'**
+  String get passwordChanged;
+
+  /// Second line of the message after the password was changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your other sessions were signed out.'**
+  String get passwordChangedDescription;
+
+  /// Error under a password field asked again before a sensitive change, when it is wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not your current password.'**
+  String get errorPasswordIncorrect;
+
+  /// Title of the two-step verification row in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification'**
+  String get settingsMfaLabel;
+
+  /// Badge beside the two-step verification title when it is on.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get settingsMfaOn;
+
+  /// Badge beside the two-step verification title when it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsMfaOff;
+
+  /// Description of the two-step verification row while it is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in also asks for a code from your authenticator app.'**
+  String get settingsMfaOnDescription;
+
+  /// Description of the two-step verification row while it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for a code from an authenticator app when signing in, besides the password.'**
+  String get settingsMfaOffDescription;
+
+  /// Button that starts turning two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get settingsMfaTurnOn;
+
+  /// Button that leads to turning two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get settingsMfaTurnOff;
+
+  /// Title of the recovery codes row in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery codes'**
+  String get settingsRecoveryCodesLabel;
+
+  /// How many recovery codes are left, in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No codes left.} =1{1 code left.} other{{count} codes left.}} Each one signs you in once without the app.'**
+  String settingsRecoveryCodesLeft(int count);
+
+  /// Warning under the recovery codes when three or fewer are left.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new ones before they run out.'**
+  String get settingsRecoveryCodesLow;
+
+  /// Button that leads to replacing the recovery codes, and title of that page.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new codes'**
+  String get settingsRecoveryCodesNew;
+
+  /// Title of the page that turns two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on two-step verification'**
+  String get mfaEnableTitle;
+
+  /// Description of the first step of turning two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your password to start.'**
+  String get mfaEnablePasswordDescription;
+
+  /// Button that moves to the next step of turning two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get mfaContinue;
+
+  /// Description of the step where the person adds the account to the authenticator app.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Monthra to your authenticator app, then type the code it shows.'**
+  String get mfaScanDescription;
+
+  /// Instruction above the QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan this QR code with the app.'**
+  String get mfaScanStep;
+
+  /// Read by screen readers for the QR code image.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code to add Monthra to your authenticator app'**
+  String get mfaQrLabel;
+
+  /// Button (phones and tablets) that adds the account to an authenticator app on the same device.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in the authenticator app'**
+  String get mfaOpenAuthenticator;
+
+  /// Message when no app could open the authenticator link.
+  ///
+  /// In en, this message translates to:
+  /// **'No authenticator app opened. Type the key instead.'**
+  String get mfaNoAuthenticator;
+
+  /// Label above the setup key, for an app that cannot scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type this key in the app'**
+  String get mfaSecretLabel;
+
+  /// Button that copies the setup key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy key'**
+  String get mfaCopySecret;
+
+  /// Message after the setup key was copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Key copied.'**
+  String get mfaSecretCopied;
+
+  /// Instruction above the field that confirms the setup with a first code.
+  ///
+  /// In en, this message translates to:
+  /// **'Then type the 6-digit code the app shows.'**
+  String get mfaConfirmStep;
+
+  /// Button that confirms the setup with the code and turns two-step verification on.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get mfaEnableSubmit;
+
+  /// Notice when the 15 minutes to confirm the setup ran out.
+  ///
+  /// In en, this message translates to:
+  /// **'The setup expired. Start again.'**
+  String get mfaSetupExpired;
+
+  /// Message on the turn-on page when it is already on (from another device, say).
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification is already on.'**
+  String get mfaAlreadyOn;
+
+  /// Message on the pages that need it on, when it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification is off.'**
+  String get mfaAlreadyOff;
+
+  /// Message after two-step verification was turned on.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification turned on'**
+  String get mfaEnabledToast;
+
+  /// Title of the page that turns two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off two-step verification'**
+  String get mfaDisableTitle;
+
+  /// Description of the page that turns two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in will ask only for your email and password. Confirm with your password and a code.'**
+  String get mfaDisableDescription;
+
+  /// Button that turns two-step verification off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get mfaDisableSubmit;
+
+  /// Message after two-step verification was turned off.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-step verification turned off'**
+  String get mfaDisabledToast;
+
+  /// Description of the page that replaces the recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'The codes you have now stop working. Confirm with your password and a code.'**
+  String get recoveryRegenerateDescription;
+
+  /// Button that replaces the recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new codes'**
+  String get recoveryRegenerateSubmit;
+
+  /// Title of the card that shows new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your recovery codes'**
+  String get recoveryCodesTitle;
+
+  /// Explanation above new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Each code signs you in once if you lose the authenticator app. They are shown only now: keep them somewhere safe, like a password manager.'**
+  String get recoveryCodesDescription;
+
+  /// Read by screen readers for the list of recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery codes'**
+  String get recoveryCodesListLabel;
+
+  /// Button that copies every recovery code, one per line.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy all'**
+  String get recoveryCodesCopy;
+
+  /// Message after the recovery codes were copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Codes copied.'**
+  String get recoveryCodesCopied;
+
+  /// Checkbox to tick before leaving new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'I saved these codes somewhere safe'**
+  String get recoveryCodesSaved;
+
+  /// Button that leaves new recovery codes once saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get recoveryCodesDone;
+
+  /// Title of the question when leaving new recovery codes unsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave without saving the codes?'**
+  String get recoveryCodesLeaveTitle;
+
+  /// Explanation of the question when leaving new recovery codes unsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'They will not be shown again. You can create new ones in Settings.'**
+  String get recoveryCodesLeaveDescription;
+
+  /// Button that leaves new recovery codes unsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get recoveryCodesLeave;
+
+  /// Button that stays with new recovery codes.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get recoveryCodesStay;
+
+  /// Message after the recovery codes were replaced.
+  ///
+  /// In en, this message translates to:
+  /// **'New recovery codes created'**
+  String get recoveryCodesNewToast;
+
+  /// Button that closes a question without doing anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get appCancel;
+
+  /// Title of the settings card listing the signed-in devices.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get sessionsTitle;
+
+  /// Description of the sessions card.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices signed in to your account. Sign out any you don\'t recognize.'**
+  String get sessionsDescription;
+
+  /// Badge beside the session of the device in use.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get sessionsThisDevice;
+
+  /// Line under the session of the device in use.
+  ///
+  /// In en, this message translates to:
+  /// **'In use now'**
+  String get sessionsActiveNow;
+
+  /// Line under another session: when it was last used.
+  ///
+  /// In en, this message translates to:
+  /// **'Last active {date}'**
+  String sessionsLastActive(String date);
+
+  /// The network address a session was last seen from.
+  ///
+  /// In en, this message translates to:
+  /// **'IP {ip}'**
+  String sessionsIp(String ip);
+
+  /// A session's device: a browser on a system (brand names, never translated).
+  ///
+  /// In en, this message translates to:
+  /// **'{browser} on {os}'**
+  String sessionsDevice(String browser, String os);
+
+  /// A session of the Monthra phone app.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthra app on {os}'**
+  String sessionsApp(String os);
+
+  /// A session whose device could not be told.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get sessionsUnknownDevice;
+
+  /// Button that signs out one session (another device).
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get sessionsRevoke;
+
+  /// Read by screen readers for the button that signs out one session.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out {device}'**
+  String sessionsRevokeLabel(String device);
+
+  /// Message after one session was signed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Session signed out.'**
+  String get sessionsRevoked;
+
+  /// Button that signs out every session but this one.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of all other sessions'**
+  String get sessionsRevokeOthers;
+
+  /// Question before signing out every other session.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of every other session?'**
+  String get sessionsRevokeOthersTitle;
+
+  /// Explanation of the question before signing out every other session.
+  ///
+  /// In en, this message translates to:
+  /// **'The other devices will have to sign in again. This one stays signed in.'**
+  String get sessionsRevokeOthersDescription;
+
+  /// Button that confirms signing out every other session.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out others'**
+  String get sessionsRevokeOthersConfirm;
+
+  /// Message after every other session was signed out.
+  ///
+  /// In en, this message translates to:
+  /// **'Other sessions signed out.'**
+  String get sessionsOthersRevoked;
+
+  /// Line when this device is the only session.
+  ///
+  /// In en, this message translates to:
+  /// **'No other device is signed in.'**
+  String get sessionsNoOthers;
+
+  /// Title when the session list could not be loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the sessions'**
+  String get sessionsLoadFailed;
+
+  /// Title of the error message when signing out a session failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The session was not signed out'**
+  String get sessionsRevokeFailed;
 }
 
 class _AppLocalizationsDelegate

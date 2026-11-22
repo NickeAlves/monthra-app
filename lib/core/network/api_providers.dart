@@ -19,6 +19,11 @@ String apiLanguage(Ref ref) => throw StateError(
   'apiLanguageProvider is overridden in main (appOverrides)',
 );
 
+/// The `retry` of providers that read the API: none. The client already
+/// sends a read again on transient failures (`RetryInterceptor`), and
+/// Riverpod's own retry would also repeat refusals (a `401`, a `404`).
+Duration? noProviderRetry(int retryCount, Object error) => null;
+
 /// Cookies on the web, Bearer tokens on Android and iOS (§6.2).
 @Riverpod(keepAlive: true)
 SessionMode sessionMode(Ref ref) =>

@@ -21,6 +21,7 @@ extension ApiErrorText on AppLocalizations {
         ProblemCode.captchaRequired ||
         ProblemCode.captchaInvalid => errorCaptcha,
         ProblemCode.mfaCodeInvalid => errorMfaCodeInvalid,
+        ProblemCode.passwordIncorrect => errorPasswordIncorrect,
         ProblemCode.validationFailed => errorCheckFields,
         ProblemCode.serviceUnavailable ||
         ProblemCode.internalError => errorUnavailable,

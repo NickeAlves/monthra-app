@@ -15,6 +15,10 @@ abstract final class AppRoutes {
   static const verifyEmail = '/verify-email';
   static const designSystem = '/design-system';
   static const settings = '/settings';
+  static const settingsPassword = '/settings/password';
+  static const settingsMfaEnable = '/settings/mfa/enable';
+  static const settingsMfaDisable = '/settings/mfa/disable';
+  static const settingsRecoveryCodes = '/settings/mfa/recovery-codes';
 
   /// Pages for someone signed out: a signed-in visit goes on to `from`.
   static const Set<String> signedOutOnly = {

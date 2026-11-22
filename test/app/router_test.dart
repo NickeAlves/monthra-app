@@ -35,6 +35,12 @@ void main() {
         '/login?from=%2Fsettings',
       ),
       ('signed in on the settings', signedIn, '/settings', null),
+      (
+        'signed out under the settings',
+        signedOut,
+        '/settings/password',
+        '/login?from=%2Fsettings%2Fpassword',
+      ),
       ('signed out on the sign-in page', signedOut, '/login', null),
       ('signed out on sign-up', signedOut, '/register', null),
       ('signed out on forgot password', signedOut, '/forgot-password', null),

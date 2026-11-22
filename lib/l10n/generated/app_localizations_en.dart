@@ -396,4 +396,274 @@ class AppLocalizationsEn extends AppLocalizations {
   String shellSignedInAs(String name) {
     return 'Signed in as $name';
   }
+
+  @override
+  String get settingsSecurityTitle => 'Security';
+
+  @override
+  String get settingsSecurityDescription =>
+      'Your password and two-step verification.';
+
+  @override
+  String get settingsPasswordLabel => 'Password';
+
+  @override
+  String get settingsPasswordDescription =>
+      'Changing it signs out your other sessions.';
+
+  @override
+  String get settingsPasswordChange => 'Change password';
+
+  @override
+  String get passwordPageDescription =>
+      'Type your current password, then the new one.';
+
+  @override
+  String get passwordCurrentLabel => 'Current password';
+
+  @override
+  String get passwordNewLabel => 'New password';
+
+  @override
+  String get passwordSubmit => 'Save new password';
+
+  @override
+  String get passwordChanged => 'Password changed';
+
+  @override
+  String get passwordChangedDescription =>
+      'Your other sessions were signed out.';
+
+  @override
+  String get errorPasswordIncorrect => 'That is not your current password.';
+
+  @override
+  String get settingsMfaLabel => 'Two-step verification';
+
+  @override
+  String get settingsMfaOn => 'On';
+
+  @override
+  String get settingsMfaOff => 'Off';
+
+  @override
+  String get settingsMfaOnDescription =>
+      'Signing in also asks for a code from your authenticator app.';
+
+  @override
+  String get settingsMfaOffDescription =>
+      'Ask for a code from an authenticator app when signing in, besides the password.';
+
+  @override
+  String get settingsMfaTurnOn => 'Turn on';
+
+  @override
+  String get settingsMfaTurnOff => 'Turn off';
+
+  @override
+  String get settingsRecoveryCodesLabel => 'Recovery codes';
+
+  @override
+  String settingsRecoveryCodesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count codes left.',
+      one: '1 code left.',
+      zero: 'No codes left.',
+    );
+    return '$_temp0 Each one signs you in once without the app.';
+  }
+
+  @override
+  String get settingsRecoveryCodesLow => 'Create new ones before they run out.';
+
+  @override
+  String get settingsRecoveryCodesNew => 'Create new codes';
+
+  @override
+  String get mfaEnableTitle => 'Turn on two-step verification';
+
+  @override
+  String get mfaEnablePasswordDescription => 'Confirm your password to start.';
+
+  @override
+  String get mfaContinue => 'Continue';
+
+  @override
+  String get mfaScanDescription =>
+      'Add Monthra to your authenticator app, then type the code it shows.';
+
+  @override
+  String get mfaScanStep => 'Scan this QR code with the app.';
+
+  @override
+  String get mfaQrLabel => 'QR code to add Monthra to your authenticator app';
+
+  @override
+  String get mfaOpenAuthenticator => 'Open in the authenticator app';
+
+  @override
+  String get mfaNoAuthenticator =>
+      'No authenticator app opened. Type the key instead.';
+
+  @override
+  String get mfaSecretLabel => 'Or type this key in the app';
+
+  @override
+  String get mfaCopySecret => 'Copy key';
+
+  @override
+  String get mfaSecretCopied => 'Key copied.';
+
+  @override
+  String get mfaConfirmStep => 'Then type the 6-digit code the app shows.';
+
+  @override
+  String get mfaEnableSubmit => 'Turn on';
+
+  @override
+  String get mfaSetupExpired => 'The setup expired. Start again.';
+
+  @override
+  String get mfaAlreadyOn => 'Two-step verification is already on.';
+
+  @override
+  String get mfaAlreadyOff => 'Two-step verification is off.';
+
+  @override
+  String get mfaEnabledToast => 'Two-step verification turned on';
+
+  @override
+  String get mfaDisableTitle => 'Turn off two-step verification';
+
+  @override
+  String get mfaDisableDescription =>
+      'Signing in will ask only for your email and password. Confirm with your password and a code.';
+
+  @override
+  String get mfaDisableSubmit => 'Turn off';
+
+  @override
+  String get mfaDisabledToast => 'Two-step verification turned off';
+
+  @override
+  String get recoveryRegenerateDescription =>
+      'The codes you have now stop working. Confirm with your password and a code.';
+
+  @override
+  String get recoveryRegenerateSubmit => 'Create new codes';
+
+  @override
+  String get recoveryCodesTitle => 'Save your recovery codes';
+
+  @override
+  String get recoveryCodesDescription =>
+      'Each code signs you in once if you lose the authenticator app. They are shown only now: keep them somewhere safe, like a password manager.';
+
+  @override
+  String get recoveryCodesListLabel => 'Recovery codes';
+
+  @override
+  String get recoveryCodesCopy => 'Copy all';
+
+  @override
+  String get recoveryCodesCopied => 'Codes copied.';
+
+  @override
+  String get recoveryCodesSaved => 'I saved these codes somewhere safe';
+
+  @override
+  String get recoveryCodesDone => 'Done';
+
+  @override
+  String get recoveryCodesLeaveTitle => 'Leave without saving the codes?';
+
+  @override
+  String get recoveryCodesLeaveDescription =>
+      'They will not be shown again. You can create new ones in Settings.';
+
+  @override
+  String get recoveryCodesLeave => 'Leave';
+
+  @override
+  String get recoveryCodesStay => 'Stay';
+
+  @override
+  String get recoveryCodesNewToast => 'New recovery codes created';
+
+  @override
+  String get appCancel => 'Cancel';
+
+  @override
+  String get sessionsTitle => 'Sessions';
+
+  @override
+  String get sessionsDescription =>
+      'Devices signed in to your account. Sign out any you don\'t recognize.';
+
+  @override
+  String get sessionsThisDevice => 'This device';
+
+  @override
+  String get sessionsActiveNow => 'In use now';
+
+  @override
+  String sessionsLastActive(String date) {
+    return 'Last active $date';
+  }
+
+  @override
+  String sessionsIp(String ip) {
+    return 'IP $ip';
+  }
+
+  @override
+  String sessionsDevice(String browser, String os) {
+    return '$browser on $os';
+  }
+
+  @override
+  String sessionsApp(String os) {
+    return 'Monthra app on $os';
+  }
+
+  @override
+  String get sessionsUnknownDevice => 'Unknown device';
+
+  @override
+  String get sessionsRevoke => 'Sign out';
+
+  @override
+  String sessionsRevokeLabel(String device) {
+    return 'Sign out $device';
+  }
+
+  @override
+  String get sessionsRevoked => 'Session signed out.';
+
+  @override
+  String get sessionsRevokeOthers => 'Sign out of all other sessions';
+
+  @override
+  String get sessionsRevokeOthersTitle => 'Sign out of every other session?';
+
+  @override
+  String get sessionsRevokeOthersDescription =>
+      'The other devices will have to sign in again. This one stays signed in.';
+
+  @override
+  String get sessionsRevokeOthersConfirm => 'Sign out others';
+
+  @override
+  String get sessionsOthersRevoked => 'Other sessions signed out.';
+
+  @override
+  String get sessionsNoOthers => 'No other device is signed in.';
+
+  @override
+  String get sessionsLoadFailed => 'Couldn\'t load the sessions';
+
+  @override
+  String get sessionsRevokeFailed => 'The session was not signed out';
 }

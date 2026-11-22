@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:monthra/core/network/api_client.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/api_problem.dart';
 import 'package:monthra/core/network/api_routes.dart';
 import 'package:monthra/core/network/models/session.dart';
+import 'package:monthra/core/network/session_refresher.dart';
 import 'package:monthra/core/security/auth_tokens.dart';
 import 'package:monthra/core/security/token_store.dart';
 
@@ -41,6 +44,18 @@ void main() {
         expect(ids.toSet(), hasLength(2));
       },
     );
+
+    test('native clients name themselves; a browser sends its own', () async {
+      final adapter = FakeAdapter((_) => Reply.json({'ok': true}));
+      await fakeApi(adapter).api.get<Object?>('/me');
+      await fakeApi(adapter, mode: SessionMode.cookie).api.get<Object?>('/me');
+
+      final [native, browser] = adapter.sent;
+      expect(native.headers['user-agent'], nativeUserAgent());
+      expect(browser.headers.containsKey('user-agent'), isFalse);
+      expect(nativeUserAgent(TargetPlatform.iOS), 'Monthra (iOS)');
+      expect(nativeUserAgent(TargetPlatform.android), 'Monthra (Android)');
+    });
 
     test('bodies come back decoded', () async {
       final adapter = FakeAdapter((_) => Reply.json({'id': 'a1', 'n': 3}));
