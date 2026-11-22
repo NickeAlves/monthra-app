@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/routes.dart';
 import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/settings/presentation/data/delete_account_page.dart';
+import 'package:monthra/features/settings/presentation/data/export_data_page.dart';
 import 'package:monthra/features/settings/presentation/security/change_password_page.dart';
 import 'package:monthra/features/settings/presentation/security/disable_mfa_page.dart';
 import 'package:monthra/features/settings/presentation/security/enable_mfa_page.dart';
@@ -67,6 +69,14 @@ enum ShellDestination {
         path: _under(AppRoutes.settingsRecoveryCodes),
         onExit: confirmLeavingRecoveryCodes,
         builder: (_, _) => const RegenerateRecoveryCodesPage(),
+      ),
+      GoRoute(
+        path: _under(AppRoutes.settingsExport),
+        builder: (_, _) => const ExportDataPage(),
+      ),
+      GoRoute(
+        path: _under(AppRoutes.settingsDeleteAccount),
+        builder: (_, _) => const DeleteAccountPage(),
       ),
     ],
   };

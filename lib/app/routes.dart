@@ -19,6 +19,8 @@ abstract final class AppRoutes {
   static const settingsMfaEnable = '/settings/mfa/enable';
   static const settingsMfaDisable = '/settings/mfa/disable';
   static const settingsRecoveryCodes = '/settings/mfa/recovery-codes';
+  static const settingsExport = '/settings/export';
+  static const settingsDeleteAccount = '/settings/delete-account';
 
   /// Pages for someone signed out: a signed-in visit goes on to `from`.
   static const Set<String> signedOutOnly = {

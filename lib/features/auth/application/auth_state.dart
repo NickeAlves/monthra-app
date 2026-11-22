@@ -55,4 +55,7 @@ enum AuthNotice {
 
   /// The two-step challenge expired or ran out of attempts.
   mfaExpired,
+
+  /// The account was deleted (Settings): every session ended with it.
+  accountDeleted,
 }

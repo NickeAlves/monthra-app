@@ -27,7 +27,8 @@ part 'router.g.dart';
 /// - While the session is unknown nothing moves (the app shows the boot
 ///   screen, no page is built).
 /// - Signed out, a page that needs a session goes to the sign-in page with
-///   `from`; `/login/mfa` without a pending challenge goes back to it.
+///   `from` (none after the account was deleted); `/login/mfa` without a
+///   pending challenge goes back to it.
 /// - Signed in, the signed-out pages go on to `from` (when it is safe, see
 ///   [safeReturnPath]) or home.
 String? authRedirect(AuthState auth, Uri uri) {
@@ -43,6 +44,11 @@ String? authRedirect(AuthState auth, Uri uri) {
     return AppRoutes.withFrom(AppRoutes.login, from);
   }
   if (signedOutOnly) return null;
+  // A deleted account leaves nothing to come back to: whoever signs in next
+  // starts on the home page, not on the deletion page.
+  if (auth case SignedOut(notice: AuthNotice.accountDeleted)) {
+    return AppRoutes.login;
+  }
   final here = Uri(path: path, query: uri.hasQuery ? uri.query : null);
   return AppRoutes.withFrom(AppRoutes.login, here.toString());
 }

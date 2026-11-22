@@ -28,10 +28,15 @@ class StepUpForm extends StatefulWidget {
     required this.onSubmit,
     this.askCode = true,
     this.destructive = false,
+    this.busyLabel,
     super.key,
   });
 
   final String submitLabel;
+
+  /// The button's label while [onSubmit] runs, for a call that takes a
+  /// while (the data export); [submitLabel] otherwise.
+  final String? busyLabel;
 
   /// Gets the password and the code (empty without [askCode]).
   final Future<void> Function(String password, String code) onSubmit;
@@ -105,7 +110,9 @@ class _StepUpFormState extends State<StepUpForm> {
             error.code == ProblemCode.passwordIncorrect
         ? l10n.errorPasswordIncorrect
         : null;
-    final label = ButtonLabel(widget.submitLabel);
+    final label = ButtonLabel(
+      _busy ? widget.busyLabel ?? widget.submitLabel : widget.submitLabel,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

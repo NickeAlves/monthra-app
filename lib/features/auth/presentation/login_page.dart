@@ -270,4 +270,5 @@ String noticeText(AppLocalizations l10n, AuthNotice notice) => switch (notice) {
   AuthNotice.sessionExpired => l10n.authNoticeSessionExpired,
   AuthNotice.passwordReset => l10n.authNoticePasswordReset,
   AuthNotice.mfaExpired => l10n.authNoticeMfaExpired,
+  AuthNotice.accountDeleted => l10n.authNoticeAccountDeleted,
 };

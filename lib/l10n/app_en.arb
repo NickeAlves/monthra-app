@@ -875,5 +875,175 @@
   "sessionsRevokeFailed": "The session was not signed out",
   "@sessionsRevokeFailed": {
     "description": "Title of the error message when signing out a session failed."
+  },
+  "settingsDataTitle": "Your data",
+  "@settingsDataTitle": {
+    "description": "Title of the data card in the settings."
+  },
+  "settingsDataDescription": "Take a copy of everything in your account, or delete it.",
+  "@settingsDataDescription": {
+    "description": "Description of the data card in the settings."
+  },
+  "settingsExportLabel": "Export my data",
+  "@settingsExportLabel": {
+    "description": "Title of the data export row in the settings."
+  },
+  "settingsExportDescription": "A ZIP file with your records in JSON. We email you after each export.",
+  "@settingsExportDescription": {
+    "description": "Description of the data export row in the settings."
+  },
+  "settingsExportOpen": "Export",
+  "@settingsExportOpen": {
+    "description": "Button of the data export row: opens the export page."
+  },
+  "settingsDeleteLabel": "Delete account",
+  "@settingsDeleteLabel": {
+    "description": "Title of the account deletion row in the settings."
+  },
+  "settingsDeleteDescription": "Erases the account and all its data. This cannot be undone.",
+  "@settingsDeleteDescription": {
+    "description": "Description of the account deletion row in the settings."
+  },
+  "settingsDeleteOpen": "Delete my account",
+  "@settingsDeleteOpen": {
+    "description": "Button of the account deletion row: opens the deletion page."
+  },
+  "exportDataTitle": "Export my data",
+  "@exportDataTitle": {
+    "description": "Title of the data export page."
+  },
+  "exportDataDescription": "Download a copy of everything your account holds, to keep or to take to another service.",
+  "@exportDataDescription": {
+    "description": "Description of the data export page."
+  },
+  "exportDataContentsTitle": "What the file holds",
+  "@exportDataContentsTitle": {
+    "description": "Title of the card that says what the export file holds."
+  },
+  "exportDataIncludes": "Your profile, accounts, categories, transactions, recurrences, budgets, investments and their movements, sessions and security events, as JSON files.",
+  "@exportDataIncludes": {
+    "description": "What the data export holds."
+  },
+  "exportDataExcludes": "Never your password, the two-step verification key or the recovery codes.",
+  "@exportDataExcludes": {
+    "description": "What the data export never holds."
+  },
+  "exportDataEmail": "Each export sends an email to {email}. You can export a few times per hour.",
+  "@exportDataEmail": {
+    "description": "Note on the export page: each export emails the owner, and exports are limited per hour.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "ana@example.com"
+      }
+    }
+  },
+  "exportDataConfirmTitle": "Confirm it's you",
+  "@exportDataConfirmTitle": {
+    "description": "Title of the card that asks the password (and a code) before exporting."
+  },
+  "exportDataSubmit": "Export",
+  "@exportDataSubmit": {
+    "description": "Button that exports the data after the password (and a code)."
+  },
+  "exportDataBusy": "Preparing the file…",
+  "@exportDataBusy": {
+    "description": "Button label while the export file is being prepared."
+  },
+  "exportDataReadyTitle": "Your file is ready",
+  "@exportDataReadyTitle": {
+    "description": "Title once the export file has been downloaded."
+  },
+  "exportDataReadyDescription": "{name}. Save it somewhere only you can open: it holds your financial records.",
+  "@exportDataReadyDescription": {
+    "description": "Description once the export file has been downloaded, with its file name.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "monthra-data-2026-11-22.zip"
+      }
+    }
+  },
+  "exportDataSave": "Save file",
+  "@exportDataSave": {
+    "description": "Button that saves the export file (again, without a new export)."
+  },
+  "fileSaved": "File saved",
+  "@fileSaved": {
+    "description": "Toast once a file was saved."
+  },
+  "fileNotSaved": "The file was not saved. You can save it again without a new export.",
+  "@fileNotSaved": {
+    "description": "The save dialog was cancelled: the export can be saved again."
+  },
+  "fileSaveFailed": "The file could not be saved. Try again.",
+  "@fileSaveFailed": {
+    "description": "A file could not be saved on the device."
+  },
+  "deleteAccountTitle": "Delete account",
+  "@deleteAccountTitle": {
+    "description": "Title of the account deletion page."
+  },
+  "deleteAccountDescription": "This erases your account and everything in it, on every device.",
+  "@deleteAccountDescription": {
+    "description": "Description of the account deletion page."
+  },
+  "deleteAccountWhatTitle": "What happens",
+  "@deleteAccountWhatTitle": {
+    "description": "Title of the card that says what deleting the account does."
+  },
+  "deleteAccountErased": "Your accounts, transactions, categories, recurrences, budgets and investments are erased.",
+  "@deleteAccountErased": {
+    "description": "What deleting the account erases."
+  },
+  "deleteAccountSignedOut": "Every session ends, on this device and the others.",
+  "@deleteAccountSignedOut": {
+    "description": "Deleting the account ends every session."
+  },
+  "deleteAccountKept": "Only the security log is kept, without addresses, for its retention period.",
+  "@deleteAccountKept": {
+    "description": "What deleting the account keeps: the security log, without addresses, for its retention period."
+  },
+  "deleteAccountEmail": "We email {email} to confirm.",
+  "@deleteAccountEmail": {
+    "description": "Deleting the account emails a confirmation to the owner.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "ana@example.com"
+      }
+    }
+  },
+  "deleteAccountFinal": "This cannot be undone.",
+  "@deleteAccountFinal": {
+    "description": "Deleting the account cannot be undone."
+  },
+  "deleteAccountExportFirst": "Export my data first",
+  "@deleteAccountExportFirst": {
+    "description": "Button on the deletion page that opens the data export."
+  },
+  "deleteAccountConfirmTitle": "Confirm it's you",
+  "@deleteAccountConfirmTitle": {
+    "description": "Title of the card that asks the password (and a code) before deleting the account."
+  },
+  "deleteAccountSubmit": "Delete account",
+  "@deleteAccountSubmit": {
+    "description": "Button that deletes the account after the password (and a code); a dialog asks once more."
+  },
+  "deleteAccountDialogTitle": "Delete your account for good?",
+  "@deleteAccountDialogTitle": {
+    "description": "Title of the dialog that asks before deleting the account."
+  },
+  "deleteAccountDialogDescription": "Your data is erased now and cannot be recovered.",
+  "@deleteAccountDialogDescription": {
+    "description": "Description of the dialog that asks before deleting the account."
+  },
+  "deleteAccountDialogConfirm": "Delete for good",
+  "@deleteAccountDialogConfirm": {
+    "description": "Button of the dialog that deletes the account."
+  },
+  "authNoticeAccountDeleted": "Your account and its data were deleted. We sent you a confirmation email.",
+  "@authNoticeAccountDeleted": {
+    "description": "Notice on the sign-in page after the account was deleted."
   }
 }

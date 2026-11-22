@@ -1263,6 +1263,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The session was not signed out'**
   String get sessionsRevokeFailed;
+
+  /// Title of the data card in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data'**
+  String get settingsDataTitle;
+
+  /// Description of the data card in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a copy of everything in your account, or delete it.'**
+  String get settingsDataDescription;
+
+  /// Title of the data export row in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Export my data'**
+  String get settingsExportLabel;
+
+  /// Description of the data export row in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'A ZIP file with your records in JSON. We email you after each export.'**
+  String get settingsExportDescription;
+
+  /// Button of the data export row: opens the export page.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get settingsExportOpen;
+
+  /// Title of the account deletion row in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get settingsDeleteLabel;
+
+  /// Description of the account deletion row in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Erases the account and all its data. This cannot be undone.'**
+  String get settingsDeleteDescription;
+
+  /// Button of the account deletion row: opens the deletion page.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get settingsDeleteOpen;
+
+  /// Title of the data export page.
+  ///
+  /// In en, this message translates to:
+  /// **'Export my data'**
+  String get exportDataTitle;
+
+  /// Description of the data export page.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a copy of everything your account holds, to keep or to take to another service.'**
+  String get exportDataDescription;
+
+  /// Title of the card that says what the export file holds.
+  ///
+  /// In en, this message translates to:
+  /// **'What the file holds'**
+  String get exportDataContentsTitle;
+
+  /// What the data export holds.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile, accounts, categories, transactions, recurrences, budgets, investments and their movements, sessions and security events, as JSON files.'**
+  String get exportDataIncludes;
+
+  /// What the data export never holds.
+  ///
+  /// In en, this message translates to:
+  /// **'Never your password, the two-step verification key or the recovery codes.'**
+  String get exportDataExcludes;
+
+  /// Note on the export page: each export emails the owner, and exports are limited per hour.
+  ///
+  /// In en, this message translates to:
+  /// **'Each export sends an email to {email}. You can export a few times per hour.'**
+  String exportDataEmail(String email);
+
+  /// Title of the card that asks the password (and a code) before exporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm it\'s you'**
+  String get exportDataConfirmTitle;
+
+  /// Button that exports the data after the password (and a code).
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportDataSubmit;
+
+  /// Button label while the export file is being prepared.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing the file…'**
+  String get exportDataBusy;
+
+  /// Title once the export file has been downloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Your file is ready'**
+  String get exportDataReadyTitle;
+
+  /// Description once the export file has been downloaded, with its file name.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}. Save it somewhere only you can open: it holds your financial records.'**
+  String exportDataReadyDescription(String name);
+
+  /// Button that saves the export file (again, without a new export).
+  ///
+  /// In en, this message translates to:
+  /// **'Save file'**
+  String get exportDataSave;
+
+  /// Toast once a file was saved.
+  ///
+  /// In en, this message translates to:
+  /// **'File saved'**
+  String get fileSaved;
+
+  /// The save dialog was cancelled: the export can be saved again.
+  ///
+  /// In en, this message translates to:
+  /// **'The file was not saved. You can save it again without a new export.'**
+  String get fileNotSaved;
+
+  /// A file could not be saved on the device.
+  ///
+  /// In en, this message translates to:
+  /// **'The file could not be saved. Try again.'**
+  String get fileSaveFailed;
+
+  /// Title of the account deletion page.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccountTitle;
+
+  /// Description of the account deletion page.
+  ///
+  /// In en, this message translates to:
+  /// **'This erases your account and everything in it, on every device.'**
+  String get deleteAccountDescription;
+
+  /// Title of the card that says what deleting the account does.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens'**
+  String get deleteAccountWhatTitle;
+
+  /// What deleting the account erases.
+  ///
+  /// In en, this message translates to:
+  /// **'Your accounts, transactions, categories, recurrences, budgets and investments are erased.'**
+  String get deleteAccountErased;
+
+  /// Deleting the account ends every session.
+  ///
+  /// In en, this message translates to:
+  /// **'Every session ends, on this device and the others.'**
+  String get deleteAccountSignedOut;
+
+  /// What deleting the account keeps: the security log, without addresses, for its retention period.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the security log is kept, without addresses, for its retention period.'**
+  String get deleteAccountKept;
+
+  /// Deleting the account emails a confirmation to the owner.
+  ///
+  /// In en, this message translates to:
+  /// **'We email {email} to confirm.'**
+  String deleteAccountEmail(String email);
+
+  /// Deleting the account cannot be undone.
+  ///
+  /// In en, this message translates to:
+  /// **'This cannot be undone.'**
+  String get deleteAccountFinal;
+
+  /// Button on the deletion page that opens the data export.
+  ///
+  /// In en, this message translates to:
+  /// **'Export my data first'**
+  String get deleteAccountExportFirst;
+
+  /// Title of the card that asks the password (and a code) before deleting the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm it\'s you'**
+  String get deleteAccountConfirmTitle;
+
+  /// Button that deletes the account after the password (and a code); a dialog asks once more.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccountSubmit;
+
+  /// Title of the dialog that asks before deleting the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account for good?'**
+  String get deleteAccountDialogTitle;
+
+  /// Description of the dialog that asks before deleting the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is erased now and cannot be recovered.'**
+  String get deleteAccountDialogDescription;
+
+  /// Button of the dialog that deletes the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete for good'**
+  String get deleteAccountDialogConfirm;
+
+  /// Notice on the sign-in page after the account was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account and its data were deleted. We sent you a confirmation email.'**
+  String get authNoticeAccountDeleted;
 }
 
 class _AppLocalizationsDelegate

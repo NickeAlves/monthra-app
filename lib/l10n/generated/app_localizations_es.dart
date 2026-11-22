@@ -675,4 +675,138 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sessionsRevokeFailed => 'No se cerró la sesión';
+
+  @override
+  String get settingsDataTitle => 'Tus datos';
+
+  @override
+  String get settingsDataDescription =>
+      'Descarga una copia de todo lo que hay en tu cuenta o elimínala.';
+
+  @override
+  String get settingsExportLabel => 'Exportar mis datos';
+
+  @override
+  String get settingsExportDescription =>
+      'Un archivo ZIP con tus registros en JSON. Te avisamos por correo en cada exportación.';
+
+  @override
+  String get settingsExportOpen => 'Exportar';
+
+  @override
+  String get settingsDeleteLabel => 'Eliminar cuenta';
+
+  @override
+  String get settingsDeleteDescription =>
+      'Borra la cuenta y todos sus datos. No se puede deshacer.';
+
+  @override
+  String get settingsDeleteOpen => 'Eliminar mi cuenta';
+
+  @override
+  String get exportDataTitle => 'Exportar mis datos';
+
+  @override
+  String get exportDataDescription =>
+      'Descarga una copia de todo lo que guarda tu cuenta, para conservarla o llevarla a otro servicio.';
+
+  @override
+  String get exportDataContentsTitle => 'Qué contiene el archivo';
+
+  @override
+  String get exportDataIncludes =>
+      'Tu perfil, cuentas, categorías, transacciones, recurrencias, presupuestos, inversiones y sus movimientos, sesiones y eventos de seguridad, en archivos JSON.';
+
+  @override
+  String get exportDataExcludes =>
+      'Nunca tu contraseña, la clave de la verificación en dos pasos ni los códigos de recuperación.';
+
+  @override
+  String exportDataEmail(String email) {
+    return 'Cada exportación envía un correo a $email. Puedes exportar algunas veces por hora.';
+  }
+
+  @override
+  String get exportDataConfirmTitle => 'Confirma que eres tú';
+
+  @override
+  String get exportDataSubmit => 'Exportar';
+
+  @override
+  String get exportDataBusy => 'Preparando el archivo…';
+
+  @override
+  String get exportDataReadyTitle => 'Tu archivo está listo';
+
+  @override
+  String exportDataReadyDescription(String name) {
+    return '$name. Guárdalo en un lugar al que solo tú accedas: contiene tus registros financieros.';
+  }
+
+  @override
+  String get exportDataSave => 'Guardar archivo';
+
+  @override
+  String get fileSaved => 'Archivo guardado';
+
+  @override
+  String get fileNotSaved =>
+      'El archivo no se guardó. Puedes guardarlo de nuevo sin exportar otra vez.';
+
+  @override
+  String get fileSaveFailed =>
+      'No se pudo guardar el archivo. Inténtalo de nuevo.';
+
+  @override
+  String get deleteAccountTitle => 'Eliminar cuenta';
+
+  @override
+  String get deleteAccountDescription =>
+      'Esto borra tu cuenta y todo lo que contiene, en todos los dispositivos.';
+
+  @override
+  String get deleteAccountWhatTitle => 'Qué ocurre';
+
+  @override
+  String get deleteAccountErased =>
+      'Se borran tus cuentas, transacciones, categorías, recurrencias, presupuestos e inversiones.';
+
+  @override
+  String get deleteAccountSignedOut =>
+      'Todas las sesiones terminan, en este dispositivo y en los demás.';
+
+  @override
+  String get deleteAccountKept =>
+      'Solo el registro de seguridad, sin direcciones, se conserva durante su plazo de retención.';
+
+  @override
+  String deleteAccountEmail(String email) {
+    return 'Enviamos una confirmación a $email.';
+  }
+
+  @override
+  String get deleteAccountFinal => 'No se puede deshacer.';
+
+  @override
+  String get deleteAccountExportFirst => 'Exportar mis datos antes';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Confirma que eres tú';
+
+  @override
+  String get deleteAccountSubmit => 'Eliminar cuenta';
+
+  @override
+  String get deleteAccountDialogTitle => '¿Eliminar tu cuenta para siempre?';
+
+  @override
+  String get deleteAccountDialogDescription =>
+      'Tus datos se borran ahora y no se pueden recuperar.';
+
+  @override
+  String get deleteAccountDialogConfirm => 'Eliminar para siempre';
+
+  @override
+  String get authNoticeAccountDeleted =>
+      'Tu cuenta y sus datos se eliminaron. Te enviamos una confirmación por correo.';
 }

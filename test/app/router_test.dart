@@ -9,6 +9,7 @@ void main() {
   group('authRedirect', () {
     final signedIn = SignedIn(me());
     const signedOut = SignedOut();
+    const deleted = SignedOut(notice: AuthNotice.accountDeleted);
     const awaiting = AwaitingMfa(challenge);
 
     final cases = <(String, AuthState, String, String?)>[
@@ -41,6 +42,14 @@ void main() {
         '/settings/password',
         '/login?from=%2Fsettings%2Fpassword',
       ),
+      (
+        'after the account was deleted, no way back to the deletion page',
+        deleted,
+        '/settings/delete-account',
+        '/login',
+      ),
+      ('the sign-in page after a deletion', deleted, '/login', null),
+      ('sign-up after a deletion', deleted, '/register', null),
       ('signed out on the sign-in page', signedOut, '/login', null),
       ('signed out on sign-up', signedOut, '/register', null),
       ('signed out on forgot password', signedOut, '/forgot-password', null),

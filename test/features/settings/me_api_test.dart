@@ -148,6 +148,83 @@ void main() {
     });
   });
 
+  group('data', () {
+    test('exportData sends the password alone without MFA and answers the '
+        'archive', () async {
+      final server = ProfileServer();
+      final api = MeApi(fakeApi(server.adapter).api);
+
+      final zip = await api.exportData(password: testPassword, code: '');
+
+      expect(zip, testExportZip);
+      final sent = server.adapter.sent.single;
+      expect('${sent.method} ${sent.path}', 'POST /api/v1/me/export');
+      expect(sent.data, {'password': testPassword});
+      expect(
+        sent.headers['accept'],
+        'application/zip, application/problem+json',
+      );
+      expect(sent.receiveTimeout, MeApi.exportTimeout);
+      expect(server.exports, 1);
+    });
+
+    test('exportData sends the code with MFA on', () async {
+      final server = ProfileServer(me: meJson(mfa: true));
+      final api = MeApi(fakeApi(server.adapter).api);
+
+      await api.exportData(password: testPassword, code: testTotp);
+
+      expect(server.adapter.sent.single.data, {
+        'password': testPassword,
+        'code': testTotp,
+      });
+    });
+
+    test('a refused export is the problem the server sent', () async {
+      final server = ProfileServer(me: meJson(mfa: true));
+      final api = MeApi(fakeApi(server.adapter).api);
+
+      await expectLater(
+        api.exportData(password: 'wrong', code: testTotp),
+        throwsA(
+          isA<ApiProblemException>().having(
+            (e) => e.code,
+            'code',
+            ProblemCode.passwordIncorrect,
+          ),
+        ),
+      );
+      await expectLater(
+        api.exportData(password: testPassword, code: ''),
+        throwsA(
+          isA<ApiProblemException>().having(
+            (e) => e.code,
+            'code',
+            ProblemCode.mfaCodeInvalid,
+          ),
+        ),
+      );
+      expect(server.exports, 0);
+    });
+
+    test('deleteAccount sends the password and the code; a browser sends '
+        'the CSRF token', () async {
+      final server = ProfileServer(me: meJson(mfa: true));
+      final api = MeApi(fakeApi(server.adapter, mode: SessionMode.cookie).api);
+
+      await api.deleteAccount(password: testPassword, code: testTotp);
+
+      expect(server.adapter.paths, [
+        'GET /api/v1/auth/csrf',
+        'DELETE /api/v1/me',
+      ]);
+      final sent = server.adapter.sent.last;
+      expect(sent.data, {'password': testPassword, 'code': testTotp});
+      expect(sent.headers['x-csrf-token'], 'csrf');
+      expect(server.deleted, isTrue);
+    });
+  });
+
   test('a body the app cannot read is unexpected', () async {
     final api = MeApi(
       fakeApi(FakeAdapter((_) => Reply.json({'theme': 42}))).api,
