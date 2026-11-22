@@ -566,7 +566,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(en.homeGreeting('Ana')), findsOneWidget);
 
-      await tester.tapButton(en.homeSignOut);
+      // The default 800 px window is a tablet: the rail's icon button.
+      await tester.tap(find.bySemanticsLabel(en.shellSignOut));
+      await tester.pumpAndSettle();
 
       expect(api.sent.last.path, '/api/v1/auth/logout');
       expect(await tokens.read(), isNull);

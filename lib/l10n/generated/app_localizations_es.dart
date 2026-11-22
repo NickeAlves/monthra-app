@@ -219,12 +219,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeComingSoon => 'Tu panel llega en las próximas versiones.';
 
   @override
-  String get homeSignOut => 'Cerrar sesión';
-
-  @override
-  String get homeDesignSystem => 'Sistema de diseño';
-
-  @override
   String get errorInvalidCredentials => 'Correo o contraseña incorrectos.';
 
   @override
@@ -314,4 +308,96 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorMfaCodeFormat => 'Introduce los 6 dígitos.';
+
+  @override
+  String get appClose => 'Cerrar';
+
+  @override
+  String get settingsTitle => 'Ajustes';
+
+  @override
+  String get settingsProfileTitle => 'Perfil';
+
+  @override
+  String get settingsProfileDescription => 'Cómo te llama Monthra.';
+
+  @override
+  String get settingsNameLabel => 'Nombre';
+
+  @override
+  String get settingsSaveName => 'Guardar nombre';
+
+  @override
+  String get settingsNameSaved => 'Nombre guardado.';
+
+  @override
+  String get settingsEmailLabel => 'Correo electrónico';
+
+  @override
+  String get settingsEmailHint =>
+      'La dirección con la que inicias sesión. Aún no se puede cambiar.';
+
+  @override
+  String get settingsPreferencesTitle => 'Preferencias';
+
+  @override
+  String get settingsPreferencesDescription =>
+      'Se guardan en tu cuenta, en todos tus dispositivos.';
+
+  @override
+  String get settingsLanguageDescription => 'La app y los correos que recibes.';
+
+  @override
+  String get settingsThemeDescription => 'Sistema sigue a tu dispositivo.';
+
+  @override
+  String get settingsCurrencyLabel => 'Moneda predeterminada';
+
+  @override
+  String get settingsCurrencyDescription => 'Se sugiere al crear una cuenta.';
+
+  @override
+  String get settingsBudgetAlertsLabel => 'Alertas de presupuesto por correo';
+
+  @override
+  String get settingsBudgetAlertsDescription =>
+      'Un correo cuando un presupuesto llega a su nivel de aviso o a su límite.';
+
+  @override
+  String get settingsSaveFailed => 'Tu cambio no se guardó';
+
+  @override
+  String get currencyBrl => 'Real brasileño (BRL)';
+
+  @override
+  String get currencyUsd => 'Dólar estadounidense (USD)';
+
+  @override
+  String get currencyEur => 'Euro (EUR)';
+
+  @override
+  String get navDashboard => 'Panel';
+
+  @override
+  String get navSettings => 'Ajustes';
+
+  @override
+  String get navMore => 'Más';
+
+  @override
+  String get shellNavigationLabel => 'Navegación principal';
+
+  @override
+  String get shellSignOut => 'Cerrar sesión';
+
+  @override
+  String get shellSignOutFailed => 'Sigues con la sesión iniciada';
+
+  @override
+  String get shellDesignSystem => 'Sistema de diseño';
+
+  @override
+  String shellSignedInAs(String name) {
+    return 'Sesión iniciada como $name';
+  }
 }

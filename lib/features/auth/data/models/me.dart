@@ -1,4 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:monthra/core/money/currency.dart';
+import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
+import 'package:monthra/features/settings/preferences/domain/app_preferences.dart';
+import 'package:monthra/features/settings/preferences/domain/theme_preference.dart';
 
 part 'me.freezed.dart';
 part 'me.g.dart';
@@ -49,4 +53,17 @@ abstract class MePreferences with _$MePreferences {
   const new _();
 
   factory fromJson(Map<String, Object?> json) => _$MePreferencesFromJson(json);
+}
+
+/// The profile's preferences in the app's types.
+extension MePreferencesValues on MePreferences {
+  /// The language and theme the app applies; a value the app does not know
+  /// follows the device (language) or the system (theme).
+  AppPreferences get app => AppPreferences(
+    locale: AppLocale.fromTag(locale),
+    theme: ThemePreference.fromWire(theme) ?? ThemePreference.system,
+  );
+
+  /// Null when the server sends a currency the app does not know.
+  Currency? get currencyValue => Currency.tryCode(currency);
 }

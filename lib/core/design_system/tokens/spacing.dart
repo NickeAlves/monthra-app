@@ -27,4 +27,16 @@ abstract final class MonthraLayout {
 
   /// Widest a centered message (empty and error states) gets.
   static const double maxMessageWidth = 360;
+
+  /// Widest a page of forms gets (the settings): one readable column.
+  static const double maxFormWidth = 720;
+
+  /// The desktop sidebar of the app shell.
+  static const double sidebarWidth = 256;
+
+  /// The tablet's collapsed sidebar: icons only.
+  static const double railWidth = 72;
+
+  /// The phone's bottom navigation bar, above the system inset.
+  static const double bottomBarMinHeight = 64;
 }

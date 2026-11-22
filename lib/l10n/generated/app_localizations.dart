@@ -472,18 +472,6 @@ abstract class AppLocalizations {
   /// **'Your dashboard arrives in the next versions.'**
   String get homeComingSoon;
 
-  /// Button that signs out.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out'**
-  String get homeSignOut;
-
-  /// Link to the design system catalog (development and staging builds only).
-  ///
-  /// In en, this message translates to:
-  /// **'Design system'**
-  String get homeDesignSystem;
-
   /// Sign-in error: the email or the password is wrong (never says which).
   ///
   /// In en, this message translates to:
@@ -627,6 +615,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter the 6 digits.'**
   String get errorMfaCodeFormat;
+
+  /// Label of a button that closes a message or a panel (icon only, read by screen readers).
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get appClose;
+
+  /// Title of the settings page (also its menu entry).
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// Title of the profile card on the settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get settingsProfileTitle;
+
+  /// Line under the profile card title.
+  ///
+  /// In en, this message translates to:
+  /// **'How Monthra addresses you.'**
+  String get settingsProfileDescription;
+
+  /// Label of the display name field on the settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get settingsNameLabel;
+
+  /// Button that saves the display name.
+  ///
+  /// In en, this message translates to:
+  /// **'Save name'**
+  String get settingsSaveName;
+
+  /// Message after the display name was saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Name saved.'**
+  String get settingsNameSaved;
+
+  /// Label above the account's email address (read-only) on the settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get settingsEmailLabel;
+
+  /// Line under the account's email address: it cannot be changed (no email change flow yet).
+  ///
+  /// In en, this message translates to:
+  /// **'The address you sign in with. It can\'t be changed yet.'**
+  String get settingsEmailHint;
+
+  /// Title of the preferences card on the settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get settingsPreferencesTitle;
+
+  /// Line under the preferences card title: the choices sync between devices.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your account, on every device.'**
+  String get settingsPreferencesDescription;
+
+  /// Line under the language setting: it applies to the interface and the account emails.
+  ///
+  /// In en, this message translates to:
+  /// **'The app and the emails you get.'**
+  String get settingsLanguageDescription;
+
+  /// Line under the theme setting.
+  ///
+  /// In en, this message translates to:
+  /// **'System follows your device.'**
+  String get settingsThemeDescription;
+
+  /// Label of the default currency setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Default currency'**
+  String get settingsCurrencyLabel;
+
+  /// Line under the default currency setting: amounts are never converted.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested when you add an account.'**
+  String get settingsCurrencyDescription;
+
+  /// Label of the switch that turns the budget alert emails on or off.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget alert emails'**
+  String get settingsBudgetAlertsLabel;
+
+  /// Line under the budget alerts switch.
+  ///
+  /// In en, this message translates to:
+  /// **'An email when a budget reaches its warning level or its limit.'**
+  String get settingsBudgetAlertsDescription;
+
+  /// Title of the message shown when a preference could not be saved (it goes back to the saved value).
+  ///
+  /// In en, this message translates to:
+  /// **'Your change wasn\'t saved'**
+  String get settingsSaveFailed;
+
+  /// Name of the currency BRL, with its code.
+  ///
+  /// In en, this message translates to:
+  /// **'Brazilian real (BRL)'**
+  String get currencyBrl;
+
+  /// Name of the currency USD, with its code.
+  ///
+  /// In en, this message translates to:
+  /// **'US dollar (USD)'**
+  String get currencyUsd;
+
+  /// Name of the currency EUR, with its code.
+  ///
+  /// In en, this message translates to:
+  /// **'Euro (EUR)'**
+  String get currencyEur;
+
+  /// Menu entry of the dashboard (the start page).
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get navDashboard;
+
+  /// Menu entry of the settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navSettings;
+
+  /// Last entry of the phone's bottom bar: opens a list with the other pages and signing out.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get navMore;
+
+  /// Name of the app's menu for screen readers (sidebar or bottom bar).
+  ///
+  /// In en, this message translates to:
+  /// **'Main navigation'**
+  String get shellNavigationLabel;
+
+  /// Button that signs out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get shellSignOut;
+
+  /// Title of the message shown when signing out failed on the web (the session stays).
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re still signed in'**
+  String get shellSignOutFailed;
+
+  /// Link to the design system catalog (development and staging builds only).
+  ///
+  /// In en, this message translates to:
+  /// **'Design system'**
+  String get shellDesignSystem;
+
+  /// Read by screen readers for the account avatar of the collapsed sidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {name}'**
+  String shellSignedInAs(String name);
 }
 
 class _AppLocalizationsDelegate

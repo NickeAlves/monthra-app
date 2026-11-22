@@ -62,27 +62,33 @@ final class PreferencesStoreProvider
 
 String _$preferencesStoreHash() => r'308315b84a6c0a72b3e5087774750ecb11de34df';
 
-/// The preferences the root widget applies (§7.6): theme and language.
+/// The preferences the root widget applies (§7.6): theme and language,
+/// saved on the device.
 ///
-/// Changes apply at once and are saved locally. The profile sync
-/// (`PATCH /me/preferences`) and "the server's value wins at sign-in"
-/// ([replaceAll]) come with the API client and the settings screen.
+/// Changes apply at once. The pickers go through `ProfileController`,
+/// which also sends them to the profile (`PATCH /me/preferences`) when
+/// someone is signed in; the profile's values replace these whenever it
+/// loads ([replaceAll], at sign-in and start-up: the server wins).
 
 @ProviderFor(Preferences)
 final preferencesProvider = PreferencesProvider._();
 
-/// The preferences the root widget applies (§7.6): theme and language.
+/// The preferences the root widget applies (§7.6): theme and language,
+/// saved on the device.
 ///
-/// Changes apply at once and are saved locally. The profile sync
-/// (`PATCH /me/preferences`) and "the server's value wins at sign-in"
-/// ([replaceAll]) come with the API client and the settings screen.
+/// Changes apply at once. The pickers go through `ProfileController`,
+/// which also sends them to the profile (`PATCH /me/preferences`) when
+/// someone is signed in; the profile's values replace these whenever it
+/// loads ([replaceAll], at sign-in and start-up: the server wins).
 final class PreferencesProvider
     extends $NotifierProvider<Preferences, AppPreferences> {
-  /// The preferences the root widget applies (§7.6): theme and language.
+  /// The preferences the root widget applies (§7.6): theme and language,
+  /// saved on the device.
   ///
-  /// Changes apply at once and are saved locally. The profile sync
-  /// (`PATCH /me/preferences`) and "the server's value wins at sign-in"
-  /// ([replaceAll]) come with the API client and the settings screen.
+  /// Changes apply at once. The pickers go through `ProfileController`,
+  /// which also sends them to the profile (`PATCH /me/preferences`) when
+  /// someone is signed in; the profile's values replace these whenever it
+  /// loads ([replaceAll], at sign-in and start-up: the server wins).
   PreferencesProvider._()
     : super(
         from: null,
@@ -112,11 +118,13 @@ final class PreferencesProvider
 
 String _$preferencesHash() => r'56e248a693795bf8088202d75c14396342238604';
 
-/// The preferences the root widget applies (§7.6): theme and language.
+/// The preferences the root widget applies (§7.6): theme and language,
+/// saved on the device.
 ///
-/// Changes apply at once and are saved locally. The profile sync
-/// (`PATCH /me/preferences`) and "the server's value wins at sign-in"
-/// ([replaceAll]) come with the API client and the settings screen.
+/// Changes apply at once. The pickers go through `ProfileController`,
+/// which also sends them to the profile (`PATCH /me/preferences`) when
+/// someone is signed in; the profile's values replace these whenever it
+/// loads ([replaceAll], at sign-in and start-up: the server wins).
 
 abstract class _$Preferences extends $Notifier<AppPreferences> {
   AppPreferences build();

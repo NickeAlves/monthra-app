@@ -4,12 +4,15 @@ import 'package:monthra/features/auth/data/models/me.dart';
 
 /// `GET /me` as the server writes it.
 Map<String, Object?> meJson({
+  String id = 'u1',
   String name = 'Ana',
   String locale = 'pt-BR',
   String theme = 'dark',
+  String currency = 'BRL',
+  bool budgetAlerts = true,
   bool mfa = false,
 }) => {
-  'id': 'u1',
+  'id': id,
   'name': name,
   'email': 'ana@example.com',
   'emailVerified': true,
@@ -17,8 +20,8 @@ Map<String, Object?> meJson({
   'preferences': {
     'locale': locale,
     'theme': theme,
-    'currency': 'BRL',
-    'budgetAlerts': true,
+    'currency': currency,
+    'budgetAlerts': budgetAlerts,
   },
   'createdAt': '2026-11-01T12:00:00Z',
 };

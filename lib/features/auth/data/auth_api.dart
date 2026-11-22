@@ -1,3 +1,4 @@
+import 'package:monthra/core/network/api_body.dart';
 import 'package:monthra/core/network/api_client.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/api_providers.dart';
@@ -44,7 +45,7 @@ class AuthApi {
         'captchaToken': ?captchaToken,
       },
     );
-    final result = _read(response.data, LoginResult.fromJson);
+    final result = readJson(response.data, LoginResult.fromJson);
     if (result is LoginSignedIn) await _open(result.session);
     return result;
   }
@@ -58,7 +59,7 @@ class AuthApi {
       '/auth/mfa/verify',
       data: {'mfaToken': mfaToken, 'code': code},
     );
-    await _open(_read(response.data, Session.fromJson));
+    await _open(readJson(response.data, Session.fromJson));
   }
 
   /// Signs up; the answer is the same whether or not the address is taken.
@@ -100,7 +101,7 @@ class AuthApi {
 
   Future<Me> me() async {
     final response = await _api.get<Map<String, Object?>>('/me');
-    return _read<Me>(response.data, Me.fromJson);
+    return readJson<Me>(response.data, Me.fromJson);
   }
 
   Future<void> _open(Session session) async {
@@ -113,21 +114,5 @@ class AuthApi {
       );
     }
     await _tokens.write(tokens);
-  }
-
-  /// [body] read by [fromJson]; a body the app cannot read is an
-  /// [UnexpectedApiException], like any other surprise from the API.
-  static T _read<T>(
-    Map<String, Object?>? body,
-    T Function(Map<String, Object?>) fromJson,
-  ) {
-    if (body == null) {
-      throw const UnexpectedApiException(status: 200, cause: 'an empty body');
-    }
-    try {
-      return fromJson(body);
-    } on Object catch (e) {
-      throw UnexpectedApiException(status: 200, cause: e);
-    }
   }
 }

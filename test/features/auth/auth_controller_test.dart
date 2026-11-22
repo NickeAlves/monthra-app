@@ -410,4 +410,51 @@ void main() {
       expect(await tokens.read(), isNull);
     });
   });
+
+  group('profile updates', () {
+    Future<ProviderContainer> signedIn() async {
+      final api = FakeAdapter(
+        (r) => r.path.endsWith('/me')
+            ? Reply.json(meJson())
+            : Reply.problem(404, 'not_found'),
+      );
+      final c = boot(api, tokens: MemoryTokenStore(savedTokens)).container;
+      expect(await settled(c), isA<SignedIn>());
+      return c;
+    }
+
+    test('apply to the person signed in', () async {
+      final c = await signedIn();
+      controllerOf(c).updateMe('u1', (me) => me.copyWith(name: 'Bia'));
+      expect((c.read(authControllerProvider) as SignedIn).me.name, 'Bia');
+    });
+
+    test('for someone else, or once signed out, change nothing', () async {
+      final c = await signedIn();
+      final before = c.read(authControllerProvider);
+      controllerOf(c).updateMe('u2', (me) => me.copyWith(name: 'Bia'));
+      expect(c.read(authControllerProvider), same(before));
+
+      // An update that swaps the person is refused too.
+      controllerOf(c)
+          .updateMe('u1', (me) => me.copyWith(id: 'u2', name: 'Bia'));
+      expect(c.read(authControllerProvider), same(before));
+
+      await controllerOf(c).signOut();
+      controllerOf(c).updateMe('u1', (me) => me.copyWith(name: 'Bia'));
+      expect(c.read(authControllerProvider), isA<SignedOut>());
+    });
+
+    test('never touch the local language and theme', () async {
+      final c = await signedIn();
+      final local = c.read(preferencesProvider);
+      controllerOf(c).updateMe(
+        'u1',
+        (me) => me.copyWith(
+          preferences: me.preferences.copyWith(theme: 'light', locale: 'en-US'),
+        ),
+      );
+      expect(c.read(preferencesProvider), local);
+    });
+  });
 }

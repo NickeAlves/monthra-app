@@ -16,21 +16,18 @@ import 'package:monthra/features/auth/presentation/auth_layout.dart';
 import 'package:monthra/features/home/presentation/home_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
+import 'package:monthra/features/settings/presentation/settings_page.dart';
 
 import 'captcha.dart';
+import 'env.dart';
 import 'fake_api.dart';
 import 'frame.dart';
 
+export 'env.dart' show localEnv;
+export 'fake_api.dart' show silentApi;
+
 /// A boot hint the app saved (see `PumpMonthraApp.pumpMonthraApp`).
 typedef SavedBootHint = ({String languageTag, String? theme});
-
-final Env localEnv = Env(
-  appEnv: AppEnv.local,
-  apiBaseUrl: Uri.parse('http://localhost:8080'),
-);
-
-/// An API that knows nothing: any call it gets is a `404`.
-FakeAdapter silentApi() => FakeAdapter((_) => Reply.problem(404, 'not_found'));
 
 extension PumpMonthraApp on WidgetTester {
   /// Pumps the whole app as `main` does, with [store] in place of the
@@ -84,6 +81,7 @@ extension PumpMonthraApp on WidgetTester {
     (w) =>
         w is AuthLayout ||
         w is HomePage ||
+        w is SettingsPage ||
         w is NotFoundPage ||
         w is DesignSystemCatalog ||
         w is BootScreen ||

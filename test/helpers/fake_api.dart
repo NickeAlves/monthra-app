@@ -105,6 +105,9 @@ final class FakeAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
+/// An API that knows nothing: any call it gets is a `404`.
+FakeAdapter silentApi() => FakeAdapter((_) => Reply.problem(404, 'not_found'));
+
 final Uri testApiRoot = Uri.parse('http://localhost:8080/api/v1');
 
 /// A client on [adapter], as the app builds it, with instant retry waits.

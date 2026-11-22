@@ -16,6 +16,9 @@ enum Currency {
     return currency;
   }
 
+  /// The currency of [code], or null when it is not one of the three.
+  static Currency? tryCode(String? code) => _byCode[code];
+
   static final Map<String, Currency> _byCode = {
     for (final c in values) c.code: c,
   };

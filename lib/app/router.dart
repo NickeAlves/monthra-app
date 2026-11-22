@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/not_found_page.dart';
+import 'package:monthra/app/routes.dart';
+import 'package:monthra/app/shell/app_shell.dart';
+import 'package:monthra/app/shell/shell_destinations.dart';
 import 'package:monthra/core/config/env_provider.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
@@ -11,45 +14,13 @@ import 'package:monthra/features/auth/presentation/mfa_page.dart';
 import 'package:monthra/features/auth/presentation/register_page.dart';
 import 'package:monthra/features/auth/presentation/reset_password_page.dart';
 import 'package:monthra/features/auth/presentation/verify_email_page.dart';
-import 'package:monthra/features/home/presentation/home_page.dart';
 import 'package:monthra/features/settings/preferences/presentation/language_picker.dart';
 import 'package:monthra/features/settings/preferences/presentation/theme_preference_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+export 'package:monthra/app/routes.dart';
+
 part 'router.g.dart';
-
-/// A production build (`APP_ENV`): the catalog route compiles away there.
-const bool productionBuild = String.fromEnvironment('APP_ENV') == 'production';
-
-/// The app's paths. Email links point at [verifyEmail] and [resetPassword]
-/// (`{APP_PUBLIC_URL}/verify-email#token=…`), budget alerts at `/budgets`.
-abstract final class AppRoutes {
-  static const home = '/';
-  static const login = '/login';
-  static const mfa = '/login/mfa';
-  static const register = '/register';
-  static const forgotPassword = '/forgot-password';
-  static const resetPassword = '/reset-password';
-  static const verifyEmail = '/verify-email';
-  static const designSystem = '/design-system';
-
-  /// Pages for someone signed out: a signed-in visit goes on to `from`.
-  static const Set<String> signedOutOnly = {
-    login,
-    mfa,
-    register,
-    forgotPassword,
-  };
-
-  /// Pages open in either state: the email links and the catalog.
-  static const Set<String> open = {resetPassword, verifyEmail, designSystem};
-
-  /// [path] carrying [from], the page to return to after signing in.
-  static String withFrom(String path, String? from) =>
-      from == null || from == home
-      ? path
-      : Uri(path: path, queryParameters: {'from': from}).toString();
-}
 
 /// Where a visit to [uri] goes given [auth]; null stays.
 ///
@@ -117,18 +88,35 @@ void dropLinkFragment(BuildContext context) {
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) {
   // Read here and kept current by the listener: the router lives as long
-  // as the app, and the guards re-run on every change of the session.
-  final auth = ValueNotifier<AuthState>(ref.read(authControllerProvider));
-  ref.listen(authControllerProvider, (_, next) => auth.value = next);
+  // as the app, and the guards re-run when the kind of session changes
+  // (a newer profile, from a rename say, moves nothing).
+  final auth = SessionKind(ref.read(authControllerProvider));
+  ref.listen(authControllerProvider, (_, next) => auth.update(next));
   final env = ref.read(envProvider);
-  final catalog = !productionBuild && !env.isProduction;
 
   final router = GoRouter(
     refreshListenable: auth,
-    redirect: (context, state) => authRedirect(auth.value, state.uri),
+    redirect: (context, state) => authRedirect(auth.state, state.uri),
     errorBuilder: (context, state) => const NotFoundPage(),
     routes: [
-      GoRoute(path: AppRoutes.home, builder: (_, _) => const HomePage()),
+      // The signed-in pages, one branch per destination (its own history
+      // and scroll position), inside the app shell. The branches not shown
+      // keep their state and take no focus (IndexedStack excludes it).
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => AppShell(shell: shell),
+        branches: [
+          for (final d in ShellDestination.values)
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: d.path,
+                  builder: (_, state) => d.page(state),
+                  routes: d.routes,
+                ),
+              ],
+            ),
+        ],
+      ),
       GoRoute(
         path: AppRoutes.login,
         builder: (_, state) => LoginPage(from: _from(state)),
@@ -153,7 +141,9 @@ GoRouter router(Ref ref) {
         path: AppRoutes.verifyEmail,
         builder: (_, state) => VerifyEmailPage(token: linkToken(state.uri)),
       ),
-      if (catalog)
+      // Outside the shell, above it when opened from it (back keeps the
+      // branch as it was).
+      if (catalogEnabled(env))
         GoRoute(
           path: AppRoutes.designSystem,
           builder: (_, _) => DesignSystemCatalog(
@@ -168,6 +158,20 @@ GoRouter router(Ref ref) {
     auth.dispose();
   });
   return router;
+}
+
+/// The session for the guards, notifying only when its kind changes
+/// (signed in, signed out, booting...): the guards look at nothing else.
+class SessionKind extends ChangeNotifier {
+  new(this.state);
+
+  AuthState state;
+
+  void update(AuthState next) {
+    final changed = next.runtimeType != state.runtimeType;
+    state = next;
+    if (changed) notifyListeners();
+  }
 }
 
 String? _from(GoRouterState state) =>

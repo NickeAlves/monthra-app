@@ -53,6 +53,8 @@ flutter:
   assets:
     - assets/brand/monthra-simbolo.svg
     - assets/brand/monthra-simbolo-branco.svg
+    - assets/brand/monthra-logo.svg
+    - assets/brand/monthra-logo-branco.svg
     # Registered with the LicenseRegistry at boot.
     - assets/fonts/inter/OFL.txt
   # Inter 4.1, subset to Latin by scripts/subset-inter.sh (OFL 1.1).
