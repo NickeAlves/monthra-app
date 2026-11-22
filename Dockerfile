@@ -62,9 +62,18 @@ LABEL org.opencontainers.image.title="monthra-app" \
 # Alpine fixes land before a new base image does (Trivy fails the build on
 # HIGH/CRITICAL ones), and the image's default server goes away: the whole
 # configuration is ours.
+#
+# Until nginx-unprivileged publishes nginx 1.30.7 (CVE-2026-113425,
+# -118899, -121810, -123007, -123633, -123634), nginx comes from Alpine's
+# own repository: the image pins nginx.org's 1.30.6 package (and its
+# modules, which this configuration does not load) in /etc/apk/world, so
+# `apk upgrade` alone keeps it. Drop the swap with the next base image bump.
 USER root
 RUN apk upgrade --no-cache \
- && rm -f /etc/nginx/conf.d/default.conf
+ && apk del --no-cache nginx-module-geoip nginx-module-image-filter \
+      nginx-module-njs nginx-module-xslt \
+ && apk add --no-cache 'nginx>=1.30.7' \
+ && rm -f /etc/nginx/conf.d/default.conf /etc/nginx/http.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/security-headers.conf /etc/nginx/security-headers.conf
 # Owned by root: the nginx user can read the site, never change it.
