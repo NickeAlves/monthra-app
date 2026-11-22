@@ -167,9 +167,17 @@ Every signed-in page lives in the app shell (`lib/app/shell/`), one navigation b
 
 The menu lists only the pages that exist: today the dashboard placeholder and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
 
-**Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app. The security, sessions, data export and account deletion sections come in the next PRs.
+**Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app. The data export and account deletion sections come in the next PR.
 
-**Try it locally:** sign in as the seeded demo account, open Settings, rename yourself and switch the theme or the language; reload or sign in on another browser and the choices are there.
+**Security and sessions** (Settings, sub-pages under `/settings`, so Settings stays selected in the menu):
+
+- **Password** (`/settings/password`): the current password, then the new one (10 characters at least, refused when it appears in known breaches). The other sessions are signed out; this one stays.
+- **Two-step verification** (`/settings/mfa/enable`): the password, then a QR code for the authenticator app (or the key to type, or, on a phone or tablet with an authenticator app, "Open in the authenticator app"), then a first code. The 10 recovery codes show **once**: copy them and tick "I saved these codes" before leaving; leaving earlier asks first. Turning it off (`/settings/mfa/disable`) and creating new recovery codes (`/settings/mfa/recovery-codes`, the old ones stop working) take the password and a code from the app or a recovery code. Wrong passwords and codes count toward the sign-in lockout of the address.
+- **Sessions:** the signed-in devices (named from their user agent; the phone apps send `Monthra (iOS)` / `Monthra (Android)`), this one first, with the address and last use; sign out one, or every other one (asked first).
+
+The QR code is drawn by `QrCodeView` (`qr` package, our own painter, ink on white in both themes). The secret and the recovery codes stay in the page's memory only.
+
+**Try it locally:** sign in as the seeded demo account, open Settings, rename yourself and switch the theme or the language; reload or sign in on another browser and the choices are there. Turn two-step verification on with any authenticator app (or `oathtool --totp -b <key>`), sign out and back in, then look at the sessions of both browsers.
 
 ## Routes and sign-in
 
@@ -178,7 +186,8 @@ The menu lists only the pages that exist: today the dashboard placeholder and Se
 | Path | Who | Page |
 |---|---|---|
 | `/` | signed in | the dashboard's place in the app shell (a greeting until the dashboard PR) |
-| `/settings` | signed in | Settings: profile and preferences |
+| `/settings` | signed in | Settings: profile, preferences, security, sessions |
+| `/settings/password`, `/settings/mfa/enable`, `/settings/mfa/disable`, `/settings/mfa/recovery-codes` | signed in | change the password, turn two-step verification on or off, new recovery codes |
 | `/login`, `/login/mfa`, `/register`, `/forgot-password` | signed out | sign-in, the two-step code, sign-up, the reset request |
 | `/verify-email#token=…`, `/reset-password#token=…` | anyone | the links of the account emails |
 | `/design-system` | anyone, outside production | the design system catalog (the route does not exist in production) |
