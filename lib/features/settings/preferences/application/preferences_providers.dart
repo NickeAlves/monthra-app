@@ -14,11 +14,13 @@ PreferencesStore preferencesStore(Ref ref) => throw StateError(
   'preferencesStoreProvider is overridden in main (PreferencesStore.open)',
 );
 
-/// The preferences the root widget applies (§7.6): theme and language.
+/// The preferences the root widget applies (§7.6): theme and language,
+/// saved on the device.
 ///
-/// Changes apply at once and are saved locally. The profile sync
-/// (`PATCH /me/preferences`) and "the server's value wins at sign-in"
-/// ([replaceAll]) come with the API client and the settings screen.
+/// Changes apply at once. The pickers go through `ProfileController`,
+/// which also sends them to the profile (`PATCH /me/preferences`) when
+/// someone is signed in; the profile's values replace these whenever it
+/// loads ([replaceAll], at sign-in and start-up: the server wins).
 @Riverpod(keepAlive: true)
 class Preferences extends _$Preferences {
   @override

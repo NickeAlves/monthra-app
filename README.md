@@ -124,8 +124,8 @@ The UI speaks pt-BR (default), es-ES and en-US (§7.6 of CLAUDE.md). No screen w
 - **Adding a string:** add it to the three files (description in `app_en.arb` only), run `make gen` and commit the generated `lib/l10n/generated/`. `make l10n-check` (also in `make lint` and CI) fails on a key missing from a language, a key only one language has, a missing description, a dropped placeholder or an empty message; CI also fails when the generated code is stale.
 - **Language names** are written in themselves ("Português (Brasil)", "Español (España)", "English (US)") in every UI language, so they live in `AppLocale`, not in the ARB files.
 - **Which language:** the one the person picked, else the first device language that is Portuguese, Spanish or English whatever the region (pt-PT -> pt-BR, es-MX -> es-ES, en-GB -> en-US, the same rule as the API's `Accept-Language` matcher), else pt-BR. A change applies at once, without a restart. Numbers, money and dates take the locale from the context (`Localizations.localeOf`), never from `Intl.defaultLocale`. On the web Flutter writes `<html lang>` itself.
-- **Preferences** (`lib/features/settings/preferences/`): `preferencesProvider` (Riverpod, generated with `riverpod_generator`) holds the language (null = follow the device) and the theme (System, Light, Dark); `appLocaleProvider` is the language in effect, the one source for the UI and the API client's `Accept-Language` (read on every call). They are kept in `shared_preferences` (nothing sensitive), read in `main` before the first frame, so the app opens in the saved theme and language. The profile sync (`PATCH /me/preferences`, the server's value wins at sign-in) comes with the sign-in and settings screens.
-- **Pickers:** `LanguagePicker` and `ThemePreferencePicker`, for the settings and the public landing page (today in the catalog header and the provisional start page). The sign-in pages show none: before signing in the app follows the device, after it the profile.
+- **Preferences** (`lib/features/settings/preferences/`): `preferencesProvider` (Riverpod, generated with `riverpod_generator`) holds the language (null = follow the device) and the theme (System, Light, Dark); `appLocaleProvider` is the language in effect, the one source for the UI and the API client's `Accept-Language` (read on every call). They are kept in `shared_preferences` (nothing sensitive), read in `main` before the first frame, so the app opens in the saved theme and language. Signed in, a change also goes to the profile (`PATCH /me/preferences`, see App shell and settings), so it follows the person to their other devices; whenever the profile loads (sign-in, start-up) its values replace the local ones.
+- **Pickers:** `LanguagePicker` and `ThemePreferencePicker`, in Settings and the catalog header (and the public landing page later). The sign-in pages show none: before signing in the app follows the device, after it the profile.
 - **No flash on the web:** the app also saves a small hint (`localStorage` `monthra.boot`, its own key); `web/boot.js` runs before the page paints and applies the saved theme and language, so a dark choice on a light system (or the other way round) never flashes the other theme. Without a hint the splash follows `prefers-color-scheme`. The native splash screens follow the system: they cannot read the app's preferences.
 - **Generated code** (`make gen`): the localizations, the Riverpod providers and the models (`*.g.dart`, `*.freezed.dart`) are committed; CI regenerates them and fails on a difference.
 
@@ -157,13 +157,28 @@ Each one carries the `requestId` (`X-Request-ID`) to match the server's logs. Sc
 
 **Models** use `freezed` + `json_serializable` (`build.yaml`: `checked`, `explicit_to_json`); their generated `*.freezed.dart`/`*.g.dart` are committed like the rest (`make gen`).
 
+## App shell and settings
+
+Every signed-in page lives in the app shell (`lib/app/shell/`), one navigation branch per destination, so each keeps its own history and scroll position while the person moves between them:
+
+- **Desktop** (wider than 1024 px): a sidebar with the logo, the destinations, the design system link (outside production), the account and sign-out.
+- **Tablet** (640 to 1024 px): the same sidebar with icons only; each shows its name on hover, long press or keyboard focus.
+- **Phone:** a bottom bar with the main destinations and **More**, a sheet with the account, the other destinations, the catalog link and sign-out. The new-transaction button will sit in the middle of the bar (transactions PR).
+
+The menu lists only the pages that exist: today the dashboard placeholder and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
+
+**Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app. The security, sessions, data export and account deletion sections come in the next PRs.
+
+**Try it locally:** sign in as the seeded demo account, open Settings, rename yourself and switch the theme or the language; reload or sign in on another browser and the choices are there.
+
 ## Routes and sign-in
 
-`lib/app/router.dart` (go_router). Paths are clean on the web and keep the fragment (`PathUrlStrategy` with `includeHash`), because the email links carry their token there:
+`lib/app/router.dart` (go_router; the paths in `lib/app/routes.dart`). Paths are clean on the web and keep the fragment (`PathUrlStrategy` with `includeHash`), because the email links carry their token there:
 
 | Path | Who | Page |
 |---|---|---|
-| `/` | signed in | the start page (a greeting and sign-out until the app shell lands) |
+| `/` | signed in | the dashboard's place in the app shell (a greeting until the dashboard PR) |
+| `/settings` | signed in | Settings: profile and preferences |
 | `/login`, `/login/mfa`, `/register`, `/forgot-password` | signed out | sign-in, the two-step code, sign-up, the reset request |
 | `/verify-email#token=…`, `/reset-password#token=…` | anyone | the links of the account emails |
 | `/design-system` | anyone, outside production | the design system catalog (the route does not exist in production) |
