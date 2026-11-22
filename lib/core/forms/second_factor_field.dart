@@ -121,7 +121,9 @@ class SecondFactorField extends StatelessWidget {
 }
 
 /// The link that switches a [SecondFactorField] between the app's code and
-/// a recovery code; [onToggled] runs after (clear an error, reset the form).
+/// a recovery code, then puts the cursor in the field it shows (once that
+/// field is built: the other one is gone); [onToggled] runs after (clear an
+/// error, reset the form).
 class SecondFactorToggle extends StatelessWidget {
   const new({required this.controller, this.onToggled, super.key});
 
@@ -136,6 +138,11 @@ class SecondFactorToggle extends StatelessWidget {
       builder: (context, _) => ShadButton.link(
         onPressed: () {
           controller.toggle();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (controller.focusNode.context != null) {
+              controller.focusNode.requestFocus();
+            }
+          });
           onToggled?.call();
         },
         child: ButtonLabel(

@@ -278,6 +278,14 @@ void main() {
       expect(server.mfaEnabled, isTrue);
 
       await tapAndSettle(tester, button('Usar um código de recuperação'));
+      expect(
+        tester
+            .widget<EditableText>(field('Código de recuperação'))
+            .focusNode
+            .hasFocus,
+        isTrue,
+        reason: 'the cursor moves to the field shown',
+      );
       await tester.enterText(
         field('Código de recuperação'),
         server.recoveryCodes.first,

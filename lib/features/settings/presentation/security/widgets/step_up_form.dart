@@ -167,13 +167,7 @@ class _StepUpFormState extends State<StepUpForm> {
                     ),
             ),
             if (widget.askCode)
-              SecondFactorToggle(
-                controller: _factor,
-                onToggled: () {
-                  _clearError();
-                  _factor.focusNode.requestFocus();
-                },
-              ),
+              SecondFactorToggle(controller: _factor, onToggled: _clearError),
           ],
         ),
       ],
