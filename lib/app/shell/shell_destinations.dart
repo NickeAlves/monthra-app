@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/routes.dart';
 import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/settings/presentation/security/change_password_page.dart';
 import 'package:monthra/features/settings/presentation/settings_page.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -40,8 +41,22 @@ enum ShellDestination {
   };
 
   /// Pages under [path] (a detail, a flow of its own): the destination
-  /// stays selected on them.
-  List<RouteBase> get routes => const [];
+  /// stays selected on them. Their paths are relative to [path].
+  List<RouteBase> get routes => switch (this) {
+    dashboard => const [],
+    settings => [
+      GoRoute(
+        path: _under(AppRoutes.settingsPassword),
+        builder: (_, _) => const ChangePasswordPage(),
+      ),
+    ],
+  };
+
+  /// [route] relative to [path] (`/settings/password` -> `password`).
+  String _under(String route) {
+    assert(route.startsWith('$path/'), '$route is not under $path');
+    return route.substring(path.length + 1);
+  }
 
   static List<ShellDestination> get bar => [
     for (final d in values)

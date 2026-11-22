@@ -400,4 +400,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String shellSignedInAs(String name) {
     return 'Sesión iniciada como $name';
   }
+
+  @override
+  String get settingsSecurityTitle => 'Seguridad';
+
+  @override
+  String get settingsSecurityDescription =>
+      'Tu contraseña y la verificación en dos pasos.';
+
+  @override
+  String get settingsPasswordLabel => 'Contraseña';
+
+  @override
+  String get settingsPasswordDescription =>
+      'Al cambiarla, se cierran tus otras sesiones.';
+
+  @override
+  String get settingsPasswordChange => 'Cambiar contraseña';
+
+  @override
+  String get passwordPageDescription =>
+      'Escribe tu contraseña actual y luego la nueva.';
+
+  @override
+  String get passwordCurrentLabel => 'Contraseña actual';
+
+  @override
+  String get passwordNewLabel => 'Nueva contraseña';
+
+  @override
+  String get passwordSubmit => 'Guardar nueva contraseña';
+
+  @override
+  String get passwordChanged => 'Contraseña cambiada';
+
+  @override
+  String get passwordChangedDescription => 'Tus otras sesiones se cerraron.';
+
+  @override
+  String get errorPasswordIncorrect => 'Esa no es tu contraseña actual.';
 }

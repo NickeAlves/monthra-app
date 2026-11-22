@@ -789,6 +789,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Signed in as {name}'**
   String shellSignedInAs(String name);
+
+  /// Title of the settings card with the password and two-step verification.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get settingsSecurityTitle;
+
+  /// Description of the security card in the settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password and two-step verification.'**
+  String get settingsSecurityDescription;
+
+  /// Title of the password row in the security settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get settingsPasswordLabel;
+
+  /// Description of the password row: a change signs out the other devices.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing it signs out your other sessions.'**
+  String get settingsPasswordDescription;
+
+  /// Button of the password row, and title of the page that changes it.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get settingsPasswordChange;
+
+  /// Description under the title of the change password page.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your current password, then the new one.'**
+  String get passwordPageDescription;
+
+  /// Label of the field with the password in use now.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get passwordCurrentLabel;
+
+  /// Label of the field with the password to set.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get passwordNewLabel;
+
+  /// Button that sets the new password.
+  ///
+  /// In en, this message translates to:
+  /// **'Save new password'**
+  String get passwordSubmit;
+
+  /// Message after the password was changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed'**
+  String get passwordChanged;
+
+  /// Second line of the message after the password was changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your other sessions were signed out.'**
+  String get passwordChangedDescription;
+
+  /// Error under a password field asked again before a sensitive change, when it is wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not your current password.'**
+  String get errorPasswordIncorrect;
 }
 
 class _AppLocalizationsDelegate

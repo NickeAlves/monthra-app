@@ -114,5 +114,17 @@
   "shellSignOut": "Sair",
   "shellSignOutFailed": "Você continua conectado",
   "shellDesignSystem": "Design system",
-  "shellSignedInAs": "Conectado como {name}"
+  "shellSignedInAs": "Conectado como {name}",
+  "settingsSecurityTitle": "Segurança",
+  "settingsSecurityDescription": "Sua senha e a verificação em duas etapas.",
+  "settingsPasswordLabel": "Senha",
+  "settingsPasswordDescription": "Ao trocar, suas outras sessões são encerradas.",
+  "settingsPasswordChange": "Alterar senha",
+  "passwordPageDescription": "Digite a senha atual e depois a nova.",
+  "passwordCurrentLabel": "Senha atual",
+  "passwordNewLabel": "Nova senha",
+  "passwordSubmit": "Salvar nova senha",
+  "passwordChanged": "Senha alterada",
+  "passwordChangedDescription": "Suas outras sessões foram encerradas.",
+  "errorPasswordIncorrect": "Essa não é a sua senha atual."
 }

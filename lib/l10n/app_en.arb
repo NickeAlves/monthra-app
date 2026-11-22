@@ -519,5 +519,53 @@
         "example": "Ana"
       }
     }
+  },
+  "settingsSecurityTitle": "Security",
+  "@settingsSecurityTitle": {
+    "description": "Title of the settings card with the password and two-step verification."
+  },
+  "settingsSecurityDescription": "Your password and two-step verification.",
+  "@settingsSecurityDescription": {
+    "description": "Description of the security card in the settings."
+  },
+  "settingsPasswordLabel": "Password",
+  "@settingsPasswordLabel": {
+    "description": "Title of the password row in the security settings."
+  },
+  "settingsPasswordDescription": "Changing it signs out your other sessions.",
+  "@settingsPasswordDescription": {
+    "description": "Description of the password row: a change signs out the other devices."
+  },
+  "settingsPasswordChange": "Change password",
+  "@settingsPasswordChange": {
+    "description": "Button of the password row, and title of the page that changes it."
+  },
+  "passwordPageDescription": "Type your current password, then the new one.",
+  "@passwordPageDescription": {
+    "description": "Description under the title of the change password page."
+  },
+  "passwordCurrentLabel": "Current password",
+  "@passwordCurrentLabel": {
+    "description": "Label of the field with the password in use now."
+  },
+  "passwordNewLabel": "New password",
+  "@passwordNewLabel": {
+    "description": "Label of the field with the password to set."
+  },
+  "passwordSubmit": "Save new password",
+  "@passwordSubmit": {
+    "description": "Button that sets the new password."
+  },
+  "passwordChanged": "Password changed",
+  "@passwordChanged": {
+    "description": "Message after the password was changed."
+  },
+  "passwordChangedDescription": "Your other sessions were signed out.",
+  "@passwordChangedDescription": {
+    "description": "Second line of the message after the password was changed."
+  },
+  "errorPasswordIncorrect": "That is not your current password.",
+  "@errorPasswordIncorrect": {
+    "description": "Error under a password field asked again before a sensitive change, when it is wrong."
   }
 }

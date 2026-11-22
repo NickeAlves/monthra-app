@@ -399,4 +399,43 @@ class AppLocalizationsPt extends AppLocalizations {
   String shellSignedInAs(String name) {
     return 'Conectado como $name';
   }
+
+  @override
+  String get settingsSecurityTitle => 'Segurança';
+
+  @override
+  String get settingsSecurityDescription =>
+      'Sua senha e a verificação em duas etapas.';
+
+  @override
+  String get settingsPasswordLabel => 'Senha';
+
+  @override
+  String get settingsPasswordDescription =>
+      'Ao trocar, suas outras sessões são encerradas.';
+
+  @override
+  String get settingsPasswordChange => 'Alterar senha';
+
+  @override
+  String get passwordPageDescription => 'Digite a senha atual e depois a nova.';
+
+  @override
+  String get passwordCurrentLabel => 'Senha atual';
+
+  @override
+  String get passwordNewLabel => 'Nova senha';
+
+  @override
+  String get passwordSubmit => 'Salvar nova senha';
+
+  @override
+  String get passwordChanged => 'Senha alterada';
+
+  @override
+  String get passwordChangedDescription =>
+      'Suas outras sessões foram encerradas.';
+
+  @override
+  String get errorPasswordIncorrect => 'Essa não é a sua senha atual.';
 }

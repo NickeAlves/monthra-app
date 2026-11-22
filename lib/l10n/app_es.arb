@@ -114,5 +114,17 @@
   "shellSignOut": "Cerrar sesión",
   "shellSignOutFailed": "Sigues con la sesión iniciada",
   "shellDesignSystem": "Sistema de diseño",
-  "shellSignedInAs": "Sesión iniciada como {name}"
+  "shellSignedInAs": "Sesión iniciada como {name}",
+  "settingsSecurityTitle": "Seguridad",
+  "settingsSecurityDescription": "Tu contraseña y la verificación en dos pasos.",
+  "settingsPasswordLabel": "Contraseña",
+  "settingsPasswordDescription": "Al cambiarla, se cierran tus otras sesiones.",
+  "settingsPasswordChange": "Cambiar contraseña",
+  "passwordPageDescription": "Escribe tu contraseña actual y luego la nueva.",
+  "passwordCurrentLabel": "Contraseña actual",
+  "passwordNewLabel": "Nueva contraseña",
+  "passwordSubmit": "Guardar nueva contraseña",
+  "passwordChanged": "Contraseña cambiada",
+  "passwordChangedDescription": "Tus otras sesiones se cerraron.",
+  "errorPasswordIncorrect": "Esa no es tu contraseña actual."
 }

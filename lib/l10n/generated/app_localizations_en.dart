@@ -396,4 +396,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String shellSignedInAs(String name) {
     return 'Signed in as $name';
   }
+
+  @override
+  String get settingsSecurityTitle => 'Security';
+
+  @override
+  String get settingsSecurityDescription =>
+      'Your password and two-step verification.';
+
+  @override
+  String get settingsPasswordLabel => 'Password';
+
+  @override
+  String get settingsPasswordDescription =>
+      'Changing it signs out your other sessions.';
+
+  @override
+  String get settingsPasswordChange => 'Change password';
+
+  @override
+  String get passwordPageDescription =>
+      'Type your current password, then the new one.';
+
+  @override
+  String get passwordCurrentLabel => 'Current password';
+
+  @override
+  String get passwordNewLabel => 'New password';
+
+  @override
+  String get passwordSubmit => 'Save new password';
+
+  @override
+  String get passwordChanged => 'Password changed';
+
+  @override
+  String get passwordChangedDescription =>
+      'Your other sessions were signed out.';
+
+  @override
+  String get errorPasswordIncorrect => 'That is not your current password.';
 }
