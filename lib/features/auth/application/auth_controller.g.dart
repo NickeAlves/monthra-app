@@ -114,7 +114,7 @@ final class AuthControllerProvider
   }
 }
 
-String _$authControllerHash() => r'3fa91d8683bef061bc944e7f425c061f153c9cf8';
+String _$authControllerHash() => r'64cdd08e4f8505d2f8b80f4af251be5675dbb95c';
 
 /// The session of the app ([AuthState]) and the ways in and out of it.
 ///

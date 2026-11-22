@@ -3,15 +3,17 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/features/settings/application/profile_controller.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// Picks the UI language (§7.6), applied at once. Shows the language the
-/// app speaks now, chosen or matched from the device; each language is
-/// written in itself. For the settings (and the public landing page);
-/// the sign-in pages show none (user decision of 2026-11-15).
+/// Picks the UI language (§7.6), applied at once and, signed in, saved to
+/// the profile ([ProfileController]). Shows the language the app speaks
+/// now, chosen or matched from the device; each language is written in
+/// itself. For the settings (and the public landing page); the sign-in
+/// pages show none (user decision of 2026-11-15).
 class LanguagePicker extends ConsumerStatefulWidget {
   const new({super.key});
 
@@ -65,9 +67,11 @@ class _LanguagePickerState extends ConsumerState<LanguagePicker> {
           ],
         ),
         onChanged: (locale) {
-          // Saving locally never fails the change (see PreferencesStore).
+          // Never throws: a failed save is reported by the controller.
           if (locale != null) {
-            unawaited(ref.read(preferencesProvider.notifier).setLocale(locale));
+            unawaited(
+              ref.read(profileControllerProvider.notifier).setLocale(locale),
+            );
           }
         },
       ),

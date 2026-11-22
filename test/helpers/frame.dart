@@ -2,12 +2,21 @@ import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:monthra/app/overrides.dart';
 import 'package:monthra/core/design_system/design_system.dart';
-import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
+import 'package:monthra/core/network/api_providers.dart';
+import 'package:monthra/core/network/session_refresher.dart';
+import 'package:monthra/core/security/token_store.dart';
+import 'package:monthra/features/auth/application/auth_controller.dart';
+import 'package:monthra/features/auth/application/auth_state.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+
+import 'env.dart';
+import 'fake_api.dart';
+import 'stub_auth.dart';
 
 /// [child] on the app background of [brightness], with the Monthra theme
 /// and the UI strings of [locale], at the top start corner.
@@ -53,14 +62,18 @@ class TestFrame extends StatelessWidget {
 
 extension PumpFrame on WidgetTester {
   /// Pumps [child] inside a [TestFrame] on a [size] window (pixel ratio 1),
-  /// under a [ProviderScope] whose preferences live in [store] (empty by
-  /// default).
+  /// under a [ProviderScope] wired as the app's, whose preferences live in
+  /// [store] (empty by default). The session is [auth] from the start (no
+  /// start-up check) and [api] answers the calls (a `404` for each by
+  /// default), as a device sends them.
   Future<void> pumpFrame(
     Widget child, {
     Brightness brightness = Brightness.light,
     AppLocale locale = AppLocale.ptBr,
     Size size = const Size(800, 600),
     PreferencesStore? store,
+    AuthState auth = const SignedOut(),
+    FakeAdapter? api,
   }) async {
     view
       ..physicalSize = size
@@ -69,9 +82,14 @@ extension PumpFrame on WidgetTester {
     await pumpWidget(
       ProviderScope(
         overrides: [
-          preferencesStoreProvider.overrideWithValue(
-            store ?? MemoryPreferencesStore(),
+          ...appOverrides(
+            env: localEnv,
+            preferences: store ?? MemoryPreferencesStore(),
           ),
+          httpAdapterProvider.overrideWithValue(api ?? silentApi()),
+          sessionModeProvider.overrideWithValue(SessionMode.bearer),
+          tokenStoreProvider.overrideWithValue(MemoryTokenStore()),
+          authControllerProvider.overrideWith(() => StubAuthController(auth)),
         ],
         child: TestFrame(brightness: brightness, locale: locale, child: child),
       ),

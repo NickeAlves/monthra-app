@@ -18,19 +18,15 @@ import 'package:monthra/features/settings/preferences/application/preferences_pr
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 
 import 'captcha.dart';
+import 'env.dart';
 import 'fake_api.dart';
 import 'frame.dart';
 
+export 'env.dart' show localEnv;
+export 'fake_api.dart' show silentApi;
+
 /// A boot hint the app saved (see `PumpMonthraApp.pumpMonthraApp`).
 typedef SavedBootHint = ({String languageTag, String? theme});
-
-final Env localEnv = Env(
-  appEnv: AppEnv.local,
-  apiBaseUrl: Uri.parse('http://localhost:8080'),
-);
-
-/// An API that knows nothing: any call it gets is a `404`.
-FakeAdapter silentApi() => FakeAdapter((_) => Reply.problem(404, 'not_found'));
 
 extension PumpMonthraApp on WidgetTester {
   /// Pumps the whole app as `main` does, with [store] in place of the

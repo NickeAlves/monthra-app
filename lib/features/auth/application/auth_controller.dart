@@ -11,9 +11,6 @@ import 'package:monthra/features/auth/data/models/login_result.dart';
 import 'package:monthra/features/auth/data/models/me.dart';
 import 'package:monthra/features/auth/data/session_hint.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
-import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
-import 'package:monthra/features/settings/preferences/domain/app_preferences.dart';
-import 'package:monthra/features/settings/preferences/domain/theme_preference.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';
@@ -136,6 +133,19 @@ class AuthController extends _$AuthController {
   /// it and show [notice] on the sign-in page.
   Future<void> sessionEnded(AuthNotice notice) => _end(notice);
 
+  /// A newer copy of the profile from an account call (a rename, saved
+  /// preferences), applied only while [userId] is still the one signed in:
+  /// a late answer for an earlier session changes nothing. [update] gets
+  /// the current profile and changes only what the call answered, so two
+  /// answers racing never roll each other back. The local language and
+  /// theme stay as they are: only sign-in and start-up replace them.
+  void updateMe(String userId, Me Function(Me current) update) {
+    final current = state;
+    if (current is! SignedIn || current.me.id != userId) return;
+    final next = update(current.me);
+    if (next.id == userId && next != current.me) state = SignedIn(next);
+  }
+
   Future<void> _boot() async {
     if (_mode == SessionMode.bearer && await _tokens.read() == null) {
       if (ref.mounted) state = const SignedOut();
@@ -165,7 +175,7 @@ class AuthController extends _$AuthController {
     // The language and theme first, so the first signed-in frame has them.
     final saving = ref
         .read(preferencesProvider.notifier)
-        .replaceAll(_preferencesOf(me));
+        .replaceAll(me.preferences.app);
     state = SignedIn(me);
     await saving;
   }
@@ -201,11 +211,4 @@ class AuthController extends _$AuthController {
     _mfaDeadline?.cancel();
     state = SignedOut(notice: notice);
   }
-
-  static AppPreferences _preferencesOf(Me me) => AppPreferences(
-    locale: AppLocale.fromTag(me.preferences.locale),
-    theme:
-        ThemePreference.fromWire(me.preferences.theme) ??
-        ThemePreference.system,
-  );
 }
