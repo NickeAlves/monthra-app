@@ -51,6 +51,7 @@ class DesignSystemCatalog extends StatelessWidget {
                     const _Section(title: 'Amounts', child: _Amounts()),
                     const _Section(title: 'Categories', child: _Categories()),
                     const _Section(title: 'States', child: _States()),
+                    const _Section(title: 'Pages and toasts', child: _Pages()),
                   ],
                 ),
               ),
@@ -364,8 +365,18 @@ class _ControlsState extends State<_Controls> {
   }
 }
 
-void _toast(BuildContext context, String message) =>
-    ShadToaster.of(context).show(ShadToast(description: Text(message)));
+void _toast(
+  BuildContext context,
+  String message, {
+  String? description,
+  bool destructive = false,
+}) => showMonthraToast(
+  context,
+  title: message,
+  description: description,
+  destructive: destructive,
+  closeLabel: 'Close',
+);
 
 class _Cards extends StatelessWidget {
   const new();
@@ -610,5 +621,43 @@ class _States extends StatelessWidget {
         ),
       ),
     ],
+  );
+}
+
+class _Pages extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) => MonthraCard(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        MonthraPageHeader(
+          title: 'Configurações',
+          description: 'Perfil, preferências e segurança da conta.',
+          actions: [
+            ShadButton.outline(
+              onPressed: () => _toast(
+                context,
+                'Nome salvo.',
+                description: 'Aparece em todos os dispositivos.',
+              ),
+              leading: const Icon(LucideIcons.bell),
+              child: const ButtonLabel('Toast'),
+            ),
+            ShadButton.destructive(
+              onPressed: () => _toast(
+                context,
+                'Sua alteração não foi salva',
+                description: 'Verifique sua conexão e tente de novo.',
+                destructive: true,
+              ),
+              leading: const Icon(LucideIcons.circleAlert),
+              child: const ButtonLabel('Error toast'),
+            ),
+          ],
+        ),
+      ],
+    ),
   );
 }

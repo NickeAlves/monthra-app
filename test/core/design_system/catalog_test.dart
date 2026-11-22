@@ -72,6 +72,25 @@ void main() {
         expect(find.byType(RichText), findsWidgets);
         expect(contrastIssues(tester), isEmpty);
       });
+
+      for (final label in ['Toast', 'Error toast']) {
+        testWidgets('the ${label.toLowerCase()} meets the guidelines', (
+          tester,
+        ) async {
+          await pumpCatalog(tester, size: phone, brightness: brightness);
+          await tester.scrollUntilVisible(
+            find.text(label),
+            400,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.tap(find.text(label));
+          await tester.pumpAndSettle();
+          expect(find.bySemanticsLabel('Close'), findsOneWidget);
+          await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+          await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+          expect(contrastIssues(tester), isEmpty);
+        });
+      }
     });
   }
 
@@ -109,6 +128,7 @@ void main() {
       'Amounts',
       'Categories',
       'States',
+      'Pages and toasts',
     ]) {
       expect(find.text(section), findsOneWidget);
     }
