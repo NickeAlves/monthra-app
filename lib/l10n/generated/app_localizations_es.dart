@@ -314,4 +314,70 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorMfaCodeFormat => 'Introduce los 6 dígitos.';
+
+  @override
+  String get appClose => 'Cerrar';
+
+  @override
+  String get settingsTitle => 'Ajustes';
+
+  @override
+  String get settingsProfileTitle => 'Perfil';
+
+  @override
+  String get settingsProfileDescription => 'Cómo te llama Monthra.';
+
+  @override
+  String get settingsNameLabel => 'Nombre';
+
+  @override
+  String get settingsSaveName => 'Guardar nombre';
+
+  @override
+  String get settingsNameSaved => 'Nombre guardado.';
+
+  @override
+  String get settingsEmailLabel => 'Correo electrónico';
+
+  @override
+  String get settingsEmailHint =>
+      'La dirección con la que inicias sesión. Aún no se puede cambiar.';
+
+  @override
+  String get settingsPreferencesTitle => 'Preferencias';
+
+  @override
+  String get settingsPreferencesDescription =>
+      'Se guardan en tu cuenta, en todos tus dispositivos.';
+
+  @override
+  String get settingsLanguageDescription => 'La app y los correos que recibes.';
+
+  @override
+  String get settingsThemeDescription => 'Sistema sigue a tu dispositivo.';
+
+  @override
+  String get settingsCurrencyLabel => 'Moneda predeterminada';
+
+  @override
+  String get settingsCurrencyDescription => 'Se sugiere al crear una cuenta.';
+
+  @override
+  String get settingsBudgetAlertsLabel => 'Alertas de presupuesto por correo';
+
+  @override
+  String get settingsBudgetAlertsDescription =>
+      'Un correo cuando un presupuesto llega a su nivel de aviso o a su límite.';
+
+  @override
+  String get settingsSaveFailed => 'Tu cambio no se guardó';
+
+  @override
+  String get currencyBrl => 'Real brasileño (BRL)';
+
+  @override
+  String get currencyUsd => 'Dólar estadounidense (USD)';
+
+  @override
+  String get currencyEur => 'Euro (EUR)';
 }

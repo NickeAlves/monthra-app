@@ -405,5 +405,89 @@
   "errorMfaCodeFormat": "Enter the 6 digits.",
   "@errorMfaCodeFormat": {
     "description": "Field error: the authenticator code needs 6 digits."
+  },
+  "appClose": "Close",
+  "@appClose": {
+    "description": "Label of a button that closes a message or a panel (icon only, read by screen readers)."
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Title of the settings page (also its menu entry)."
+  },
+  "settingsProfileTitle": "Profile",
+  "@settingsProfileTitle": {
+    "description": "Title of the profile card on the settings page."
+  },
+  "settingsProfileDescription": "How Monthra addresses you.",
+  "@settingsProfileDescription": {
+    "description": "Line under the profile card title."
+  },
+  "settingsNameLabel": "Name",
+  "@settingsNameLabel": {
+    "description": "Label of the display name field on the settings page."
+  },
+  "settingsSaveName": "Save name",
+  "@settingsSaveName": {
+    "description": "Button that saves the display name."
+  },
+  "settingsNameSaved": "Name saved.",
+  "@settingsNameSaved": {
+    "description": "Message after the display name was saved."
+  },
+  "settingsEmailLabel": "Email",
+  "@settingsEmailLabel": {
+    "description": "Label above the account's email address (read-only) on the settings page."
+  },
+  "settingsEmailHint": "The address you sign in with. It can't be changed yet.",
+  "@settingsEmailHint": {
+    "description": "Line under the account's email address: it cannot be changed (no email change flow yet)."
+  },
+  "settingsPreferencesTitle": "Preferences",
+  "@settingsPreferencesTitle": {
+    "description": "Title of the preferences card on the settings page."
+  },
+  "settingsPreferencesDescription": "Saved to your account, on every device.",
+  "@settingsPreferencesDescription": {
+    "description": "Line under the preferences card title: the choices sync between devices."
+  },
+  "settingsLanguageDescription": "The app and the emails you get.",
+  "@settingsLanguageDescription": {
+    "description": "Line under the language setting: it applies to the interface and the account emails."
+  },
+  "settingsThemeDescription": "System follows your device.",
+  "@settingsThemeDescription": {
+    "description": "Line under the theme setting."
+  },
+  "settingsCurrencyLabel": "Default currency",
+  "@settingsCurrencyLabel": {
+    "description": "Label of the default currency setting."
+  },
+  "settingsCurrencyDescription": "Suggested when you add an account.",
+  "@settingsCurrencyDescription": {
+    "description": "Line under the default currency setting: amounts are never converted."
+  },
+  "settingsBudgetAlertsLabel": "Budget alert emails",
+  "@settingsBudgetAlertsLabel": {
+    "description": "Label of the switch that turns the budget alert emails on or off."
+  },
+  "settingsBudgetAlertsDescription": "An email when a budget reaches its warning level or its limit.",
+  "@settingsBudgetAlertsDescription": {
+    "description": "Line under the budget alerts switch."
+  },
+  "settingsSaveFailed": "Your change wasn't saved",
+  "@settingsSaveFailed": {
+    "description": "Title of the message shown when a preference could not be saved (it goes back to the saved value)."
+  },
+  "currencyBrl": "Brazilian real (BRL)",
+  "@currencyBrl": {
+    "description": "Name of the currency BRL, with its code."
+  },
+  "currencyUsd": "US dollar (USD)",
+  "@currencyUsd": {
+    "description": "Name of the currency USD, with its code."
+  },
+  "currencyEur": "Euro (EUR)",
+  "@currencyEur": {
+    "description": "Name of the currency EUR, with its code."
   }
 }
