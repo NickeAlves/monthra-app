@@ -10,6 +10,7 @@ export 'components/category_icons.dart';
 export 'components/monthra_card.dart';
 export 'components/monthra_page.dart';
 export 'components/monthra_toast.dart';
+export 'components/qr_code_view.dart';
 export 'components/skeleton.dart';
 export 'components/state_message.dart';
 export 'theme.dart';

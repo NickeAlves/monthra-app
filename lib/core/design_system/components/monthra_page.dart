@@ -1,17 +1,29 @@
 import 'package:flutter/widgets.dart';
+import 'package:monthra/core/design_system/components/button_label.dart';
 import 'package:monthra/core/design_system/tokens/breakpoints.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
+/// The way back from a page under another one (a settings flow): a link
+/// with an arrow above the title.
+final class MonthraPageBack {
+  const new({required this.label, required this.onPressed});
+
+  /// Names where it goes ("Settings").
+  final String label;
+  final VoidCallback onPressed;
+}
+
 /// A screen of the app shell: its title (and [description], [actions])
 /// over [child], scrolling, centered at [maxWidth] with the gutter of the
-/// breakpoint, on the app background.
+/// breakpoint, on the app background. A page under another has a [back].
 class MonthraPage extends StatelessWidget {
   const new({
     required this.title,
     required this.child,
     this.description,
     this.actions = const [],
+    this.back,
     this.maxWidth = MonthraLayout.maxContentWidth,
     super.key,
   });
@@ -19,6 +31,7 @@ class MonthraPage extends StatelessWidget {
   final String title;
   final String? description;
   final List<Widget> actions;
+  final MonthraPageBack? back;
   final double maxWidth;
   final Widget child;
 
@@ -46,6 +59,21 @@ class MonthraPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (back case final back?) ...[
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: ShadButton.link(
+                        onPressed: back.onPressed,
+                        // The arrow lines up with the title.
+                        padding: const EdgeInsetsDirectional.only(
+                          end: MonthraSpacing.x2,
+                        ),
+                        leading: const Icon(LucideIcons.arrowLeft),
+                        child: ButtonLabel(back.label),
+                      ),
+                    ),
+                    const SizedBox(height: MonthraSpacing.x2),
+                  ],
                   MonthraPageHeader(
                     title: title,
                     description: description,

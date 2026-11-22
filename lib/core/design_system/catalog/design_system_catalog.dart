@@ -52,6 +52,10 @@ class DesignSystemCatalog extends StatelessWidget {
                     const _Section(title: 'Categories', child: _Categories()),
                     const _Section(title: 'States', child: _States()),
                     const _Section(title: 'Pages and toasts', child: _Pages()),
+                    const _Section(
+                      title: 'Sub-page and QR code',
+                      child: _SubPage(),
+                    ),
                   ],
                 ),
               ),
@@ -621,6 +625,38 @@ class _States extends StatelessWidget {
         ),
       ),
     ],
+  );
+}
+
+/// An authenticator app URI with a made-up secret.
+const String _sampleOtpauth =
+    'otpauth://totp/Monthra:ana%40example.com?algorithm=SHA1&digits=6'
+    '&issuer=Monthra&period=30&secret=JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP';
+
+/// A page under another one (its way back above the title) holding a QR
+/// code, in a frame of its own: [MonthraPage] scrolls by itself.
+class _SubPage extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) => MonthraCard(
+    child: SizedBox(
+      height: 520,
+      child: MonthraPage(
+        title: 'Ativar a verificação',
+        description: 'Escaneie o código com o app autenticador.',
+        back: MonthraPageBack(
+          label: 'Configurações',
+          onPressed: () => _toast(context, 'Back tapped'),
+        ),
+        child: const Center(
+          child: QrCodeView(
+            data: _sampleOtpauth,
+            semanticLabel: 'QR code to add Monthra (sample)',
+          ),
+        ),
+      ),
+    ),
   );
 }
 
