@@ -100,21 +100,55 @@ class ApiClient {
     ),
   );
 
+  /// [accept] replaces the JSON `Accept` (a download), and
+  /// [receiveTimeout] the client's 30 s for an answer that takes longer to
+  /// come. In a browser dio waits for the whole answer within the connect
+  /// and receive timeouts together; on a device the receive timeout is the
+  /// longest pause between two chunks.
   Future<Response<T>> post<T>(
     String path, {
     Object? data,
     Map<String, Object?>? query,
     ResponseType? responseType,
+    String? accept,
+    Duration? receiveTimeout,
     CancelToken? cancelToken,
   }) => _send(
     () => _dio.post<T>(
       path,
       data: data,
       queryParameters: query,
-      options: _options(responseType),
+      options: _options(
+        responseType,
+        accept: accept,
+        receiveTimeout: receiveTimeout,
+      ),
       cancelToken: cancelToken,
     ),
   );
+
+  /// POSTs [data] and answers the body as bytes, whatever its type: a
+  /// download (the data export), which may take [receiveTimeout] to come.
+  /// Its refusals are problems like any call's ([accept] names the
+  /// download's type before `application/problem+json`).
+  Future<Uint8List> postBytes(
+    String path, {
+    required String accept,
+    Object? data,
+    Duration? receiveTimeout,
+    CancelToken? cancelToken,
+  }) async {
+    final response = await post<List<int>>(
+      path,
+      data: data,
+      responseType: ResponseType.bytes,
+      accept: '$accept, application/problem+json',
+      receiveTimeout: receiveTimeout,
+      cancelToken: cancelToken,
+    );
+    final bytes = response.data ?? const <int>[];
+    return bytes is Uint8List ? bytes : Uint8List.fromList(bytes);
+  }
 
   Future<Response<T>> patch<T>(
     String path, {
@@ -144,8 +178,17 @@ class ApiClient {
     ),
   );
 
-  static Options? _options(ResponseType? responseType) =>
-      responseType == null ? null : Options(responseType: responseType);
+  static Options? _options(
+    ResponseType? responseType, {
+    String? accept,
+    Duration? receiveTimeout,
+  }) => responseType == null && accept == null && receiveTimeout == null
+      ? null
+      : Options(
+          responseType: responseType,
+          receiveTimeout: receiveTimeout,
+          headers: {'accept': ?accept},
+        );
 
   static Future<Response<T>> _send<T>(
     Future<Response<T>> Function() call,

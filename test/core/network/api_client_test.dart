@@ -65,6 +65,35 @@ void main() {
 
       expect(response.data, {'id': 'a1', 'n': 3});
     });
+
+    test('a download asks for its own type and waits longer', () async {
+      final adapter = FakeAdapter((_) => Reply.bytes([80, 75, 5, 6]));
+      final api = fakeApi(adapter).api;
+
+      final bytes = await api.postBytes(
+        '/me/export',
+        accept: 'application/zip',
+        data: {'password': 'p'},
+        receiveTimeout: const Duration(minutes: 5),
+      );
+      await api.post<void>('/accounts', data: {'name': 'Wallet'});
+
+      expect(bytes, isA<Uint8List>());
+      expect(bytes, [80, 75, 5, 6]);
+      final [download, json] = adapter.sent;
+      expect(
+        download.headers['accept'],
+        'application/zip, application/problem+json',
+      );
+      expect(download.headers['content-type'], 'application/json');
+      expect(download.responseType, ResponseType.bytes);
+      expect(download.receiveTimeout, const Duration(minutes: 5));
+      expect(
+        json.headers['accept'],
+        'application/json, application/problem+json',
+      );
+      expect(json.receiveTimeout, const Duration(seconds: 30));
+    });
   });
 
   group('failures become ApiException', () {
@@ -121,6 +150,51 @@ void main() {
         isA<UnexpectedApiException>()
             .having((e) => e.status, 'status', 500)
             .having((e) => e.requestId, 'requestId', 'proxy-id'),
+      );
+    });
+
+    test('a problem answering a download', () async {
+      final adapter = FakeAdapter(
+        (_) =>
+            Reply.problem(429, 'rate_limited', headers: {'retry-after': '30'}),
+      );
+      final error = await _failure(
+        fakeApi(adapter).api.post<List<int>>(
+          '/me/export',
+          data: {'password': 'p'},
+          responseType: ResponseType.bytes,
+        ),
+      );
+
+      expect(
+        error,
+        isA<ApiProblemException>()
+            .having((e) => e.code, 'code', ProblemCode.rateLimited)
+            .having(
+              (e) => e.retryAfter,
+              'retryAfter',
+              const Duration(seconds: 30),
+            )
+            .having((e) => e.requestId, 'requestId', 'server-request-id'),
+      );
+    });
+
+    test('a download answered by an error page', () async {
+      final adapter = FakeAdapter(
+        (_) => const Reply(
+          502,
+          body: '{"not": "json"',
+          headers: {'content-type': 'application/json'},
+        ),
+      );
+      final error = await _failure(
+        fakeApi(adapter).api
+            .post<List<int>>('/me/export', responseType: ResponseType.bytes),
+      );
+
+      expect(
+        error,
+        isA<UnexpectedApiException>().having((e) => e.status, 'status', 502),
       );
     });
 
