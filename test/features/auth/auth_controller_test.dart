@@ -456,5 +456,54 @@ void main() {
       );
       expect(c.read(preferencesProvider), local);
     });
+
+    test('refreshProfile reads the profile again, and only that', () async {
+      var profile = meJson();
+      final api = FakeAdapter(
+        (r) => r.path.endsWith('/me')
+            ? Reply.json(profile)
+            : Reply.problem(404, 'not_found'),
+      );
+      final c = boot(api, tokens: MemoryTokenStore(savedTokens)).container;
+      expect(await settled(c), isA<SignedIn>());
+      final local = c.read(preferencesProvider);
+
+      profile = meJson(mfa: true, theme: 'light');
+      await controllerOf(c).refreshProfile();
+
+      final me = (c.read(authControllerProvider) as SignedIn).me;
+      expect(me.mfa.enabled, isTrue);
+      expect(me.preferences.theme, 'light');
+      expect(c.read(preferencesProvider), local, reason: 'not a sign-in');
+      expect(api.count('GET', '/api/v1/me'), 2);
+    });
+
+    test(
+      'refreshProfile throws a failure and asks nothing signed out',
+      () async {
+        var down = false;
+        final api = FakeAdapter(
+          (r) => down
+              ? Reply.problem(503, 'service_unavailable')
+              : r.path.endsWith('/me')
+              ? Reply.json(meJson())
+              : Reply.problem(404, 'not_found'),
+        );
+        final c = boot(api, tokens: MemoryTokenStore(savedTokens)).container;
+        expect(await settled(c), isA<SignedIn>());
+        down = true;
+        await expectLater(
+          controllerOf(c).refreshProfile(),
+          throwsA(isA<ApiProblemException>()),
+        );
+        expect(c.read(authControllerProvider), isA<SignedIn>());
+
+        down = false;
+        await controllerOf(c).signOut();
+        final asked = api.sent.length;
+        await controllerOf(c).refreshProfile();
+        expect(api.sent.length, asked);
+      },
+    );
   });
 }

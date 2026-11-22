@@ -146,6 +146,17 @@ class AuthController extends _$AuthController {
     if (next.id == userId && next != current.me) state = SignedIn(next);
   }
 
+  /// Reads the profile again (`GET /me`) after the account changed
+  /// elsewhere (MFA turned on or off from another device, say) and applies
+  /// it like [updateMe]: the local language and theme stay. A failure is
+  /// the caller's to show.
+  Future<void> refreshProfile() async {
+    final current = state;
+    if (current is! SignedIn) return;
+    final me = await _api.me();
+    if (ref.mounted) updateMe(current.me.id, (_) => me);
+  }
+
   Future<void> _boot() async {
     if (_mode == SessionMode.bearer && await _tokens.read() == null) {
       if (ref.mounted) state = const SignedOut();
