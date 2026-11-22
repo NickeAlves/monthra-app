@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/design_system.dart';
-import 'package:monthra/features/auth/presentation/widgets/auth_validators.dart';
+import 'package:monthra/core/forms/validators.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// The height of every field of the sign-in forms: the password field's,
+/// The height of every field of the account forms: the password field's,
 /// whose show/hide button is a full touch target.
 const BoxConstraints authFieldConstraints = BoxConstraints(
   minHeight: MonthraLayout.fieldWithButtonHeight,
@@ -62,16 +62,26 @@ class PasswordField extends StatefulWidget {
   const new({
     required this.controller,
     this.isNew = false,
+    this.id = 'password',
+    this.label,
     this.serverError,
     this.onChanged,
     this.onSubmitted,
     this.textInputAction = TextInputAction.done,
     this.focusNode,
+    this.autofocus = false,
     super.key,
   });
 
   final TextEditingController controller;
   final bool isNew;
+
+  /// The field's id in its [ShadForm]: unique when a form has two.
+  final String id;
+
+  /// "Password" when null.
+  final String? label;
+  final bool autofocus;
 
   /// Lets the page bring the cursor back after a failed attempt (Enter
   /// with `done` takes the focus away).
@@ -92,11 +102,12 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return ShadInputFormField(
-      id: 'password',
+      id: widget.id,
       controller: widget.controller,
       focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
       constraints: authFieldConstraints,
-      label: Text(l10n.authPasswordLabel),
+      label: Text(widget.label ?? l10n.authPasswordLabel),
       description: widget.isNew ? Text(l10n.authNewPasswordHint) : null,
       forceErrorText: widget.serverError,
       validator: widget.isNew

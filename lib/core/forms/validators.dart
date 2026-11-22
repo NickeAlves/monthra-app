@@ -13,7 +13,8 @@ abstract final class AuthLimits {
   static const int mfaCodeLength = 6;
 }
 
-/// Field checks of the auth forms, returning the sentence to show.
+/// Field checks of the account forms (sign-in, sign-up, settings),
+/// returning the sentence to show.
 extension AuthValidators on AppLocalizations {
   String? validateEmail(String value) {
     final email = value.trim();

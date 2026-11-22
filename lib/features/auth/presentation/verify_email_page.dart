@@ -6,14 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/router.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/core/forms/countdown.dart';
+import 'package:monthra/core/forms/fields.dart';
+import 'package:monthra/core/forms/form_alert.dart';
 import 'package:monthra/core/network/api_error_text.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/api_problem.dart';
 import 'package:monthra/features/auth/data/auth_api.dart';
 import 'package:monthra/features/auth/presentation/auth_layout.dart';
-import 'package:monthra/features/auth/presentation/widgets/auth_fields.dart';
-import 'package:monthra/features/auth/presentation/widgets/countdown.dart';
-import 'package:monthra/features/auth/presentation/widgets/form_alert.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
