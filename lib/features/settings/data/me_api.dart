@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:monthra/core/network/api_body.dart';
 import 'package:monthra/core/network/api_client.dart';
 import 'package:monthra/core/network/api_exception.dart';
@@ -80,4 +81,35 @@ class MeApi {
 
   /// Signs every session out but this one.
   Future<void> revokeOtherSessions() => _api.delete<void>('/me/sessions');
+
+  /// How long the export may take to arrive: the server's own write
+  /// deadline (`ExportWriteTimeout`).
+  static const Duration exportTimeout = Duration(minutes: 5);
+
+  /// Every record of the account as a ZIP (LGPD), after the password and,
+  /// with two-step verification on, a [code] (empty without it). The server
+  /// emails the owner each time. An archive cut short fails the call, so
+  /// the bytes answered are a whole archive.
+  Future<Uint8List> exportData({
+    required String password,
+    required String code,
+  }) => _api.postBytes(
+    '/me/export',
+    accept: 'application/zip',
+    data: _stepUp(password, code),
+    receiveTimeout: exportTimeout,
+  );
+
+  /// Deletes the account and its data after the password and, with
+  /// two-step verification on, a [code]. The server ends every session (a
+  /// browser's cookies too) and emails a confirmation.
+  Future<void> deleteAccount({
+    required String password,
+    required String code,
+  }) => _api.delete<void>('/me', data: _stepUp(password, code));
+
+  static Map<String, Object?> _stepUp(String password, String code) => {
+    'password': password,
+    if (code.isNotEmpty) 'code': code,
+  };
 }

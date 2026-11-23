@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:monthra/core/network/api_problem.dart';
 
@@ -118,12 +120,27 @@ const requestIdHeader = 'x-request-id';
 
 /// The problem in [response], or null when its body is not one.
 ApiProblem? problemOf(Response<Object?>? response) {
-  final data = response?.data;
+  final data = _jsonBody(response);
   if (data is! Map<String, Object?>) return null;
   try {
     return ApiProblem.fromJson(data);
   } on Object {
     // CheckedFromJsonException or a type error: not a problem body.
+    return null;
+  }
+}
+
+/// The body of [response] as dio decoded it, or decoded here from JSON for
+/// a call that asked for bytes (a download): its error answers are
+/// problems too, and dio leaves them as bytes.
+Object? _jsonBody(Response<Object?>? response) {
+  final data = response?.data;
+  if (data is! List<int>) return data;
+  final type = response?.headers.value(Headers.contentTypeHeader) ?? '';
+  if (!type.contains('json')) return null;
+  try {
+    return jsonDecode(utf8.decode(data));
+  } on FormatException {
     return null;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/core/network/api_problem.dart';
@@ -68,6 +69,31 @@ void main() {
         'GET $csrfPath',
         'POST /api/v1/accounts',
       ]);
+      expect(adapter.sent.last.headers['x-csrf-token'], 'token-2');
+    });
+
+    test('a download refused for csrf_invalid is sent again too', () async {
+      var issued = 0;
+      var writes = 0;
+      final adapter = FakeAdapter((r) {
+        if (r.path == csrfPath) {
+          return Reply.json({'csrfToken': 'token-${++issued}'});
+        }
+        return ++writes == 1
+            ? Reply.problem(403, 'csrf_invalid')
+            : Reply.bytes([80, 75, 5, 6]);
+      });
+      final api = fakeApi(adapter, mode: SessionMode.cookie).api;
+
+      final response = await api.post<List<int>>(
+        '/me/export',
+        data: {'password': 'p'},
+        responseType: ResponseType.bytes,
+      );
+
+      expect(response.data, [80, 75, 5, 6]);
+      expect(adapter.count('POST', '/api/v1/me/export'), 2);
+      expect(adapter.sent.last.responseType, ResponseType.bytes);
       expect(adapter.sent.last.headers['x-csrf-token'], 'token-2');
     });
 

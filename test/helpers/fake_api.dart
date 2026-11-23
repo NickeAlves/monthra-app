@@ -14,6 +14,8 @@ typedef SentRequest = ({
   String path,
   Map<String, Object?> headers,
   Object? data,
+  ResponseType responseType,
+  Duration? receiveTimeout,
 });
 
 /// What the fake server answers.
@@ -26,6 +28,10 @@ final class Reply {
   });
 
   factory json(Object? body, {int status = 200}) => Reply(status, body: body);
+
+  /// A binary answer (a download), sent as is.
+  factory bytes(List<int> bytes, {String contentType = 'application/zip'}) =>
+      Reply(200, body: bytes, headers: {'content-type': contentType});
 
   /// A problem+json answer, as the server writes it.
   factory problem(
@@ -80,6 +86,8 @@ final class FakeAdapter implements HttpClientAdapter {
       path: options.uri.path,
       headers: Map<String, Object?>.of(options.headers),
       data: options.data,
+      responseType: options.responseType,
+      receiveTimeout: options.receiveTimeout,
     );
     sent.add(request);
     final reply = await handler(request);
@@ -90,6 +98,15 @@ final class FakeAdapter implements HttpClientAdapter {
       );
     }
     final body = reply.body;
+    if (body is List<int>) {
+      return ResponseBody.fromBytes(
+        body,
+        reply.status,
+        headers: {
+          for (final h in reply.headers.entries) h.key: [h.value],
+        },
+      );
+    }
     return ResponseBody.fromString(
       body == null ? '' : (body is String ? body : jsonEncode(body)),
       reply.status,

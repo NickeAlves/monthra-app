@@ -17,6 +17,9 @@ const String testOtpauthUri =
     'otpauth://totp/Monthra:ana%40example.com?algorithm=SHA1&digits=6'
     '&issuer=Monthra&period=30&secret=$testMfaSecret';
 
+/// The archive [ProfileServer] exports: an empty ZIP (its end record).
+final List<int> testExportZip = [0x50, 0x4B, 0x05, 0x06, ...List.filled(18, 0)];
+
 /// A session as `GET /me/sessions` lists it.
 Map<String, Object?> sessionInfoJson({
   required String id,
@@ -52,8 +55,10 @@ List<Map<String, Object?>> defaultSessions() => [
 /// `breached password` is refused as breached), the sessions
 /// ([sessions]), two-step verification (setup, enable, disable, new
 /// recovery codes; the app's code is [testTotp], the recovery codes are
-/// [recoveryCodes]), sign-in without MFA, sign-out and the CSRF token.
-/// Anything else is a `404`.
+/// [recoveryCodes]), the data export ([testExportZip], counted in
+/// [exports]), the account deletion (then every call is a `401`, as for a
+/// session that no longer exists), sign-in without MFA, sign-out and the
+/// CSRF token. Anything else is a `404`.
 ///
 /// [hold] makes the next `PATCH` wait for a completer; [fail] answers the
 /// next request to a path with a given reply.
@@ -77,6 +82,12 @@ final class ProfileServer {
 
   /// A setup waits for its first code.
   bool setupPending = false;
+
+  /// How many exports were answered.
+  int exports = 0;
+
+  /// `DELETE /me` went through.
+  bool deleted = false;
 
   int _generation = 0;
 
@@ -151,6 +162,15 @@ final class ProfileServer {
       return null;
     }
     return Reply.problem(403, 'mfa_code_invalid');
+  }
+
+  /// The step-up of the account routes (export, deletion): the password,
+  /// and a code only while MFA is on (the server ignores one sent without).
+  Reply? _accountStepUp(Map<String, Object?> body) {
+    if (body['password'] != password) {
+      return Reply.problem(403, 'password_incorrect');
+    }
+    return mfaEnabled ? _stepUp(body) : null;
   }
 
   Reply _password(Map<String, Object?> body) {
@@ -231,6 +251,7 @@ final class ProfileServer {
         _readGates.isNotEmpty) {
       await _readGates.removeAt(0).future;
     }
+    if (deleted) return Reply.problem(401, 'unauthorized');
     final failures = _failures[r.path];
     if (failures != null && failures.isNotEmpty) return failures.removeAt(0);
     final body = r.data is Map
@@ -256,6 +277,16 @@ final class ProfileServer {
         return Reply.json(preferences);
       case ('POST', '/api/v1/me/password'):
         return _password(body);
+      case ('POST', '/api/v1/me/export'):
+        final refused = _accountStepUp(body);
+        if (refused != null) return refused;
+        exports++;
+        return Reply.bytes(testExportZip);
+      case ('DELETE', '/api/v1/me'):
+        final refused = _accountStepUp(body);
+        if (refused != null) return refused;
+        deleted = true;
+        return const Reply(204);
       case ('GET', '/api/v1/me/sessions'):
         return Reply.json({'sessions': sessions});
       case ('DELETE', '/api/v1/me/sessions'):

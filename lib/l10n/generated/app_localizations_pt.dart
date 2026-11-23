@@ -670,4 +670,161 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get sessionsRevokeFailed => 'A sessão não foi encerrada';
+
+  @override
+  String get settingsDataTitle => 'Seus dados';
+
+  @override
+  String get settingsDataDescription =>
+      'Baixe uma cópia de tudo o que está na sua conta ou exclua a conta.';
+
+  @override
+  String get settingsExportLabel => 'Exportar meus dados';
+
+  @override
+  String get settingsExportDescription =>
+      'Um arquivo ZIP com seus registros em JSON. Avisamos por e-mail a cada exportação.';
+
+  @override
+  String get settingsExportOpen => 'Exportar';
+
+  @override
+  String get settingsDeleteLabel => 'Excluir conta';
+
+  @override
+  String get settingsDeleteDescription =>
+      'Apaga a conta e todos os dados dela. Não dá para desfazer.';
+
+  @override
+  String get settingsDeleteOpen => 'Excluir minha conta';
+
+  @override
+  String get exportDataTitle => 'Exportar meus dados';
+
+  @override
+  String get exportDataDescription =>
+      'Baixe uma cópia de tudo o que a sua conta guarda, para guardar ou levar para outro serviço.';
+
+  @override
+  String get exportDataContentsTitle => 'O que vai no arquivo';
+
+  @override
+  String get exportDataIncludes =>
+      'Seu perfil, contas, categorias, transações, recorrências, orçamentos, investimentos e seus movimentos, sessões e eventos de segurança, em arquivos JSON.';
+
+  @override
+  String get exportDataExcludes =>
+      'Nunca a sua senha, a chave da verificação em duas etapas nem os códigos de recuperação.';
+
+  @override
+  String exportDataEmail(String email) {
+    return 'Cada exportação envia um e-mail para $email. Dá para exportar algumas vezes por hora.';
+  }
+
+  @override
+  String get exportDataConfirmTitle => 'Confirme que é você';
+
+  @override
+  String get exportDataSubmit => 'Exportar';
+
+  @override
+  String get exportDataBusy => 'Preparando o arquivo…';
+
+  @override
+  String get exportDataReadyTitle => 'Seu arquivo está pronto';
+
+  @override
+  String exportDataReadyDescription(String name) {
+    return '$name. Salve num lugar que só você acessa: ele tem seus registros financeiros.';
+  }
+
+  @override
+  String get exportDataSave => 'Salvar arquivo';
+
+  @override
+  String get fileSaved => 'Arquivo salvo';
+
+  @override
+  String get fileNotSaved =>
+      'O arquivo não foi salvo. Dá para salvar de novo sem exportar outra vez.';
+
+  @override
+  String get fileSaveFailed =>
+      'Não foi possível salvar o arquivo. Tente de novo.';
+
+  @override
+  String get deleteAccountTitle => 'Excluir conta';
+
+  @override
+  String get deleteAccountDescription =>
+      'Isso apaga a sua conta e tudo o que há nela, em todos os aparelhos.';
+
+  @override
+  String get deleteAccountWhatTitle => 'O que acontece';
+
+  @override
+  String get deleteAccountErased =>
+      'Suas contas, transações, categorias, recorrências, orçamentos e investimentos são apagados.';
+
+  @override
+  String get deleteAccountSignedOut =>
+      'Todas as sessões terminam, neste aparelho e nos outros.';
+
+  @override
+  String get deleteAccountKept =>
+      'Só o registro de segurança, sem endereços, fica guardado pelo prazo de retenção.';
+
+  @override
+  String deleteAccountEmail(String email) {
+    return 'Enviamos uma confirmação para $email.';
+  }
+
+  @override
+  String get deleteAccountFinal => 'Não dá para desfazer.';
+
+  @override
+  String get deleteAccountExportFirst => 'Exportar meus dados antes';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Confirme que é você';
+
+  @override
+  String get deleteAccountSubmit => 'Excluir conta';
+
+  @override
+  String get deleteAccountDialogTitle => 'Excluir a sua conta para sempre?';
+
+  @override
+  String get deleteAccountDialogDescription =>
+      'Seus dados são apagados agora e não podem ser recuperados.';
+
+  @override
+  String get deleteAccountDialogConfirm => 'Excluir para sempre';
+
+  @override
+  String get authNoticeAccountDeleted =>
+      'Sua conta e os dados dela foram excluídos. Enviamos uma confirmação por e-mail.';
+
+  @override
+  String get recoveryCodesDownload => 'Baixar .txt';
+
+  @override
+  String get recoveryCodesFileTitle => 'Códigos de recuperação do Monthra';
+
+  @override
+  String recoveryCodesFileAccount(String email) {
+    return 'Conta: $email';
+  }
+
+  @override
+  String recoveryCodesFileCreated(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(localeName);
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Gerados em: $dateString';
+  }
+
+  @override
+  String get recoveryCodesFileNote =>
+      'Cada código faz login uma vez, no lugar de um código do app autenticador.';
 }

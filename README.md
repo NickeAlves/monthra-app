@@ -131,7 +131,7 @@ The UI speaks pt-BR (default), es-ES and en-US (§7.6 of CLAUDE.md). No screen w
 
 ## API client
 
-`lib/core/network/` talks to the API under `/api/v1` (`Env.apiRoot`). Features read `apiClientProvider` and call `get`/`post`/`patch`/`delete` with the OpenAPI paths (`/accounts`); every failure is an `ApiException`, never a dio type:
+`lib/core/network/` talks to the API under `/api/v1` (`Env.apiRoot`). Features read `apiClientProvider` and call `get`/`post`/`patch`/`delete` with the OpenAPI paths (`/accounts`), or `postBytes` for a download (the data export: the bytes as a `Uint8List`, with its own `Accept` and a longer timeout); every failure is an `ApiException`, never a dio type, a download's refusals included:
 
 | Exception | When |
 |---|---|
@@ -167,17 +167,24 @@ Every signed-in page lives in the app shell (`lib/app/shell/`), one navigation b
 
 The menu lists only the pages that exist: today the dashboard placeholder and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
 
-**Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app. The data export and account deletion sections come in the next PR.
+**Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app.
 
 **Security and sessions** (Settings, sub-pages under `/settings`, so Settings stays selected in the menu):
 
 - **Password** (`/settings/password`): the current password, then the new one (10 characters at least, refused when it appears in known breaches). The other sessions are signed out; this one stays.
-- **Two-step verification** (`/settings/mfa/enable`): the password, then a QR code for the authenticator app (or the key to type, or, on a phone or tablet with an authenticator app, "Open in the authenticator app"), then a first code. The 10 recovery codes show **once**: copy them and tick "I saved these codes" before leaving; leaving earlier asks first. Turning it off (`/settings/mfa/disable`) and creating new recovery codes (`/settings/mfa/recovery-codes`, the old ones stop working) take the password and a code from the app or a recovery code. Wrong passwords and codes count toward the sign-in lockout of the address.
+- **Two-step verification** (`/settings/mfa/enable`): the password, then a QR code for the authenticator app (or the key to type, or, on a phone or tablet with an authenticator app, "Open in the authenticator app"), then a first code. The 10 recovery codes show **once**: copy them or download them as `monthra-recovery-codes.txt`, and tick "I saved these codes" before leaving; leaving earlier asks first. Turning it off (`/settings/mfa/disable`) and creating new recovery codes (`/settings/mfa/recovery-codes`, the old ones stop working) take the password and a code from the app or a recovery code. Wrong passwords and codes count toward the sign-in lockout of the address.
 - **Sessions:** the signed-in devices (named from their user agent; the phone apps send `Monthra (iOS)` / `Monthra (Android)`), this one first, with the address and last use; sign out one, or every other one (asked first).
 
 The QR code is drawn by `QrCodeView` (`qr` package, our own painter, ink on white in both themes). The secret and the recovery codes stay in the page's memory only.
 
-**Try it locally:** sign in as the seeded demo account, open Settings, rename yourself and switch the theme or the language; reload or sign in on another browser and the choices are there. Turn two-step verification on with any authenticator app (or `oathtool --totp -b <key>`), sign out and back in, then look at the sessions of both browsers.
+**Your data** (LGPD, the last card of Settings):
+
+- **Export my data** (`/settings/export`): the password and, with two-step verification on, a code; then the server's ZIP (`POST /me/export`: one JSON file per kind of record, never the password, the two-step key or the recovery codes) is saved as `monthra-data-YYYY-MM-DD.zip`. Each export emails the owner and the server allows a few per hour (`RATE_LIMIT_DATA_EXPORT_USER`, 5/h by default), so the archive stays on the page until it is left: a cancelled or failed save goes again without a new export.
+- **Delete account** (`/settings/delete-account`): what is erased, kept (the security log, without addresses) and emailed, a shortcut to the export, then the password (and a code) and one last question. The server ends every session and erases the data; the app goes to the sign-in page, which says the account was deleted.
+
+Files are saved through `FileSaver` (`lib/core/files/file_saver.dart`, on `file_picker`): the system's "Save as" on Android (no storage permission) and iOS ("Save to Files"), a download in a browser.
+
+**Try it locally:** sign in as the seeded demo account, open Settings, rename yourself and switch the theme or the language; reload or sign in on another browser and the choices are there. Turn two-step verification on with any authenticator app (or `oathtool --totp -b <key>`), sign out and back in, then look at the sessions of both browsers. Export your data and open the ZIP; the emails land in Mailpit (http://localhost:8025). Deleting the demo account is fine locally: `make seed` in monthra-server creates it again.
 
 ## Routes and sign-in
 
@@ -186,15 +193,16 @@ The QR code is drawn by `QrCodeView` (`qr` package, our own painter, ink on whit
 | Path | Who | Page |
 |---|---|---|
 | `/` | signed in | the dashboard's place in the app shell (a greeting until the dashboard PR) |
-| `/settings` | signed in | Settings: profile, preferences, security, sessions |
+| `/settings` | signed in | Settings: profile, preferences, security, sessions, your data |
 | `/settings/password`, `/settings/mfa/enable`, `/settings/mfa/disable`, `/settings/mfa/recovery-codes` | signed in | change the password, turn two-step verification on or off, new recovery codes |
+| `/settings/export`, `/settings/delete-account` | signed in | export my data, delete the account |
 | `/login`, `/login/mfa`, `/register`, `/forgot-password` | signed out | sign-in, the two-step code, sign-up, the reset request |
 | `/verify-email#token=…`, `/reset-password#token=…` | anyone | the links of the account emails |
 | `/design-system` | anyone, outside production | the design system catalog (the route does not exist in production) |
 
-- **Guards** (`authRedirect`, a pure function): signed out, a page that needs a session goes to `/login?from=<path>`; signed in, the signed-out pages go on to `from` or `/`. `from` is only followed when it is a path of the app (`safeReturnPath`: no scheme, host, `//`, `\`, control characters or fragment), so a crafted link cannot send anyone elsewhere after signing in.
+- **Guards** (`authRedirect`, a pure function): signed out, a page that needs a session goes to `/login?from=<path>` (just `/login` after the account was deleted, so the next sign-in does not land on the deletion page); signed in, the signed-out pages go on to `from` or `/`. `from` is only followed when it is a path of the app (`safeReturnPath`: no scheme, host, `//`, `\`, control characters or fragment), so a crafted link cannot send anyone elsewhere after signing in.
 - **Start-up:** while the app checks an earlier session (`GET /me`) only the boot screen shows, and no page is built. A device checks when it holds tokens; the web when `localStorage['monthra.session']` says it signed in here (a mark with no secret: the session stays in the `HttpOnly` cookies), so an anonymous visit costs no request. An unreachable API shows "try again".
-- **Session state** (`authControllerProvider`): booting, signed in (the profile, `Me`), signed out (with a notice: session ended, password changed, two-step expired), awaiting the two-step code (the challenge lives only in memory and expires with it), unavailable. Each time the profile loads, its language and theme replace the local ones (the server wins, §7.6).
+- **Session state** (`authControllerProvider`): booting, signed in (the profile, `Me`), signed out (with a notice: session ended, password changed, two-step expired, account deleted), awaiting the two-step code (the challenge lives only in memory and expires with it), unavailable. Each time the profile loads, its language and theme replace the local ones (the server wins, §7.6).
 - **Email links:** `/verify-email` sends its token once when it opens; `/reset-password` asks for the new password. Both take the token out of the address bar and the browser history right after reading it (`Router.neglect`: the history entry is replaced). A dead link offers a new one.
 - **Signing out:** a device always forgets its tokens, even when the server cannot be told; a browser stays signed in and says so when the call fails, because its cookies only go away through the server.
 - **Captcha** (`lib/features/auth/captcha/`): after repeated failed sign-ins (3 per address, 10 per IP) or sign-ups (3 per IP and hour), a server with `TURNSTILE_SECRET` answers `captcha_required`. The sign-in and sign-up pages then show Cloudflare Turnstile above the button and send the form again by themselves once it passes (`captchaToken`). A token works once, so every later attempt takes a fresh check; after a refused token (`captcha_invalid`) the person sends again, so a server refusing every token never loops. The widget lives in a page of its own, `web/turnstile.html` (+ `turnstile.js`, `turnstile.css`), with its own CSP: Cloudflare's script and frame only, no inline code, framed by the app's origin only. The web app shows it in an iframe (the app's CSP adds `frame-src 'self'` and nothing of Cloudflare's); devices load the same page from `APP_PUBLIC_URL` in `webview_flutter`, which may only show that page and Cloudflare's frames. The page reads its settings from the query string (site key, `action` `login`/`register`, theme, language, size, background) and only posts messages to the app, never reads any. A build without a site key (staging and production for now) keeps "too many attempts, try again later".

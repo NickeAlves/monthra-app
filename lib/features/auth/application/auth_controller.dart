@@ -129,8 +129,8 @@ class AuthController extends _$AuthController {
     await _end(null);
   }
 
-  /// The session ended outside this controller (a password reset): forget
-  /// it and show [notice] on the sign-in page.
+  /// The session ended outside this controller (a password reset, the
+  /// account deleted): forget it and show [notice] on the sign-in page.
   Future<void> sessionEnded(AuthNotice notice) => _end(notice);
 
   /// A newer copy of the profile from an account call (a rename, saved
