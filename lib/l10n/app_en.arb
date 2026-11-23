@@ -264,9 +264,9 @@
   "@notFoundHome": {
     "description": "Button from the unknown address page to the start page."
   },
-  "homeGreeting": "Hello, {name}",
-  "@homeGreeting": {
-    "description": "Greeting on the start page.",
+  "dashboardGreeting": "Hello, {name}",
+  "@dashboardGreeting": {
+    "description": "Title of the dashboard: a greeting with the person's name.",
     "placeholders": {
       "name": {
         "type": "String",
@@ -274,9 +274,253 @@
       }
     }
   },
-  "homeComingSoon": "Your dashboard arrives in the next versions.",
-  "@homeComingSoon": {
-    "description": "Temporary line on the start page until the dashboard lands."
+  "dashboardPreviousMonth": "Previous month",
+  "@dashboardPreviousMonth": {
+    "description": "Label of the dashboard button that shows the month before."
+  },
+  "dashboardNextMonth": "Next month",
+  "@dashboardNextMonth": {
+    "description": "Label of the dashboard button that shows the month after."
+  },
+  "dashboardThisMonth": "This month",
+  "@dashboardThisMonth": {
+    "description": "Dashboard button back to the current month, shown while another month shows."
+  },
+  "dashboardRefresh": "Refresh",
+  "@dashboardRefresh": {
+    "description": "Label of the dashboard button that loads the numbers again."
+  },
+  "dashboardLoading": "Loading the dashboard",
+  "@dashboardLoading": {
+    "description": "Read by screen readers while the dashboard loads (placeholders show)."
+  },
+  "dashboardLoadError": "We couldn't load your dashboard",
+  "@dashboardLoadError": {
+    "description": "Title of the dashboard error state."
+  },
+  "dashboardEmptyTitle": "No accounts yet",
+  "@dashboardEmptyTitle": {
+    "description": "Title of the dashboard when the person has no account."
+  },
+  "dashboardEmptyMessage": "Your month shows up here once you add an account.",
+  "@dashboardEmptyMessage": {
+    "description": "Message of the dashboard when the person has no account."
+  },
+  "dashboardBalance": "Balance",
+  "@dashboardBalance": {
+    "description": "Dashboard tile: the net worth of the accounts on a day (a card's debt counts against it)."
+  },
+  "dashboardBalanceOn": "On {date}",
+  "@dashboardBalanceOn": {
+    "description": "Line under the balance: the day it counts up to.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Nov 23, 2026"
+      }
+    }
+  },
+  "dashboardIncome": "Income",
+  "@dashboardIncome": {
+    "description": "Dashboard tile and chart series: the month's income."
+  },
+  "dashboardExpenses": "Expenses",
+  "@dashboardExpenses": {
+    "description": "Dashboard tile and chart series: the month's expenses."
+  },
+  "dashboardNet": "Month result",
+  "@dashboardNet": {
+    "description": "Dashboard tile: the month's income minus its expenses."
+  },
+  "dashboardNetHint": "Income minus expenses",
+  "@dashboardNetHint": {
+    "description": "Line under the month result tile."
+  },
+  "dashboardScheduled": "{amount} still scheduled",
+  "@dashboardScheduled": {
+    "description": "Line under the income or expenses tile: what recurring entries still add this month.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "R$ 159,90"
+      }
+    }
+  },
+  "dashboardNothingScheduled": "Nothing else scheduled",
+  "@dashboardNothingScheduled": {
+    "description": "Line under the income or expenses tile when no recurring entry is still due this month."
+  },
+  "dashboardByCategory": "By category",
+  "@dashboardByCategory": {
+    "description": "Title of the dashboard card that splits the month by category."
+  },
+  "dashboardCategoryKind": "Show",
+  "@dashboardCategoryKind": {
+    "description": "Read by screen readers for the expenses/income switch of the category card."
+  },
+  "dashboardNoExpenses": "No expenses this month",
+  "@dashboardNoExpenses": {
+    "description": "Category card of the dashboard with no expense in the month."
+  },
+  "dashboardNoIncome": "No income this month",
+  "@dashboardNoIncome": {
+    "description": "Category card of the dashboard with no income in the month."
+  },
+  "dashboardOtherCategories": "Others",
+  "@dashboardOtherCategories": {
+    "description": "The smallest categories of the month together, in the category card."
+  },
+  "dashboardUnknownCategory": "Category",
+  "@dashboardUnknownCategory": {
+    "description": "Name shown for a category the app could not find (created or deleted meanwhile)."
+  },
+  "dashboardEntries": "{count, plural, =1{1 entry} other{{count} entries}}",
+  "@dashboardEntries": {
+    "description": "How many transactions a category has in the month.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "9"
+      }
+    }
+  },
+  "dashboardCategoryShare": "{name}: {amount}, {percent}",
+  "@dashboardCategoryShare": {
+    "description": "One part of the category chart, as screen readers read it.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Groceries"
+      },
+      "amount": {
+        "type": "String",
+        "example": "R$ 742,22"
+      },
+      "percent": {
+        "type": "String",
+        "example": "18%"
+      }
+    }
+  },
+  "dashboardExpensesChart": "Expenses by category: {parts}",
+  "@dashboardExpensesChart": {
+    "description": "What screen readers read for the expenses chart; parts lists each category.",
+    "placeholders": {
+      "parts": {
+        "type": "String",
+        "example": "Housing: R$ 1.649,38, 40%; Groceries: R$ 742,22, 18%"
+      }
+    }
+  },
+  "dashboardIncomeChart": "Income by category: {parts}",
+  "@dashboardIncomeChart": {
+    "description": "What screen readers read for the income chart; parts lists each category.",
+    "placeholders": {
+      "parts": {
+        "type": "String",
+        "example": "Salary: R$ 7.480,00, 88%"
+      }
+    }
+  },
+  "dashboardCashFlow": "Income and expenses",
+  "@dashboardCashFlow": {
+    "description": "Title of the dashboard card with 12 months of income and expenses."
+  },
+  "dashboardLast12Months": "Last 12 months",
+  "@dashboardLast12Months": {
+    "description": "Description of the dashboard cards that show 12 months up to the one shown."
+  },
+  "dashboardCashFlowChart": "Income and expenses from {first} to {last}. In {month}: income {income}, expenses {expense}.",
+  "@dashboardCashFlowChart": {
+    "description": "What screen readers read for the 12-month income and expenses chart.",
+    "placeholders": {
+      "first": {
+        "type": "String",
+        "example": "December 2025"
+      },
+      "last": {
+        "type": "String",
+        "example": "November 2026"
+      },
+      "month": {
+        "type": "String",
+        "example": "November 2026"
+      },
+      "income": {
+        "type": "String",
+        "example": "R$ 8.500,00"
+      },
+      "expense": {
+        "type": "String",
+        "example": "R$ 4.123,45"
+      }
+    }
+  },
+  "dashboardNetWorth": "Net worth",
+  "@dashboardNetWorth": {
+    "description": "Title of the dashboard card with 12 months of the balance at each month's end."
+  },
+  "dashboardNetWorthChart": "Net worth from {first} to {last}: from {start} to {end}.",
+  "@dashboardNetWorthChart": {
+    "description": "What screen readers read for the net worth chart: the first and last months with a value.",
+    "placeholders": {
+      "first": {
+        "type": "String",
+        "example": "December 2025"
+      },
+      "last": {
+        "type": "String",
+        "example": "November 2026"
+      },
+      "start": {
+        "type": "String",
+        "example": "R$ 14.433,21"
+      },
+      "end": {
+        "type": "String",
+        "example": "R$ 19.383,21"
+      }
+    }
+  },
+  "dashboardNoNetWorth": "Months still to come have no net worth yet.",
+  "@dashboardNoNetWorth": {
+    "description": "Net worth card when every month shown is still to come."
+  },
+  "dashboardAccounts": "Accounts",
+  "@dashboardAccounts": {
+    "description": "Title of the dashboard card with each account's balance."
+  },
+  "dashboardArchived": "Archived",
+  "@dashboardArchived": {
+    "description": "Badge of an archived account that still holds money (it counts in the balance)."
+  },
+  "dashboardUnknownAccount": "Account",
+  "@dashboardUnknownAccount": {
+    "description": "Name shown for an account the app could not find (created meanwhile)."
+  },
+  "accountTypeChecking": "Checking",
+  "@accountTypeChecking": {
+    "description": "Account type: a checking account."
+  },
+  "accountTypeSavings": "Savings",
+  "@accountTypeSavings": {
+    "description": "Account type: a savings account."
+  },
+  "accountTypeCreditCard": "Credit card",
+  "@accountTypeCreditCard": {
+    "description": "Account type: a credit card."
+  },
+  "accountTypeCash": "Cash",
+  "@accountTypeCash": {
+    "description": "Account type: cash in hand."
+  },
+  "accountTypeBrokerage": "Brokerage",
+  "@accountTypeBrokerage": {
+    "description": "Account type: a brokerage account."
+  },
+  "accountTypeOther": "Account",
+  "@accountTypeOther": {
+    "description": "Account type this version of the app does not know."
   },
   "errorInvalidCredentials": "Wrong email or password.",
   "@errorInvalidCredentials": {

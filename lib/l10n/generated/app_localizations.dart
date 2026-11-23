@@ -460,17 +460,268 @@ abstract class AppLocalizations {
   /// **'Go to the start'**
   String get notFoundHome;
 
-  /// Greeting on the start page.
+  /// Title of the dashboard: a greeting with the person's name.
   ///
   /// In en, this message translates to:
   /// **'Hello, {name}'**
-  String homeGreeting(String name);
+  String dashboardGreeting(String name);
 
-  /// Temporary line on the start page until the dashboard lands.
+  /// Label of the dashboard button that shows the month before.
   ///
   /// In en, this message translates to:
-  /// **'Your dashboard arrives in the next versions.'**
-  String get homeComingSoon;
+  /// **'Previous month'**
+  String get dashboardPreviousMonth;
+
+  /// Label of the dashboard button that shows the month after.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get dashboardNextMonth;
+
+  /// Dashboard button back to the current month, shown while another month shows.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get dashboardThisMonth;
+
+  /// Label of the dashboard button that loads the numbers again.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get dashboardRefresh;
+
+  /// Read by screen readers while the dashboard loads (placeholders show).
+  ///
+  /// In en, this message translates to:
+  /// **'Loading the dashboard'**
+  String get dashboardLoading;
+
+  /// Title of the dashboard error state.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load your dashboard'**
+  String get dashboardLoadError;
+
+  /// Title of the dashboard when the person has no account.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts yet'**
+  String get dashboardEmptyTitle;
+
+  /// Message of the dashboard when the person has no account.
+  ///
+  /// In en, this message translates to:
+  /// **'Your month shows up here once you add an account.'**
+  String get dashboardEmptyMessage;
+
+  /// Dashboard tile: the net worth of the accounts on a day (a card's debt counts against it).
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get dashboardBalance;
+
+  /// Line under the balance: the day it counts up to.
+  ///
+  /// In en, this message translates to:
+  /// **'On {date}'**
+  String dashboardBalanceOn(String date);
+
+  /// Dashboard tile and chart series: the month's income.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get dashboardIncome;
+
+  /// Dashboard tile and chart series: the month's expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get dashboardExpenses;
+
+  /// Dashboard tile: the month's income minus its expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Month result'**
+  String get dashboardNet;
+
+  /// Line under the month result tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Income minus expenses'**
+  String get dashboardNetHint;
+
+  /// Line under the income or expenses tile: what recurring entries still add this month.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} still scheduled'**
+  String dashboardScheduled(String amount);
+
+  /// Line under the income or expenses tile when no recurring entry is still due this month.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing else scheduled'**
+  String get dashboardNothingScheduled;
+
+  /// Title of the dashboard card that splits the month by category.
+  ///
+  /// In en, this message translates to:
+  /// **'By category'**
+  String get dashboardByCategory;
+
+  /// Read by screen readers for the expenses/income switch of the category card.
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get dashboardCategoryKind;
+
+  /// Category card of the dashboard with no expense in the month.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses this month'**
+  String get dashboardNoExpenses;
+
+  /// Category card of the dashboard with no income in the month.
+  ///
+  /// In en, this message translates to:
+  /// **'No income this month'**
+  String get dashboardNoIncome;
+
+  /// The smallest categories of the month together, in the category card.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get dashboardOtherCategories;
+
+  /// Name shown for a category the app could not find (created or deleted meanwhile).
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get dashboardUnknownCategory;
+
+  /// How many transactions a category has in the month.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 entry} other{{count} entries}}'**
+  String dashboardEntries(int count);
+
+  /// One part of the category chart, as screen readers read it.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {amount}, {percent}'**
+  String dashboardCategoryShare(String name, String amount, String percent);
+
+  /// What screen readers read for the expenses chart; parts lists each category.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses by category: {parts}'**
+  String dashboardExpensesChart(String parts);
+
+  /// What screen readers read for the income chart; parts lists each category.
+  ///
+  /// In en, this message translates to:
+  /// **'Income by category: {parts}'**
+  String dashboardIncomeChart(String parts);
+
+  /// Title of the dashboard card with 12 months of income and expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Income and expenses'**
+  String get dashboardCashFlow;
+
+  /// Description of the dashboard cards that show 12 months up to the one shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 12 months'**
+  String get dashboardLast12Months;
+
+  /// What screen readers read for the 12-month income and expenses chart.
+  ///
+  /// In en, this message translates to:
+  /// **'Income and expenses from {first} to {last}. In {month}: income {income}, expenses {expense}.'**
+  String dashboardCashFlowChart(
+    String first,
+    String last,
+    String month,
+    String income,
+    String expense,
+  );
+
+  /// Title of the dashboard card with 12 months of the balance at each month's end.
+  ///
+  /// In en, this message translates to:
+  /// **'Net worth'**
+  String get dashboardNetWorth;
+
+  /// What screen readers read for the net worth chart: the first and last months with a value.
+  ///
+  /// In en, this message translates to:
+  /// **'Net worth from {first} to {last}: from {start} to {end}.'**
+  String dashboardNetWorthChart(
+    String first,
+    String last,
+    String start,
+    String end,
+  );
+
+  /// Net worth card when every month shown is still to come.
+  ///
+  /// In en, this message translates to:
+  /// **'Months still to come have no net worth yet.'**
+  String get dashboardNoNetWorth;
+
+  /// Title of the dashboard card with each account's balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get dashboardAccounts;
+
+  /// Badge of an archived account that still holds money (it counts in the balance).
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get dashboardArchived;
+
+  /// Name shown for an account the app could not find (created meanwhile).
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get dashboardUnknownAccount;
+
+  /// Account type: a checking account.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking'**
+  String get accountTypeChecking;
+
+  /// Account type: a savings account.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get accountTypeSavings;
+
+  /// Account type: a credit card.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit card'**
+  String get accountTypeCreditCard;
+
+  /// Account type: cash in hand.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get accountTypeCash;
+
+  /// Account type: a brokerage account.
+  ///
+  /// In en, this message translates to:
+  /// **'Brokerage'**
+  String get accountTypeBrokerage;
+
+  /// Account type this version of the app does not know.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountTypeOther;
 
   /// Sign-in error: the email or the password is wrong (never says which).
   ///

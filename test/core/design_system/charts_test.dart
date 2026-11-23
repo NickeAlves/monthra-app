@@ -18,7 +18,7 @@ void main() {
     });
 
     test('bars start at zero and end on a round tick', () {
-      final scale = ChartScale.fit([850000, 412345, 300000]);
+      final scale = ChartScale.fit(const [850000, 412345, 300000]);
       expect(scale.min, 0);
       expect(scale.interval, 250000);
       expect(scale.max, 1000000);
@@ -26,7 +26,10 @@ void main() {
     });
 
     test('a line keeps the range of its values', () {
-      final scale = ChartScale.fit([1500000, 1938321], includeZero: false);
+      final scale = ChartScale.fit(const [
+        1500000,
+        1938321,
+      ], includeZero: false);
       // A range of 438.321 in four steps: 200.000 each, on round ticks.
       expect(scale.interval, 200000);
       expect(scale.min, 1400000);
@@ -34,7 +37,7 @@ void main() {
     });
 
     test('negative values hang below zero', () {
-      final scale = ChartScale.fit([-120, 300]);
+      final scale = ChartScale.fit(const [-120, 300]);
       expect(scale.min, lessThanOrEqualTo(-120));
       expect(scale.max, greaterThanOrEqualTo(300));
       expect(scale.min % scale.interval, 0);
@@ -43,7 +46,7 @@ void main() {
     test('no value or one flat value still gets an axis', () {
       final empty = ChartScale.fit(const []);
       expect(empty.max, greaterThan(empty.min));
-      final flat = ChartScale.fit([118000, 118000], includeZero: false);
+      final flat = ChartScale.fit(const [118000, 118000], includeZero: false);
       expect(flat.min, lessThan(118000));
       expect(flat.max, greaterThan(118000));
     });

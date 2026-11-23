@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/app/router.dart';
 import 'package:monthra/features/auth/captcha/captcha_message.dart';
 import 'package:monthra/features/auth/captcha/captcha_request.dart';
-import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/dashboard/presentation/dashboard_page.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -105,7 +105,7 @@ void main() {
           'captchaToken': 'token-1',
         },
       ]);
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('a refused token loads a new check and waits for the '
@@ -147,7 +147,7 @@ void main() {
         'token-2',
         'token-3',
       ]);
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('after a wrong password the next attempt needs a fresh check', (
@@ -231,7 +231,7 @@ void main() {
       expect(enabled(tester, en.authSignInButton), isFalse);
 
       await tester.captchaSays(captcha, const CaptchaSolved('token-2'));
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('a build without a captcha page keeps "try again later"', (

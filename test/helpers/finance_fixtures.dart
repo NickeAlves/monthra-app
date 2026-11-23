@@ -4,6 +4,19 @@ import 'package:monthra/core/dates/year_month.dart';
 /// November 2026, 10:00 on the device.
 final DateTime testNow = DateTime(2026, 11, 23, 10);
 
+/// What the dashboard reads as it opens, on top of a flow's own calls.
+const Set<String> dashboardReads = {
+  'GET /api/v1/dashboard/summary',
+  'GET /api/v1/accounts',
+  'GET /api/v1/categories',
+};
+
+/// [paths] without the dashboard's reads ([dashboardReads]).
+List<String> withoutDashboardReads(Iterable<String> paths) => [
+  for (final p in paths)
+    if (!dashboardReads.contains(p)) p,
+];
+
 /// The month of [testNow].
 const YearMonth testMonth = YearMonth(2026, 11);
 
@@ -52,16 +65,16 @@ Map<String, Object?> categoryJson({
 /// Four open accounts (three in reais, one in dollars) and an archived one
 /// that holds nothing, oldest first.
 List<Map<String, Object?>> demoAccounts() => [
-  accountJson(id: 'acc-checking', name: 'Conta corrente', balance: 523410),
+  accountJson(id: 'acc-checking', name: 'Banco Azul', balance: 523410),
   accountJson(
     id: 'acc-savings',
-    name: 'Poupança',
+    name: 'Reserva',
     type: 'savings',
     balance: 1500000,
   ),
   accountJson(
     id: 'acc-card',
-    name: 'Cartão',
+    name: 'Cartão Roxo',
     type: 'credit_card',
     balance: -85089,
   ),

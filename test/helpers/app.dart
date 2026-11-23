@@ -15,7 +15,7 @@ import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/captcha/captcha_view.dart';
 import 'package:monthra/features/auth/data/session_hint.dart';
 import 'package:monthra/features/auth/presentation/auth_layout.dart';
-import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/dashboard/presentation/dashboard_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 import 'package:monthra/features/settings/presentation/settings_page.dart';
@@ -89,7 +89,7 @@ extension PumpMonthraApp on WidgetTester {
   Finder get appPage => find.byWidgetPredicate(
     (w) =>
         w is AuthLayout ||
-        w is HomePage ||
+        w is DashboardPage ||
         w is SettingsPage ||
         w is NotFoundPage ||
         w is DesignSystemCatalog ||

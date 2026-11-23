@@ -89,7 +89,7 @@ void main() {
     String compact(int minor, Locale l, [Currency? c]) =>
         MoneyFormat.compact(minor, l, currency: c).replaceAll('\u00A0', ' ');
 
-    test('rounds to the locale\'s short form', () {
+    test("rounds to the locale's short form", () {
       expect(compact(850000, ptBR), '8,5 mil');
       expect(compact(193832100, ptBR), '1,94 mi');
       expect(compact(850000, esES), '8,5 mil');

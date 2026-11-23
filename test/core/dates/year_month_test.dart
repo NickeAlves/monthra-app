@@ -47,7 +47,7 @@ void main() {
       expect(a.compareTo(b), lessThan(0));
       expect(a == const YearMonth(2025, 12), isTrue);
       expect(a.hashCode, const YearMonth(2025, 12).hashCode);
-      expect({a, const YearMonth(2025, 12)}, hasLength(1));
+      expect({a, YearMonth.parse('2025-12')}, hasLength(1));
     });
 
     test('takes the month of a day and starts on its first day', () {

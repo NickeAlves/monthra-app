@@ -33,9 +33,6 @@ final class ChartStyle {
 
   ShadColorScheme get _scheme => _theme.colorScheme;
 
-  /// Behind the selected group or point.
-  Color get highlight => _scheme.muted;
-
   TextStyle get axisLabel => _theme.textTheme.caption.copyWith(
     color: _scheme.mutedForeground,
     fontFeatures: MonthraTypography.tabularFigures,

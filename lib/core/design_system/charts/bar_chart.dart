@@ -22,7 +22,7 @@ final class BarSeries {
 
 /// Groups of side-by-side bars over [labels] (months, say), on a value
 /// axis with round ticks and thin horizontal lines only. The [highlight]ed
-/// group sits on a soft column and its label reads stronger. Hovering or
+/// group's label reads stronger. Hovering or
 /// touching a bar shows its series and value ([formatValue]); the axis
 /// writes [formatAxis].
 ///
@@ -120,12 +120,6 @@ class MonthraBarChart extends StatelessWidget {
                             width: barWidth,
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(barWidth / 3),
-                            ),
-                            backDrawRodData: BackgroundBarChartRodData(
-                              show: i == highlight,
-                              fromY: scale.min,
-                              toY: scale.max,
-                              color: style.highlight,
                             ),
                           ),
                       ],
