@@ -22,9 +22,9 @@ void main() {
     ('shell_tablet', Size(800, 1024), '/', false, false),
     ('shell_phone', Size(390, 844), '/', false, false),
     ('shell_phone_more', Size(390, 844), '/', true, false),
-    ('settings_desktop', Size(1280, 1900), '/settings', false, false),
+    ('settings_desktop', Size(1280, 2000), '/settings', false, false),
     ('settings_phone', Size(390, 2900), '/settings', false, false),
-    ('settings_mfa_desktop', Size(1280, 1900), '/settings', false, true),
+    ('settings_mfa_desktop', Size(1280, 2000), '/settings', false, true),
     ('settings_mfa_phone', Size(390, 2900), '/settings', false, true),
   ];
 
