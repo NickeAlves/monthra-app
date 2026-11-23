@@ -395,7 +395,7 @@ void main() {
                 labels: labels,
                 values: [
                   for (var i = 0; i < 12; i++)
-                    i > 9 ? null : 1500000.0 + i * 45000,
+                    if (i > 9) null else 1500000.0 + i * 45000,
                 ],
                 color: scheme.accentText,
                 highlight: 9,
