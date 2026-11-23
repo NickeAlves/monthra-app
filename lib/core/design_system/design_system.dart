@@ -2,6 +2,10 @@
 /// Screens import this file and never hard-code a color, size or duration.
 library;
 
+export 'charts/bar_chart.dart';
+export 'charts/chart_scale.dart';
+export 'charts/donut_chart.dart';
+export 'charts/line_chart.dart';
 export 'color_utils.dart';
 export 'components/amount_text.dart';
 export 'components/button_label.dart';

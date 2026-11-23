@@ -5,6 +5,7 @@ import 'package:monthra/core/config/env.dart';
 import 'package:monthra/core/design_system/catalog/sample_categories.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/money/currency.dart';
+import 'package:monthra/core/money/money_format.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// A living sheet of the design system, shown outside production only.
@@ -50,6 +51,7 @@ class DesignSystemCatalog extends StatelessWidget {
                     const _Section(title: 'Cards', child: _Cards()),
                     const _Section(title: 'Amounts', child: _Amounts()),
                     const _Section(title: 'Categories', child: _Categories()),
+                    const _Section(title: 'Charts', child: _Charts()),
                     const _Section(title: 'States', child: _States()),
                     const _Section(title: 'Pages and toasts', child: _Pages()),
                     const _Section(
@@ -569,6 +571,109 @@ class _Categories extends StatelessWidget {
       ],
     ),
   );
+}
+
+class _Charts extends StatelessWidget {
+  const new();
+
+  // Twelve months of income and expense (in cents) and the net worth, the
+  // last two months still to come (no net worth).
+  static const _income = [
+    820000, 845000, 800000, 830000, 900000, 850000, //
+    870000, 820000, 905000, 850000, 850000, 850000,
+  ];
+  static const _expense = [
+    410000, 395000, 450000, 380000, 520000, 401000, //
+    430000, 398000, 470000, 412345, 0, 0,
+  ];
+  static const List<int?> _worth = [
+    1520000, 1610000, 1590000, 1700000, 1760000, 1820000, //
+    1850000, 1880000, 1910000, 1938321, null, null,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ShadTheme.of(context);
+    final scheme = theme.colorScheme;
+    final locale = Localizations.localeOf(context);
+    final months = DateFormat.MMM(locale.toLanguageTag());
+    final labels = [
+      for (var i = 0; i < 12; i++) months.format(DateTime(2026, i + 1)),
+    ];
+    String axis(double v) => MoneyFormat.compact(v.round(), locale);
+    String value(double v) =>
+        MoneyFormat.format(v.round(), Currency.brl, locale);
+    final caption = theme.textTheme.caption.copyWith(
+      color: scheme.mutedForeground,
+    );
+    return MonthraCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('Donut (six parts, then empty)', style: caption),
+          const SizedBox(height: MonthraSpacing.x3),
+          Wrap(
+            spacing: MonthraSpacing.x6,
+            runSpacing: MonthraSpacing.x4,
+            children: [
+              MonthraDonutChart(
+                semanticLabel: 'Expenses by category',
+                slices: [
+                  for (final (i, c) in sampleCategories.take(5).indexed)
+                    DonutSlice(
+                      value: (5 - i) * 10.0,
+                      color: parseHexColor(c.color)!,
+                    ),
+                  DonutSlice(value: 8, color: scheme.mutedForeground),
+                ],
+                center: const AmountText(
+                  412345,
+                  currency: Currency.brl,
+                  size: AmountSize.small,
+                  alignment: Alignment.center,
+                ),
+              ),
+              const MonthraDonutChart(semanticLabel: 'No expenses', slices: []),
+            ],
+          ),
+          const SizedBox(height: MonthraSpacing.x6),
+          Text('Bars (October highlighted)', style: caption),
+          const SizedBox(height: MonthraSpacing.x3),
+          MonthraBarChart(
+            semanticLabel: 'Income and expenses, 12 months',
+            labels: labels,
+            highlight: 9,
+            formatAxis: axis,
+            formatValue: value,
+            series: [
+              BarSeries(
+                name: 'Income',
+                color: scheme.income,
+                values: [for (final v in _income) v.toDouble()],
+              ),
+              BarSeries(
+                name: 'Expenses',
+                color: scheme.expense,
+                values: [for (final v in _expense) v.toDouble()],
+              ),
+            ],
+          ),
+          const SizedBox(height: MonthraSpacing.x6),
+          Text('Line (the months to come have no point)', style: caption),
+          const SizedBox(height: MonthraSpacing.x3),
+          MonthraLineChart(
+            semanticLabel: 'Net worth, 12 months',
+            labels: labels,
+            values: [for (final v in _worth) v?.toDouble()],
+            color: scheme.accentText,
+            highlight: 9,
+            formatAxis: axis,
+            formatValue: value,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _States extends StatelessWidget {

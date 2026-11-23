@@ -84,4 +84,34 @@ void main() {
       expect(show(123456, Currency.brl, const Locale('xx')), r'R$ 1.234,56');
     });
   });
+
+  group('MoneyFormat.compact', () {
+    String compact(int minor, Locale l, [Currency? c]) =>
+        MoneyFormat.compact(minor, l, currency: c).replaceAll('\u00A0', ' ');
+
+    test('rounds to the locale\'s short form', () {
+      expect(compact(850000, ptBR), '8,5 mil');
+      expect(compact(193832100, ptBR), '1,94 mi');
+      expect(compact(850000, esES), '8,5 mil');
+      expect(compact(193832100, esES), '1,94 M');
+      expect(compact(850000, enUS), '8.5K');
+      expect(compact(95000, enUS), '950');
+      expect(compact(0, ptBR), '0');
+    });
+
+    test('adds the CLDR symbol when asked', () {
+      expect(compact(850000, ptBR, Currency.brl), r'R$ 8,5 mil');
+      expect(compact(850000, ptBR, Currency.usd), r'US$ 8,5 mil');
+      expect(compact(850000, enUS, Currency.usd), r'$8.5K');
+      expect(compact(850000, esES, Currency.eur), '8,5 mil €');
+    });
+
+    test('signs with the typographic minus', () {
+      expect(compact(-250000, ptBR), '${MoneyFormat.minus}2,5 mil');
+      expect(
+        compact(-250000, enUS, Currency.usd),
+        '${MoneyFormat.minus}\$2.5K',
+      );
+    });
+  });
 }

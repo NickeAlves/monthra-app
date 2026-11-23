@@ -48,12 +48,35 @@ abstract final class MoneyFormat {
     };
   }
 
+  /// [minor] in a short, rounded form for tight spots where the exact
+  /// amount shows elsewhere (a chart's axis): `8,5 mil` and `1,94 mi` in
+  /// pt-BR, `8.5K` in en-US. With [currency], its symbol too
+  /// (`R$ 8,5 mil`).
+  static String compact(int minor, Locale locale, {Currency? currency}) {
+    final tag = _tag(locale);
+    final format = _compactFormats.putIfAbsent(
+      (tag, currency),
+      () => currency == null
+          ? NumberFormat.compact(locale: tag)
+          : NumberFormat.compactCurrency(
+              locale: tag,
+              name: currency.code,
+              symbol: symbol(currency, tag),
+            ),
+    );
+    return format.format(minor / 100).replaceFirst('-', minus);
+  }
+
+  static final Map<(String, Currency?), NumberFormat> _compactFormats = {};
+
+  static String _tag(Locale locale) => Intl.verifiedLocale(
+    Intl.canonicalizedLocale(locale.toLanguageTag()),
+    NumberFormat.localeExists,
+    onFailure: (_) => fallbackLocale,
+  )!;
+
   static NumberFormat _format(Locale locale, Currency currency) {
-    final tag = Intl.verifiedLocale(
-      Intl.canonicalizedLocale(locale.toLanguageTag()),
-      NumberFormat.localeExists,
-      onFailure: (_) => fallbackLocale,
-    )!;
+    final tag = _tag(locale);
     return _formats.putIfAbsent(
       (tag, currency),
       () => NumberFormat.currency(
