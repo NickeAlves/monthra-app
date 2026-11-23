@@ -231,5 +231,10 @@
   "deleteAccountDialogTitle": "Excluir a sua conta para sempre?",
   "deleteAccountDialogDescription": "Seus dados são apagados agora e não podem ser recuperados.",
   "deleteAccountDialogConfirm": "Excluir para sempre",
-  "authNoticeAccountDeleted": "Sua conta e os dados dela foram excluídos. Enviamos uma confirmação por e-mail."
+  "authNoticeAccountDeleted": "Sua conta e os dados dela foram excluídos. Enviamos uma confirmação por e-mail.",
+  "recoveryCodesDownload": "Baixar .txt",
+  "recoveryCodesFileTitle": "Códigos de recuperação do Monthra",
+  "recoveryCodesFileAccount": "Conta: {email}",
+  "recoveryCodesFileCreated": "Gerados em: {date}",
+  "recoveryCodesFileNote": "Cada código faz login uma vez, no lugar de um código do app autenticador."
 }

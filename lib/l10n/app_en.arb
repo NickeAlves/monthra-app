@@ -1045,5 +1045,38 @@
   "authNoticeAccountDeleted": "Your account and its data were deleted. We sent you a confirmation email.",
   "@authNoticeAccountDeleted": {
     "description": "Notice on the sign-in page after the account was deleted."
+  },
+  "recoveryCodesDownload": "Download .txt",
+  "@recoveryCodesDownload": {
+    "description": "Button that saves the recovery codes as a text file."
+  },
+  "recoveryCodesFileTitle": "Monthra recovery codes",
+  "@recoveryCodesFileTitle": {
+    "description": "First line of the recovery codes text file."
+  },
+  "recoveryCodesFileAccount": "Account: {email}",
+  "@recoveryCodesFileAccount": {
+    "description": "Line of the recovery codes text file: the account they belong to.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "ana@example.com"
+      }
+    }
+  },
+  "recoveryCodesFileCreated": "Created: {date}",
+  "@recoveryCodesFileCreated": {
+    "description": "Line of the recovery codes text file: the day they were created.",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMd",
+        "example": "2026-11-22"
+      }
+    }
+  },
+  "recoveryCodesFileNote": "Each code signs you in once, in place of a code from the authenticator app.",
+  "@recoveryCodesFileNote": {
+    "description": "Last line of the recovery codes text file."
   }
 }

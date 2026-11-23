@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:monthra/app/routes.dart';
 import 'package:monthra/core/files/file_saver.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/application/auth_state.dart';
+import 'package:monthra/features/settings/presentation/security/widgets/recovery_codes_view.dart';
+import 'package:monthra/l10n/generated/app_localizations.dart';
 
 import '../../helpers/app.dart';
 import '../../helpers/auth_fixtures.dart';
@@ -307,6 +312,64 @@ void main() {
       );
       await tapAndSettle(tester, button('Exportar meus dados antes'));
       expect(tester.appLocation.path, AppRoutes.settingsExport);
+    });
+  });
+
+  group('the recovery codes file', () {
+    testWidgets('saves the new codes as text, without ticking the box', (
+      tester,
+    ) async {
+      final saver = FakeFileSaver();
+      final server = await pumpData(
+        tester,
+        location: AppRoutes.settingsRecoveryCodes,
+        saver: saver,
+        server: ProfileServer(me: meJson(mfa: true)),
+      );
+      await tester.enterText(password(), testPassword);
+      await tester.enterText(code(), testTotp);
+      await tester.pumpAndSettle();
+      await waitOutToasts(tester);
+
+      await tapAndSettle(tester, button('Baixar .txt'));
+      final file = saver.files.single;
+      expect(file.name, 'monthra-recovery-codes.txt');
+      expect(file.mimeType, 'text/plain');
+      final text = utf8.decode(file.bytes);
+      expect(text, startsWith('Códigos de recuperação do Monthra\n'));
+      expect(text, contains('Conta: ana@example.com\n'));
+      expect(text, contains('${server.recoveryCodes.join('\n')}\n'));
+      expect(
+        text,
+        endsWith(
+          'Cada código faz login uma vez, no lugar de um código do app '
+          'autenticador.\n',
+        ),
+      );
+      expect(find.text(saved), findsOneWidget);
+      expect(enabled(tester, 'Concluir'), isFalse);
+    });
+
+    test('reads, in English', () async {
+      await initializeDateFormatting('en');
+      final text = recoveryCodesText(
+        lookupAppLocalizations(const Locale('en')),
+        email: 'ana@example.com',
+        codes: const ['aaaa-bbbb', 'cccc-dddd'],
+        at: DateTime(2026, 11, 22, 18),
+      );
+      expect(
+        text,
+        'Monthra recovery codes\n'
+        'Account: ana@example.com\n'
+        'Created: November 22, 2026\n'
+        '\n'
+        'aaaa-bbbb\n'
+        'cccc-dddd\n'
+        '\n'
+        'Each code signs you in once, in place of a code from the '
+        'authenticator app.\n',
+      );
     });
   });
 

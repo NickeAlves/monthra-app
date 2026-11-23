@@ -1491,6 +1491,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your account and its data were deleted. We sent you a confirmation email.'**
   String get authNoticeAccountDeleted;
+
+  /// Button that saves the recovery codes as a text file.
+  ///
+  /// In en, this message translates to:
+  /// **'Download .txt'**
+  String get recoveryCodesDownload;
+
+  /// First line of the recovery codes text file.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthra recovery codes'**
+  String get recoveryCodesFileTitle;
+
+  /// Line of the recovery codes text file: the account they belong to.
+  ///
+  /// In en, this message translates to:
+  /// **'Account: {email}'**
+  String recoveryCodesFileAccount(String email);
+
+  /// Line of the recovery codes text file: the day they were created.
+  ///
+  /// In en, this message translates to:
+  /// **'Created: {date}'**
+  String recoveryCodesFileCreated(DateTime date);
+
+  /// Last line of the recovery codes text file.
+  ///
+  /// In en, this message translates to:
+  /// **'Each code signs you in once, in place of a code from the authenticator app.'**
+  String get recoveryCodesFileNote;
 }
 
 class _AppLocalizationsDelegate

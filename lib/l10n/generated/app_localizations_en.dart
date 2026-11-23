@@ -799,4 +799,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authNoticeAccountDeleted =>
       'Your account and its data were deleted. We sent you a confirmation email.';
+
+  @override
+  String get recoveryCodesDownload => 'Download .txt';
+
+  @override
+  String get recoveryCodesFileTitle => 'Monthra recovery codes';
+
+  @override
+  String recoveryCodesFileAccount(String email) {
+    return 'Account: $email';
+  }
+
+  @override
+  String recoveryCodesFileCreated(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(localeName);
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Created: $dateString';
+  }
+
+  @override
+  String get recoveryCodesFileNote =>
+      'Each code signs you in once, in place of a code from the authenticator app.';
 }

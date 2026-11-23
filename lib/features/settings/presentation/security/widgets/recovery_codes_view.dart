@@ -1,24 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/core/files/file_saver.dart';
+import 'package:monthra/features/auth/application/auth_controller.dart';
+import 'package:monthra/features/auth/application/auth_state.dart';
+import 'package:monthra/features/settings/domain/download_names.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// New recovery codes, shown this once: copy them, tick that they are
-/// saved, then [onDone]. Leaving before that asks first (the route's
-/// `confirmLeavingRecoveryCodes`).
-class RecoveryCodesView extends StatefulWidget {
+/// New recovery codes, shown this once: copy them or save them as a text
+/// file, tick that they are saved, then [onDone]. Leaving before that asks
+/// first (the route's `confirmLeavingRecoveryCodes`). Saving the file does
+/// not tick the box: the person says where the codes are.
+class RecoveryCodesView extends ConsumerStatefulWidget {
   const new({required this.codes, required this.onDone, super.key});
 
   final List<String> codes;
   final VoidCallback onDone;
 
   @override
-  State<RecoveryCodesView> createState() => _RecoveryCodesViewState();
+  ConsumerState<RecoveryCodesView> createState() => _RecoveryCodesViewState();
 }
 
-class _RecoveryCodesViewState extends State<RecoveryCodesView> {
+/// The recovery codes' text file, in the UI language: a heading, the
+/// account ([email]) and the day [at], the [codes] one per line, and how
+/// they work.
+String recoveryCodesText(
+  AppLocalizations l10n, {
+  required String? email,
+  required List<String> codes,
+  required DateTime at,
+}) => [
+  l10n.recoveryCodesFileTitle,
+  if (email != null) l10n.recoveryCodesFileAccount(email),
+  l10n.recoveryCodesFileCreated(at),
+  '',
+  ...codes,
+  '',
+  l10n.recoveryCodesFileNote,
+  '',
+].join('\n');
+
+class _RecoveryCodesViewState extends ConsumerState<RecoveryCodesView> {
   bool _saved = false;
+  bool _saving = false;
 
   Future<void> _copy() async {
     final l10n = context.l10n;
@@ -27,6 +55,43 @@ class _RecoveryCodesViewState extends State<RecoveryCodesView> {
     showMonthraToast(
       context,
       title: l10n.recoveryCodesCopied,
+      closeLabel: l10n.appClose,
+    );
+  }
+
+  Future<void> _download() async {
+    if (_saving) return;
+    final l10n = context.l10n;
+    final email = switch (ref.read(authControllerProvider)) {
+      SignedIn(:final me) => me.email,
+      _ => null,
+    };
+    final text = recoveryCodesText(
+      l10n,
+      email: email,
+      codes: widget.codes,
+      at: DateTime.now(),
+    );
+    setState(() => _saving = true);
+    bool? saved;
+    try {
+      saved = await ref
+          .read(fileSaverProvider)
+          .save(
+            name: recoveryCodesFileName,
+            bytes: utf8.encode(text),
+            mimeType: 'text/plain',
+          );
+    } on FileSaveException {
+      saved = null;
+    }
+    if (!mounted) return;
+    setState(() => _saving = false);
+    if (saved == false) return;
+    showMonthraToast(
+      context,
+      title: saved == null ? l10n.fileSaveFailed : l10n.fileSaved,
+      destructive: saved == null,
       closeLabel: l10n.appClose,
     );
   }
@@ -81,13 +146,22 @@ class _RecoveryCodesViewState extends State<RecoveryCodesView> {
               ),
             ),
             const SizedBox(height: MonthraSpacing.x4),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: ShadButton.outline(
-                onPressed: _copy,
-                leading: const Icon(LucideIcons.copy),
-                child: ButtonLabel(l10n.recoveryCodesCopy),
-              ),
+            Wrap(
+              spacing: MonthraSpacing.x4,
+              runSpacing: MonthraSpacing.x2,
+              children: [
+                ShadButton.outline(
+                  onPressed: _copy,
+                  leading: const Icon(LucideIcons.copy),
+                  child: ButtonLabel(l10n.recoveryCodesCopy),
+                ),
+                ShadButton.outline(
+                  enabled: !_saving,
+                  onPressed: _download,
+                  leading: const Icon(LucideIcons.download),
+                  child: ButtonLabel(l10n.recoveryCodesDownload),
+                ),
+              ],
             ),
             const SizedBox(height: MonthraSpacing.x6),
             ShadCheckbox(

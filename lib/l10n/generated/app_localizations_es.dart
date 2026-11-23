@@ -809,4 +809,27 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get authNoticeAccountDeleted =>
       'Tu cuenta y sus datos se eliminaron. Te enviamos una confirmación por correo.';
+
+  @override
+  String get recoveryCodesDownload => 'Descargar .txt';
+
+  @override
+  String get recoveryCodesFileTitle => 'Códigos de recuperación de Monthra';
+
+  @override
+  String recoveryCodesFileAccount(String email) {
+    return 'Cuenta: $email';
+  }
+
+  @override
+  String recoveryCodesFileCreated(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(localeName);
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Generados el: $dateString';
+  }
+
+  @override
+  String get recoveryCodesFileNote =>
+      'Cada código inicia sesión una vez, en lugar de un código de la app de autenticación.';
 }
