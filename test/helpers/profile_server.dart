@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:monthra/core/dates/year_month.dart';
+
 import 'auth_fixtures.dart';
 import 'fake_api.dart';
+import 'finance_fixtures.dart';
 
 /// The password [ProfileServer] accepts until it changes.
 const String testPassword = 'correct horse battery';
@@ -58,14 +61,25 @@ List<Map<String, Object?>> defaultSessions() => [
 /// [recoveryCodes]), the data export ([testExportZip], counted in
 /// [exports]), the account deletion (then every call is a `401`, as for a
 /// session that no longer exists), sign-in without MFA, sign-out and the
-/// CSRF token. Anything else is a `404`.
+/// CSRF token. It also answers the dashboard's reads: the summary of any
+/// month from [summaryFor] ([demoSummary] by default), [accounts] and
+/// [categories]. Anything else is a `404`.
 ///
-/// [hold] makes the next `PATCH` wait for a completer; [fail] answers the
-/// next request to a path with a given reply.
+/// [hold] makes the next `PATCH` wait for a completer, [holdSummary] the
+/// next summary; [fail] answers the next request to a path with a given
+/// reply.
 final class ProfileServer {
-  new({Map<String, Object?>? me, List<Map<String, Object?>>? sessions})
-    : me = me ?? meJson(),
-      sessions = sessions ?? defaultSessions() {
+  new({
+    Map<String, Object?>? me,
+    List<Map<String, Object?>>? sessions,
+    Map<String, Object?> Function(YearMonth month)? summaryFor,
+    List<Map<String, Object?>>? accounts,
+    List<Map<String, Object?>>? categories,
+  }) : me = me ?? meJson(),
+       sessions = sessions ?? defaultSessions(),
+       summaryFor = summaryFor ?? demoSummary,
+       accounts = accounts ?? demoAccounts(),
+       categories = categories ?? demoCategories() {
     if (mfa['enabled'] == true) recoveryCodes = _newCodes();
   }
 
@@ -76,6 +90,13 @@ final class ProfileServer {
   List<Map<String, Object?>> sessions;
 
   String password = testPassword;
+
+  /// The summary `GET /dashboard/summary?month=` answers.
+  Map<String, Object?> Function(YearMonth month) summaryFor;
+
+  /// What `GET /accounts` and `GET /categories` list.
+  List<Map<String, Object?>> accounts;
+  List<Map<String, Object?>> categories;
 
   /// The recovery codes MFA holds now (empty while off).
   List<String> recoveryCodes = const [];
@@ -112,6 +133,16 @@ final class ProfileServer {
   }
 
   final List<Completer<void>> _readGates = [];
+
+  /// The next `GET /dashboard/summary` waits until the returned completer
+  /// completes.
+  Completer<void> holdSummary() {
+    final gate = Completer<void>();
+    _summaryGates.add(gate);
+    return gate;
+  }
+
+  final List<Completer<void>> _summaryGates = [];
 
   /// The next request to [path] (`/api/v1/...`) gets [reply] instead.
   void fail(String path, Reply reply) => (_failures[path] ??= []).add(reply);
@@ -251,6 +282,11 @@ final class ProfileServer {
         _readGates.isNotEmpty) {
       await _readGates.removeAt(0).future;
     }
+    if (r.method == 'GET' &&
+        r.path == '/api/v1/dashboard/summary' &&
+        _summaryGates.isNotEmpty) {
+      await _summaryGates.removeAt(0).future;
+    }
     if (deleted) return Reply.problem(401, 'unauthorized');
     final failures = _failures[r.path];
     if (failures != null && failures.isNotEmpty) return failures.removeAt(0);
@@ -289,6 +325,19 @@ final class ProfileServer {
         return const Reply(204);
       case ('GET', '/api/v1/me/sessions'):
         return Reply.json({'sessions': sessions});
+      case ('GET', '/api/v1/dashboard/summary'):
+        final month = YearMonth.tryParse(r.query['month']) ?? testMonth;
+        return Reply.json(summaryFor(month));
+      case ('GET', '/api/v1/accounts'):
+        final archived = r.query['includeArchived'] == 'true';
+        return Reply.json({
+          'accounts': [
+            for (final a in accounts)
+              if (archived || a['archived'] != true) a,
+          ],
+        });
+      case ('GET', '/api/v1/categories'):
+        return Reply.json({'categories': categories});
       case ('DELETE', '/api/v1/me/sessions'):
         sessions = [
           for (final s in sessions)

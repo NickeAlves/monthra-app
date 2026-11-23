@@ -6,6 +6,7 @@ import 'package:monthra/app/not_found_page.dart';
 import 'package:monthra/app/overrides.dart';
 import 'package:monthra/app/router.dart';
 import 'package:monthra/core/config/env.dart';
+import 'package:monthra/core/dates/clock.dart';
 import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/network/api_providers.dart';
 import 'package:monthra/core/network/session_refresher.dart';
@@ -22,6 +23,7 @@ import 'package:monthra/features/settings/presentation/settings_page.dart';
 import 'captcha.dart';
 import 'env.dart';
 import 'fake_api.dart';
+import 'finance_fixtures.dart';
 import 'frame.dart';
 
 export 'env.dart' show localEnv;
@@ -38,6 +40,7 @@ extension PumpMonthraApp on WidgetTester {
   /// on a device and [hint] on the web; the web boot hints it saves go to
   /// [bootHints]. The captcha page is [captcha] (a [FakeCaptcha] that never
   /// posts by default); it only shows with an [env] like [captchaEnv].
+  /// The device's clock reads [now] ([testNow] by default).
   /// [overrides] come last (a fake of a device service, say).
   Future<void> pumpMonthraApp({
     Env? env,
@@ -49,6 +52,7 @@ extension PumpMonthraApp on WidgetTester {
     SessionHint? hint,
     String? location,
     FakeCaptcha? captcha,
+    DateTime? now,
     List<Override> overrides = const [],
   }) async {
     if (location != null) {
@@ -69,6 +73,7 @@ extension PumpMonthraApp on WidgetTester {
           captchaViewBuilderProvider.overrideWithValue(
             (captcha ?? FakeCaptcha()).builder,
           ),
+          clockProvider.overrideWithValue(() => now ?? testNow),
           ...overrides,
         ],
         child: MonthraApp(
