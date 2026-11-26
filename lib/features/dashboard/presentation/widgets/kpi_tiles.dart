@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/core/format/display_format.dart';
 import 'package:monthra/core/money/money_format.dart';
 import 'package:monthra/features/dashboard/domain/dashboard_view.dart';
-import 'package:monthra/features/dashboard/presentation/dashboard_format.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -29,7 +29,7 @@ class KpiTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final format = DashboardFormat.of(context);
+    final format = DisplayFormat.of(context);
     final s = currency.summary;
     String scheduled(int amount) => amount == 0
         ? l10n.dashboardNothingScheduled

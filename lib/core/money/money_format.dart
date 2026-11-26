@@ -48,6 +48,23 @@ abstract final class MoneyFormat {
     };
   }
 
+  /// [minor] as a bare number with the currency's decimals and the locale's
+  /// separators, no symbol and no sign: `1.234,56` in pt-BR, `1,234.56` in
+  /// en-US. What a money field shows as it is typed.
+  static String number(int minor, Currency currency, Locale locale) {
+    final tag = _tag(locale);
+    final format = _numberFormats.putIfAbsent(
+      (tag, currency),
+      () => NumberFormat.decimalPatternDigits(
+        locale: tag,
+        decimalDigits: currency.decimalDigits,
+      ),
+    );
+    return format.format(minor.abs() / currency.minorPerMajor);
+  }
+
+  static final Map<(String, Currency), NumberFormat> _numberFormats = {};
+
   /// [minor] in a short, rounded form for tight spots where the exact
   /// amount shows elsewhere (a chart's axis): `8,5 mil` and `1,94 mi` in
   /// pt-BR, `8.5K` in en-US. With [currency], its symbol too
@@ -87,6 +104,10 @@ abstract final class MoneyFormat {
       ),
     );
   }
+
+  /// The symbol of [currency] in the UI [locale] (`R$`, `US$`).
+  static String symbolIn(Currency currency, Locale locale) =>
+      symbol(currency, _tag(locale));
 
   /// The symbol CLDR gives [currency] in the intl locale [tag]. intl's own
   /// table writes a bare `$` for dollars everywhere, which a user holding

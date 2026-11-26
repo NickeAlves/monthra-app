@@ -11,6 +11,8 @@ export 'components/amount_text.dart';
 export 'components/button_label.dart';
 export 'components/category_badge.dart';
 export 'components/category_icons.dart';
+export 'components/form_sheet.dart';
+export 'components/month_switcher.dart';
 export 'components/monthra_card.dart';
 export 'components/monthra_confirm.dart';
 export 'components/monthra_page.dart';

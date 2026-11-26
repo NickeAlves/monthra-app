@@ -57,6 +57,25 @@ void main() {
       );
       expect(const YearMonth(2026, 2).firstDay, DateTime(2026, 2));
     });
+
+    test('clamp a day to the last one of a shorter month', () {
+      expect(const YearMonth(2026, 2).length, 28);
+      expect(const YearMonth(2028, 2).length, 29);
+      expect(const YearMonth(2026, 4).length, 30);
+      expect(const YearMonth(2026, 12).length, 31);
+      expect(const YearMonth(2026, 2).day(31), DateTime(2026, 2, 28));
+      expect(const YearMonth(2028, 2).day(30), DateTime(2028, 2, 29));
+      expect(const YearMonth(2026, 4).day(31), DateTime(2026, 4, 30));
+      expect(const YearMonth(2026, 11).day(3), DateTime(2026, 11, 3));
+    });
+
+    test('count the months between two', () {
+      const nov = YearMonth(2026, 11);
+      expect(nov.monthsUntil(const YearMonth(2027, 2)), 3);
+      expect(nov.monthsUntil(const YearMonth(2025, 11)), -12);
+      expect(nov <= nov, isTrue);
+      expect(nov >= const YearMonth(2026, 12), isFalse);
+    });
   });
 
   group('civil dates', () {

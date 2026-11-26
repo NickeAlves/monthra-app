@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:monthra/core/format/display_format.dart';
 import 'package:monthra/core/money/currency.dart';
 import 'package:monthra/features/dashboard/domain/dashboard_view.dart';
-import 'package:monthra/features/dashboard/presentation/dashboard_format.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -37,7 +37,7 @@ class _CategoryCardState extends State<CategoryCard> {
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
     final l10n = context.l10n;
-    final format = DashboardFormat.of(context);
+    final format = DisplayFormat.of(context);
     final currency = widget.currency.currency;
     final slices = switch (_flow) {
       CategoryFlow.expenses => widget.currency.expenses,

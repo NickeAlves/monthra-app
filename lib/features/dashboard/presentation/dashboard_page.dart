@@ -15,7 +15,6 @@ import 'package:monthra/features/dashboard/application/dashboard_providers.dart'
 import 'package:monthra/features/dashboard/domain/dashboard_view.dart';
 import 'package:monthra/features/dashboard/presentation/widgets/dashboard_layout.dart';
 import 'package:monthra/features/dashboard/presentation/widgets/dashboard_skeleton.dart';
-import 'package:monthra/features/dashboard/presentation/widgets/month_switcher.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -128,6 +127,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           current: current,
           onChanged: (next) =>
               context.go(DashboardPage.location(next, current)),
+          labels: (
+            previous: l10n.dashboardPreviousMonth,
+            next: l10n.dashboardNextMonth,
+            current: l10n.dashboardThisMonth,
+          ),
         ),
         ShadIconButton.outline(
           onPressed: state.isLoading ? null : () => _refresh(month),
