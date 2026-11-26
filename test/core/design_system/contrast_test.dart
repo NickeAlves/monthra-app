@@ -18,6 +18,7 @@ void main() {
       final surfaces = {
         'background': scheme.background,
         'card': scheme.card,
+        'popover': scheme.popover,
         'muted': scheme.muted,
       };
       final texts = {
@@ -54,6 +55,32 @@ void main() {
           contrastRatio(scheme.secondaryForeground, scheme.secondary),
           greaterThanOrEqualTo(4.5),
         );
+        expect(
+          contrastRatio(scheme.onBrand, scheme.brand),
+          greaterThanOrEqualTo(4.5),
+        );
+      });
+
+      test('chart marks read at 3:1 where charts sit', () {
+        final marks = {
+          'income': scheme.income,
+          'chartMuted': scheme.chartMuted,
+          for (final (i, c) in scheme.chartRamp.indexed) 'chartRamp[$i]': c,
+        };
+        for (final mark in marks.entries) {
+          for (final surface in [scheme.background, scheme.card]) {
+            expect(
+              contrastRatio(mark.value, surface),
+              greaterThanOrEqualTo(3),
+              reason: mark.key,
+            );
+          }
+        }
+      });
+
+      test('the chart ramp holds five distinct greens', () {
+        expect(scheme.chartRamp, hasLength(5));
+        expect(scheme.chartRamp.toSet(), hasLength(5));
       });
 
       test('the focus ring stands out from the surfaces', () {
@@ -62,34 +89,36 @@ void main() {
         }
       });
 
-      test('every default category reads on its tint', () {
+      test('every default category dot reads at 3:1 on the page', () {
         final theme = monthraTheme(brightness);
         for (final category in sampleCategories) {
-          final colors = CategoryColors.of(theme, category.color);
           expect(
-            contrastRatio(colors.icon, colors.tint),
+            contrastRatio(
+              CategoryDot.colorOf(theme, category.color),
+              theme.colorScheme.background,
+            ),
             greaterThanOrEqualTo(3),
-            reason: '${category.key} icon',
-          );
-          expect(
-            contrastRatio(colors.text, colors.tint),
-            greaterThanOrEqualTo(4.5),
-            reason: '${category.key} label',
+            reason: category.key,
           );
         }
       });
     });
   }
 
-  test('the dark primary keeps the brand accent (user decision)', () {
-    expect(MonthraColorSchemes.dark.primary, MonthraPalette.accent);
-    expect(MonthraColorSchemes.light.primary, MonthraPalette.accent);
+  test('the primary is ink and the brand stays green (user decision)', () {
+    expect(MonthraColorSchemes.light.primary, MonthraPalette.ink);
+    expect(MonthraColorSchemes.dark.primary, MonthraPalette.offWhite);
+    expect(MonthraColorSchemes.light.brand, MonthraPalette.accent);
+    expect(MonthraColorSchemes.dark.brand, MonthraPalette.accent);
     expect(MonthraColorSchemes.dark.accentText, MonthraPalette.accentLight);
+    expect(MonthraColorSchemes.light.expense, MonthraPalette.ink);
   });
 
   test('a scheme without the Monthra roles falls back', () {
     const zinc = ShadZincColorScheme.light();
     expect(zinc.income, zinc.foreground);
     expect(zinc.skeleton, zinc.muted);
+    expect(zinc.brand, zinc.primary);
+    expect(zinc.chartRamp, everyElement(zinc.foreground));
   });
 }

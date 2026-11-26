@@ -20,6 +20,10 @@ abstract final class MonthraLayout {
   /// Smallest side of anything that takes a tap (§4.4).
   static const double minTouchTarget = 44;
 
+  /// Controls of a desktop layout, driven by a pointer (Flutter's desktop
+  /// target is 24 px); see `MonthraDensity`.
+  static const double pointerControlHeight = 36;
+
   /// A field holding a button (show password): the button keeps a whole
   /// touch target inside the field's 1 px border. The other fields of the
   /// same form take this height too, so they line up.

@@ -120,22 +120,33 @@ void main() {
     });
   });
 
-  test('the theme keeps controls at 44 px and the brand radius', () {
+  group('MonthraDensity', () {
+    test('drops to pointer controls on a desktop layout only', () {
+      expect(MonthraDensity.forWidth(390), MonthraDensity.touch);
+      expect(MonthraDensity.forWidth(1024), MonthraDensity.touch);
+      expect(MonthraDensity.forWidth(1025), MonthraDensity.pointer);
+      expect(MonthraDensity.touch.controlHeight, MonthraLayout.minTouchTarget);
+      expect(MonthraDensity.pointer.controlHeight, 36);
+    });
+  });
+
+  test('the theme sizes controls by density, with quiet surfaces', () {
     for (final brightness in Brightness.values) {
+      for (final density in MonthraDensity.values) {
+        final theme = monthraTheme(brightness, density: density);
+        expect(theme.buttonSizesTheme.regular!.height, density.controlHeight);
+        expect(theme.buttonSizesTheme.icon!.width, density.controlHeight);
+        expect(theme.inputTheme.constraints!.minHeight, density.controlHeight);
+      }
       final theme = monthraTheme(brightness);
       expect(
         theme.buttonSizesTheme.regular!.height,
         MonthraLayout.minTouchTarget,
       );
-      expect(theme.buttonSizesTheme.icon!.width, MonthraLayout.minTouchTarget);
-      expect(theme.radius, MonthraRadii.mdAll);
+      expect(theme.radius, MonthraRadii.smAll);
       expect(theme.cardTheme.radius, MonthraRadii.lgAll);
+      expect(theme.cardTheme.shadows, isEmpty);
       expect(theme.textTheme.family, 'Inter');
     }
-    expect(monthraTheme(Brightness.dark).cardTheme.shadows, isEmpty);
-    expect(
-      monthraTheme(Brightness.light).cardTheme.shadows,
-      MonthraShadows.subtle,
-    );
   });
 }

@@ -18,7 +18,7 @@ class AccountTypeIcon extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: scheme.muted,
-        borderRadius: MonthraRadii.smAll,
+        borderRadius: MonthraRadii.mdAll,
       ),
       child: SizedBox.square(
         dimension: CategoryIconSize.md.box,

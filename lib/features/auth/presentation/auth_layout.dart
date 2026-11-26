@@ -150,9 +150,9 @@ class _BrandPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
-    final ink = theme.colorScheme.primaryForeground;
+    final ink = theme.colorScheme.onBrand;
     return ColoredBox(
-      color: theme.colorScheme.primary,
+      color: theme.colorScheme.brand,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(MonthraSpacing.x12),

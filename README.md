@@ -244,7 +244,7 @@ The first page (`/`, `lib/features/dashboard/`) sums up a month from `GET /dashb
 
 ## Icons and splash screens
 
-`make icons` regenerates them from `assets/brand/` (the brand pack) and `assets/icon/` (layers the pack lacks, drawn from the logo's bars: the Android adaptive foreground and monochrome, the iOS 18 dark and tinted icons, the Android 12 splash logos). The web icons in `web/icons/` and the web splash (`web/index.html`, `web/splash.css`, `web/boot.js`) are kept by hand. Every splash follows the system theme (`#F5F5F3` light, `#141414` dark), so a dark device never flashes white; the web splash follows the theme the person chose, when there is one.
+`make icons` regenerates them from `assets/brand/` (the brand pack) and `assets/icon/` (layers the pack lacks, drawn from the logo's bars: the Android adaptive foreground and monochrome, the iOS 18 dark and tinted icons, the Android 12 splash logos). The web icons in `web/icons/` and the web splash (`web/index.html`, `web/splash.css`, `web/boot.js`) are kept by hand. Every splash follows the system theme (`#FCFCFB` light, `#141414` dark), so a dark device never flashes white; the web splash follows the theme the person chose, when there is one.
 
 ## Related repositories
 

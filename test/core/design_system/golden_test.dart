@@ -140,10 +140,24 @@ void main() {
 
   goldenTest(
     'cards',
-    size: const Size(480, 360),
+    size: const Size(480, 520),
     () => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        MonthraSection(
+          title: const Text('Contas'),
+          description: const Text('Saldo de hoje'),
+          trailing: ShadButton.link(
+            onPressed: () {},
+            child: const ButtonLabel('Ver todas'),
+          ),
+          child: const AmountText(
+            1284590,
+            currency: Currency.brl,
+            locale: Locale('pt', 'BR'),
+          ),
+        ),
+        const SizedBox(height: MonthraSpacing.x6),
         const MonthraCard(
           title: Text('Saldo'),
           description: Text('Todas as contas em reais'),
@@ -251,7 +265,7 @@ void main() {
           runSpacing: MonthraSpacing.x2,
           children: [
             for (final c in sampleCategories)
-              CategoryBadge(icon: c.icon, color: c.color, label: c.name),
+              CategoryBadge(color: c.color, label: c.name),
           ],
         ),
         const SizedBox(height: MonthraSpacing.x4),
@@ -260,8 +274,17 @@ void main() {
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             for (final size in CategoryIconSize.values)
-              CategoryIcon(icon: 'utensils', color: '#F97316', size: size),
-            const CategoryIcon(icon: 'unknown-icon', color: 'invalid'),
+              CategoryIcon(icon: 'utensils', size: size),
+            const CategoryIcon(icon: 'unknown-icon'),
+          ],
+        ),
+        const SizedBox(height: MonthraSpacing.x4),
+        Wrap(
+          spacing: MonthraSpacing.x3,
+          runSpacing: MonthraSpacing.x3,
+          children: [
+            for (final c in sampleCategories) CategoryDot(c.color, size: 12),
+            const CategoryDot('invalid', size: 12),
           ],
         ),
       ],
@@ -333,77 +356,72 @@ void main() {
         String axis(double v) => MoneyFormat.compact(v.round(), _ptBR);
         String value(double v) =>
             MoneyFormat.format(v.round(), Currency.brl, _ptBR);
-        return MonthraCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  MonthraDonutChart(
-                    semanticLabel: 'Gastos por categoria',
-                    slices: [
-                      for (final (i, c) in sampleCategories.take(5).indexed)
-                        DonutSlice(
-                          value: (5 - i) * 10.0,
-                          color: parseHexColor(c.color)!,
-                        ),
-                      DonutSlice(value: 8, color: scheme.mutedForeground),
-                    ],
-                    center: const AmountText(
-                      412345,
-                      currency: Currency.brl,
-                      size: AmountSize.small,
-                      alignment: Alignment.center,
-                    ),
+        // Charts sit on the page, in sections.
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                MonthraDonutChart(
+                  semanticLabel: 'Gastos por categoria',
+                  slices: [
+                    for (final (i, color) in scheme.chartRamp.indexed)
+                      DonutSlice(value: (5 - i) * 10.0, color: color),
+                    DonutSlice(value: 8, color: scheme.chartMuted),
+                  ],
+                  center: const AmountText(
+                    412345,
+                    currency: Currency.brl,
+                    size: AmountSize.small,
+                    alignment: Alignment.center,
                   ),
-                  const SizedBox(width: MonthraSpacing.x6),
-                  const MonthraDonutChart(
-                    semanticLabel: 'Nenhum gasto',
-                    slices: [],
-                    size: 96,
-                    thickness: 10,
-                  ),
-                ],
-              ),
-              const SizedBox(height: MonthraSpacing.x6),
-              MonthraBarChart(
-                semanticLabel: 'Entradas e saídas',
-                labels: labels,
-                highlight: 11,
-                formatAxis: axis,
-                formatValue: value,
-                series: [
-                  BarSeries(
-                    name: 'Entradas',
-                    color: scheme.income,
-                    values: [
-                      for (var i = 0; i < 12; i++) 800000.0 + (i % 3) * 25000,
-                    ],
-                  ),
-                  BarSeries(
-                    name: 'Saídas',
-                    color: scheme.expense,
-                    values: [
-                      for (var i = 0; i < 12; i++) 350000.0 + (i % 4) * 30000,
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: MonthraSpacing.x6),
-              MonthraLineChart(
-                semanticLabel: 'Patrimônio',
-                labels: labels,
-                values: [
-                  for (var i = 0; i < 12; i++)
-                    if (i > 9) null else 1500000.0 + i * 45000,
-                ],
-                color: scheme.accentText,
-                highlight: 9,
-                formatAxis: axis,
-                formatValue: value,
-              ),
-            ],
-          ),
+                ),
+                const SizedBox(width: MonthraSpacing.x6),
+                const MonthraDonutChart(
+                  semanticLabel: 'Nenhum gasto',
+                  slices: [],
+                  size: 96,
+                ),
+              ],
+            ),
+            const SizedBox(height: MonthraSpacing.x6),
+            MonthraBarChart(
+              semanticLabel: 'Entradas e saídas',
+              labels: labels,
+              highlight: 11,
+              formatAxis: axis,
+              formatValue: value,
+              series: [
+                BarSeries(
+                  name: 'Entradas',
+                  color: scheme.income,
+                  values: [
+                    for (var i = 0; i < 12; i++) 800000.0 + (i % 3) * 25000,
+                  ],
+                ),
+                BarSeries(
+                  name: 'Saídas',
+                  color: scheme.chartMuted,
+                  values: [
+                    for (var i = 0; i < 12; i++) 350000.0 + (i % 4) * 30000,
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: MonthraSpacing.x6),
+            MonthraLineChart(
+              semanticLabel: 'Patrimônio',
+              labels: labels,
+              values: [
+                for (var i = 0; i < 12; i++)
+                  if (i > 9) null else 1500000.0 + i * 45000,
+              ],
+              color: scheme.accentText,
+              highlight: 9,
+              formatAxis: axis,
+              formatValue: value,
+            ),
+          ],
         );
       },
     );

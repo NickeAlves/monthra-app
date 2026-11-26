@@ -4,11 +4,14 @@ import 'package:monthra/core/design_system/tokens/breakpoints.dart';
 import 'package:monthra/core/design_system/tokens/motion.dart';
 import 'package:monthra/core/design_system/tokens/radii.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
+import 'package:monthra/core/design_system/tokens/typography.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// The surface of the app: a thin-bordered card on the theme's card color.
+/// The one lifted surface ("Silêncio"): a card with a 1 px border and no
+/// shadow, for forms and for what must stand apart from the page. Lists,
+/// figures and charts sit on the page in a `MonthraSection` instead.
 ///
-/// The padding follows the breakpoint (16 on mobile, 24 above). With
+/// The padding follows the breakpoint (16 on mobile, 20 above). With
 /// [onTap], the card is a button: it takes keyboard focus (Enter or Space
 /// activates it), darkens its border on hover and draws the focus ring.
 class MonthraCard extends StatefulWidget {
@@ -56,15 +59,15 @@ class _MonthraCardState extends State<MonthraCard> {
         EdgeInsets.all(
           context.monthraBreakpoint == MonthraBreakpoint.mobile
               ? MonthraSpacing.x4
-              : MonthraSpacing.x6,
+              : MonthraSpacing.x5,
         );
     // shadcn titles cards with h3; a card title stays below the figures it
-    // introduces.
+    // introduces, like a section's.
     final titleWidget = widget.title;
     final title = titleWidget == null
         ? null
         : DefaultTextStyle.merge(
-            style: theme.textTheme.large.copyWith(color: scheme.cardForeground),
+            style: theme.textTheme.title.copyWith(color: scheme.cardForeground),
             child: titleWidget,
           );
     final onTap = widget.onTap;

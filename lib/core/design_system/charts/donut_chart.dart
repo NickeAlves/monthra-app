@@ -16,8 +16,9 @@ final class DonutSlice {
 }
 
 /// Parts of a whole on a thin ring (fl_chart), with [center] inside it (a
-/// total, say). Slice colors are moved until they read at 3:1 on the card
-/// (WCAG 1.4.11), with a gap between slices. With no positive slice the ring
+/// total, say). Slice colors are moved until they read at 3:1 on the page
+/// (WCAG 1.4.11), with a gap between slices; `chartRamp` gives ranked
+/// parts their greens. With no positive slice the ring
 /// is drawn empty, in the border color.
 ///
 /// The ring is a picture: assistive technologies read [semanticLabel]
@@ -29,7 +30,7 @@ class MonthraDonutChart extends StatelessWidget {
     required this.semanticLabel,
     this.center,
     this.size = 168,
-    this.thickness = 16,
+    this.thickness = 10,
     super.key,
   });
 
@@ -59,7 +60,7 @@ class MonthraDonutChart extends StatelessWidget {
             for (final s in parts)
               PieChartSectionData(
                 value: s.value,
-                color: ensureContrast(s.color, scheme.card),
+                color: ensureContrast(s.color, scheme.background),
                 radius: thickness,
                 showTitle: false,
               ),

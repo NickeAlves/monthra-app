@@ -1,92 +1,123 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/tokens/colors.dart';
+import 'package:monthra/core/design_system/tokens/density.dart';
 import 'package:monthra/core/design_system/tokens/radii.dart';
 import 'package:monthra/core/design_system/tokens/shadows.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:monthra/core/design_system/tokens/typography.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-const _labelPadding = EdgeInsetsDirectional.only(
-  start: MonthraSpacing.x2,
-  top: MonthraSpacing.x3,
-  bottom: MonthraSpacing.x3,
-);
-
 /// The shadcn theme of [brightness], built from the Monthra tokens. Both
-/// brightnesses share every size; only the color roles differ.
-ShadThemeData monthraTheme(Brightness brightness) {
+/// brightnesses share every size; only the color roles differ. [density]
+/// sets the controls' height: 44 px for touch, 36 on a desktop layout
+/// (`MonthraDensity.forWidth` picks it from the window).
+ShadThemeData monthraTheme(
+  Brightness brightness, {
+  MonthraDensity density = MonthraDensity.touch,
+}) {
   final scheme = switch (brightness) {
     Brightness.light => MonthraColorSchemes.light,
     Brightness.dark => MonthraColorSchemes.dark,
   };
-  const touch = MonthraLayout.minTouchTarget;
+  final control = density.controlHeight;
+  final touch = density == MonthraDensity.touch;
+  // The label row is the tap area of a switch or checkbox: its 20 px line
+  // plus this above and below is a whole control.
+  final labelPadding = EdgeInsetsDirectional.only(
+    start: MonthraSpacing.x2,
+    top: (control - 20) / 2,
+    bottom: (control - 20) / 2,
+  );
   return ShadThemeData(
     brightness: brightness,
     colorScheme: scheme,
     textTheme: MonthraTypography.textTheme,
-    radius: MonthraRadii.mdAll,
-    // shadcn paints outline, ghost and link buttons in `primary`, a neutral
-    // there; with the brand green as primary that text would fall to 2.9:1
-    // on the dark background.
+    radius: MonthraRadii.smAll,
+    // shadcn paints outline, ghost and link buttons in `primary`; links take
+    // the green, the rest the text color.
     outlineButtonTheme: ShadButtonTheme(foregroundColor: scheme.foreground),
     ghostButtonTheme: ShadButtonTheme(foregroundColor: scheme.foreground),
     linkButtonTheme: ShadButtonTheme(
       foregroundColor: scheme.accentText,
       hoverForegroundColor: scheme.accentText,
     ),
-    cardTheme: ShadCardTheme(
-      padding: const EdgeInsets.all(MonthraSpacing.x6),
+    // Cards: the lifted surface, a hairline and no shadow.
+    cardTheme: const ShadCardTheme(
+      padding: EdgeInsets.all(MonthraSpacing.x5),
       radius: MonthraRadii.lgAll,
-      shadows: MonthraShadows.card(brightness),
+      shadows: MonthraShadows.none,
     ),
-    // Every control is at least 44 px tall: the same sizes on touch and
-    // pointer screens (§4.4).
-    buttonSizesTheme: const ShadButtonSizesTheme(
+    buttonSizesTheme: ShadButtonSizesTheme(
       regular: ShadButtonSizeTheme(
-        height: touch,
-        padding: EdgeInsets.symmetric(horizontal: MonthraSpacing.x4),
+        height: control,
+        padding: EdgeInsets.symmetric(
+          horizontal: touch ? MonthraSpacing.x4 : MonthraSpacing.x3 + 2,
+        ),
       ),
+      // Pointer layouts only: under a touch target.
       sm: ShadButtonSizeTheme(
-        height: 36,
-        padding: EdgeInsets.symmetric(horizontal: MonthraSpacing.x3),
+        height: touch ? 36 : 30,
+        padding: const EdgeInsets.symmetric(horizontal: MonthraSpacing.x3),
       ),
       lg: ShadButtonSizeTheme(
-        height: 48,
-        padding: EdgeInsets.symmetric(horizontal: MonthraSpacing.x8),
+        height: control + 4,
+        padding: const EdgeInsets.symmetric(horizontal: MonthraSpacing.x6),
       ),
       icon: ShadButtonSizeTheme(
-        height: touch,
-        width: touch,
+        height: control,
+        width: control,
         padding: EdgeInsets.zero,
       ),
     ),
-    inputTheme: const ShadInputTheme(
-      constraints: BoxConstraints(minHeight: touch),
-    ),
-    // 20 px of text + 2 x 11 + the border: 44.
-    selectTheme: const ShadSelectTheme(
+    inputTheme: ShadInputTheme(constraints: BoxConstraints(minHeight: control)),
+    // 20 px of text + the padding above and below + the border: a control.
+    selectTheme: ShadSelectTheme(
       padding: EdgeInsets.symmetric(
         horizontal: MonthraSpacing.x3,
-        vertical: 11,
+        vertical: (control - 22) / 2,
       ),
     ),
-    // The label row is the tap area of a switch or checkbox: 12 px above and
-    // below its 20 px line make it 44.
-    switchTheme: const ShadSwitchTheme(padding: _labelPadding),
+    // "On" reads green: a checked box, a switch that is on.
+    switchTheme: ShadSwitchTheme(
+      padding: labelPadding,
+      checkedTrackColor: scheme.accentText,
+    ),
     checkboxTheme: ShadCheckboxTheme(
-      padding: _labelPadding,
+      padding: labelPadding,
+      color: scheme.accentText,
+      // The empty box keeps 3:1 (WCAG 1.4.11) in the muted text color.
       decoration: ShadDecoration(
         border: ShadBorder.all(
-          color: scheme.primary,
+          color: scheme.mutedForeground,
           radius: MonthraRadii.xsAll,
           width: 1,
         ),
       ),
     ),
-    primaryDialogTheme: const ShadDialogTheme(radius: MonthraRadii.lgAll),
-    alertDialogTheme: const ShadDialogTheme(radius: MonthraRadii.lgAll),
-    sheetTheme: const ShadSheetTheme(radius: MonthraRadii.lgAll),
-    primaryToastTheme: const ShadToastTheme(radius: MonthraRadii.mdAll),
+    // A thin bar on the muted track (a card's limit, a budget).
+    progressTheme: ShadProgressTheme(
+      minHeight: 6,
+      backgroundColor: scheme.muted,
+      borderRadius: MonthraRadii.pillAll,
+      innerBorderRadius: MonthraRadii.pillAll,
+    ),
+    // Dialogs, sheets and toasts lift off the page on the popover surface.
+    primaryDialogTheme: ShadDialogTheme(
+      radius: MonthraRadii.lgAll,
+      backgroundColor: scheme.popover,
+    ),
+    alertDialogTheme: ShadDialogTheme(
+      radius: MonthraRadii.lgAll,
+      backgroundColor: scheme.popover,
+    ),
+    sheetTheme: ShadSheetTheme(
+      radius: MonthraRadii.lgAll,
+      backgroundColor: scheme.popover,
+    ),
+    primaryToastTheme: ShadToastTheme(
+      radius: MonthraRadii.mdAll,
+      backgroundColor: scheme.popover,
+    ),
     destructiveToastTheme: const ShadToastTheme(radius: MonthraRadii.mdAll),
   );
 }

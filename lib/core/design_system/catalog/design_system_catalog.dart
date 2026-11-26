@@ -48,7 +48,10 @@ class DesignSystemCatalog extends StatelessWidget {
                     const _Section(title: 'Typography', child: _Typography()),
                     const _Section(title: 'Color roles', child: _Palette()),
                     const _Section(title: 'Controls', child: _Controls()),
-                    const _Section(title: 'Cards', child: _Cards()),
+                    const _Section(
+                      title: 'Sections and cards',
+                      child: _Cards(),
+                    ),
                     const _Section(title: 'Amounts', child: _Amounts()),
                     const _Section(title: 'Categories', child: _Categories()),
                     const _Section(title: 'Charts', child: _Charts()),
@@ -201,6 +204,7 @@ class _Palette extends StatelessWidget {
     final roles = <(String, Color)>[
       ('background', scheme.background),
       ('card', scheme.card),
+      ('popover', scheme.popover),
       ('foreground', scheme.foreground),
       ('mutedForeground', scheme.mutedForeground),
       ('primary', scheme.primary),
@@ -211,6 +215,10 @@ class _Palette extends StatelessWidget {
       ('expense', scheme.expense),
       ('warning', scheme.warning),
       ('destructive', scheme.destructive),
+      ('brand', scheme.brand),
+      ('chartMuted', scheme.chartMuted),
+      for (final (i, color) in scheme.chartRamp.indexed)
+        ('chartRamp[$i]', color),
     ];
     return Wrap(
       spacing: MonthraSpacing.x3,
@@ -394,6 +402,18 @@ class _Cards extends StatelessWidget {
       spacing: MonthraSpacing.x4,
       runSpacing: MonthraSpacing.x4,
       children: [
+        SizedBox(
+          width: 300,
+          child: MonthraSection(
+            title: const Text('Contas'),
+            description: const Text('Saldo de hoje'),
+            trailing: ShadButton.link(
+              onPressed: () => _toast(context, 'Link tapped'),
+              child: const ButtonLabel('Ver todas'),
+            ),
+            child: const AmountText(1284590, currency: Currency.brl),
+          ),
+        ),
         const SizedBox(
           width: 300,
           child: MonthraCard(
@@ -555,7 +575,7 @@ class _Categories extends StatelessWidget {
           runSpacing: MonthraSpacing.x2,
           children: [
             for (final c in sampleCategories)
-              CategoryBadge(icon: c.icon, color: c.color, label: c.name),
+              CategoryBadge(color: c.color, label: c.name),
           ],
         ),
         const SizedBox(height: MonthraSpacing.x6),
@@ -564,8 +584,17 @@ class _Categories extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             for (final size in CategoryIconSize.values)
-              CategoryIcon(icon: 'shopping-cart', color: '#22C55E', size: size),
-            const CategoryIcon(icon: 'unknown-icon', color: 'invalid'),
+              CategoryIcon(icon: 'shopping-cart', size: size),
+            const CategoryIcon(icon: 'unknown-icon'),
+          ],
+        ),
+        const SizedBox(height: MonthraSpacing.x6),
+        Wrap(
+          spacing: MonthraSpacing.x3,
+          runSpacing: MonthraSpacing.x3,
+          children: [
+            for (final c in sampleCategories) CategoryDot(c.color, size: 12),
+            const CategoryDot('invalid', size: 12),
           ],
         ),
       ],
@@ -606,72 +635,71 @@ class _Charts extends StatelessWidget {
     final caption = theme.textTheme.caption.copyWith(
       color: scheme.mutedForeground,
     );
-    return MonthraCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('Donut (six parts, then empty)', style: caption),
-          const SizedBox(height: MonthraSpacing.x3),
-          Wrap(
-            spacing: MonthraSpacing.x6,
-            runSpacing: MonthraSpacing.x4,
-            children: [
-              MonthraDonutChart(
-                semanticLabel: 'Expenses by category',
-                slices: [
-                  for (final (i, c) in sampleCategories.take(5).indexed)
-                    DonutSlice(
-                      value: (5 - i) * 10.0,
-                      color: parseHexColor(c.color)!,
-                    ),
-                  DonutSlice(value: 8, color: scheme.mutedForeground),
-                ],
-                center: const AmountText(
-                  412345,
-                  currency: Currency.brl,
-                  size: AmountSize.small,
-                  alignment: Alignment.center,
-                ),
+    // Charts sit on the page, as the dashboard's sections hold them.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Donut (five ranked parts and "others", then empty)',
+          style: caption,
+        ),
+        const SizedBox(height: MonthraSpacing.x3),
+        Wrap(
+          spacing: MonthraSpacing.x6,
+          runSpacing: MonthraSpacing.x4,
+          children: [
+            MonthraDonutChart(
+              semanticLabel: 'Expenses by category',
+              slices: [
+                for (final (i, color) in scheme.chartRamp.indexed)
+                  DonutSlice(value: (5 - i) * 10.0, color: color),
+                DonutSlice(value: 8, color: scheme.chartMuted),
+              ],
+              center: const AmountText(
+                412345,
+                currency: Currency.brl,
+                size: AmountSize.small,
+                alignment: Alignment.center,
               ),
-              const MonthraDonutChart(semanticLabel: 'No expenses', slices: []),
-            ],
-          ),
-          const SizedBox(height: MonthraSpacing.x6),
-          Text('Bars (October highlighted)', style: caption),
-          const SizedBox(height: MonthraSpacing.x3),
-          MonthraBarChart(
-            semanticLabel: 'Income and expenses, 12 months',
-            labels: labels,
-            highlight: 9,
-            formatAxis: axis,
-            formatValue: value,
-            series: [
-              BarSeries(
-                name: 'Income',
-                color: scheme.income,
-                values: [for (final v in _income) v.toDouble()],
-              ),
-              BarSeries(
-                name: 'Expenses',
-                color: scheme.expense,
-                values: [for (final v in _expense) v.toDouble()],
-              ),
-            ],
-          ),
-          const SizedBox(height: MonthraSpacing.x6),
-          Text('Line (the months to come have no point)', style: caption),
-          const SizedBox(height: MonthraSpacing.x3),
-          MonthraLineChart(
-            semanticLabel: 'Net worth, 12 months',
-            labels: labels,
-            values: [for (final v in _worth) v?.toDouble()],
-            color: scheme.accentText,
-            highlight: 9,
-            formatAxis: axis,
-            formatValue: value,
-          ),
-        ],
-      ),
+            ),
+            const MonthraDonutChart(semanticLabel: 'No expenses', slices: []),
+          ],
+        ),
+        const SizedBox(height: MonthraSpacing.x6),
+        Text('Bars (October highlighted)', style: caption),
+        const SizedBox(height: MonthraSpacing.x3),
+        MonthraBarChart(
+          semanticLabel: 'Income and expenses, 12 months',
+          labels: labels,
+          highlight: 9,
+          formatAxis: axis,
+          formatValue: value,
+          series: [
+            BarSeries(
+              name: 'Income',
+              color: scheme.income,
+              values: [for (final v in _income) v.toDouble()],
+            ),
+            BarSeries(
+              name: 'Expenses',
+              color: scheme.chartMuted,
+              values: [for (final v in _expense) v.toDouble()],
+            ),
+          ],
+        ),
+        const SizedBox(height: MonthraSpacing.x6),
+        Text('Line (the months to come have no point)', style: caption),
+        const SizedBox(height: MonthraSpacing.x3),
+        MonthraLineChart(
+          semanticLabel: 'Net worth, 12 months',
+          labels: labels,
+          values: [for (final v in _worth) v?.toDouble()],
+          color: scheme.accentText,
+          highlight: 9,
+          formatAxis: axis,
+          formatValue: value,
+        ),
+      ],
     );
   }
 }

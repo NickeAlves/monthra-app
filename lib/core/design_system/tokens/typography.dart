@@ -9,11 +9,16 @@ abstract final class _Style {
   static const amountTitle = 'monthra.amountTitle';
   static const amount = 'monthra.amount';
   static const amountSmall = 'monthra.amountSmall';
+  static const title = 'monthra.title';
   static const label = 'monthra.label';
   static const caption = 'monthra.caption';
 }
 
 /// Inter at 400, 500 and 600 only (§4.2), bundled in assets/fonts/inter.
+///
+/// "Silêncio": hierarchy by size, not weight. Large titles and figures are
+/// regular (400), small titles, labels and list amounts medium (500); no
+/// style uses 600 (still bundled: shadcn's own widgets may ask for it).
 ///
 /// Styles carry no color, like shadcn's: components apply the role they
 /// need, and plain text takes the foreground from the app.
@@ -68,28 +73,29 @@ abstract final class MonthraTypography {
   /// The text theme of both brightnesses.
   static final ShadTextTheme textTheme = ShadTextTheme(
     family: family,
-    h1Large: style(48, semiBold, lineHeight: 52),
-    h1: style(36, semiBold, lineHeight: 40),
-    h2: style(30, semiBold, lineHeight: 36),
-    h3: style(24, semiBold, lineHeight: 32),
-    h4: style(20, semiBold, lineHeight: 28),
+    h1Large: style(48, regular, lineHeight: 52),
+    h1: style(36, regular, lineHeight: 40),
+    h2: style(30, regular, lineHeight: 36),
+    h3: style(24, medium, lineHeight: 32),
+    h4: style(20, medium, lineHeight: 28),
     p: style(16, regular, lineHeight: 26),
     blockquote: style(
       16,
       regular,
       lineHeight: 24,
     ).copyWith(fontStyle: FontStyle.italic),
-    table: style(16, semiBold, lineHeight: 24),
+    table: style(16, medium, lineHeight: 24),
     list: style(16, regular, lineHeight: 24),
     lead: style(18, regular, lineHeight: 28),
     large: style(18, medium, lineHeight: 28),
     small: style(14, medium, lineHeight: 20),
     muted: style(14, regular, lineHeight: 20),
     custom: {
-      _Style.amountDisplay: _amount(40, semiBold, lineHeight: 48),
-      _Style.amountTitle: _amount(24, semiBold, lineHeight: 32),
+      _Style.amountDisplay: _amount(40, regular, lineHeight: 48),
+      _Style.amountTitle: _amount(22, regular, lineHeight: 28),
       _Style.amount: _amount(16, medium, lineHeight: 24),
       _Style.amountSmall: _amount(14, medium, lineHeight: 20),
+      _Style.title: style(16, medium, lineHeight: 24),
       _Style.label: style(14, medium, lineHeight: 20),
       _Style.caption: style(12, regular, lineHeight: 16),
     },
@@ -109,6 +115,9 @@ extension MonthraTextStyles on ShadTextTheme {
   /// An amount in a list or a form.
   TextStyle get amount => custom[_Style.amount] ?? p;
   TextStyle get amountSmall => custom[_Style.amountSmall] ?? small;
+
+  /// The title of a section or a card.
+  TextStyle get title => custom[_Style.title] ?? large;
 
   /// Field labels, tile titles.
   TextStyle get label => custom[_Style.label] ?? small;

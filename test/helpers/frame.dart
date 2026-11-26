@@ -35,31 +35,39 @@ class TestFrame extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => ShadApp(
-    theme: monthraTheme(Brightness.light),
-    darkTheme: monthraTheme(Brightness.dark),
-    themeMode: brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light,
-    locale: locale.locale,
-    supportedLocales: AppLocale.supportedLocales,
-    localizationsDelegates: const [AppLocalizations.delegate],
-    home: Builder(
-      builder: (context) {
-        final theme = ShadTheme.of(context);
-        return ColoredBox(
-          color: theme.colorScheme.background,
-          child: DefaultTextStyle(
-            style: theme.textTheme.p.copyWith(
-              color: theme.colorScheme.foreground,
+  Widget build(BuildContext context) {
+    // The app's density for the test window, as MonthraApp picks it.
+    final density = MonthraDensity.forWidth(
+      MediaQuery.maybeSizeOf(context)?.width ?? 0,
+    );
+    return ShadApp(
+      theme: monthraTheme(Brightness.light, density: density),
+      darkTheme: monthraTheme(Brightness.dark, density: density),
+      themeMode: brightness == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light,
+      locale: locale.locale,
+      supportedLocales: AppLocale.supportedLocales,
+      localizationsDelegates: const [AppLocalizations.delegate],
+      home: Builder(
+        builder: (context) {
+          final theme = ShadTheme.of(context);
+          return ColoredBox(
+            color: theme.colorScheme.background,
+            child: DefaultTextStyle(
+              style: theme.textTheme.p.copyWith(
+                color: theme.colorScheme.foreground,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(MonthraSpacing.x4),
+                child: Align(alignment: Alignment.topLeft, child: child),
+              ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(MonthraSpacing.x4),
-              child: Align(alignment: Alignment.topLeft, child: child),
-            ),
-          ),
-        );
-      },
-    ),
-  );
+          );
+        },
+      ),
+    );
+  }
 }
 
 extension PumpFrame on WidgetTester {
