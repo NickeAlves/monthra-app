@@ -327,14 +327,21 @@ class _LimitCard extends StatelessWidget {
     final muted = theme.textTheme.small.copyWith(color: scheme.mutedForeground);
     String money(int minor) => format.money(minor, account.currency);
     return MonthraCard(
-      title: Text(l10n.accountCardLimit),
-      trailing: limit == null
-          ? null
-          : AmountText(
-              limit,
-              currency: account.currency,
-              alignment: AlignmentDirectional.centerEnd,
-            ),
+      title: MergeSemantics(
+        child: Row(
+          children: [
+            Expanded(child: Text(l10n.accountCardLimit)),
+            if (limit != null) ...[
+              const SizedBox(width: MonthraSpacing.x3),
+              AmountText(
+                limit,
+                currency: account.currency,
+                alignment: AlignmentDirectional.centerEnd,
+              ),
+            ],
+          ],
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.only(top: MonthraSpacing.x4),
         child: Column(

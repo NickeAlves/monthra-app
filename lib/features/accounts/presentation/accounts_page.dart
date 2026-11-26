@@ -116,8 +116,15 @@ class _AccountsList extends StatelessWidget {
         for (final (i, group) in view.groups.indexed) ...[
           if (i > 0) SizedBox(height: gap),
           MonthraCard(
-            title: Text(l10n.currencyName(group.currency)),
-            trailing: _GroupTotal(group: group),
+            // The total in the title's row: a card's trailing slot would
+            // take a column beside the rows.
+            title: Row(
+              children: [
+                Expanded(child: Text(l10n.currencyName(group.currency))),
+                const SizedBox(width: MonthraSpacing.x3),
+                _GroupTotal(group: group),
+              ],
+            ),
             padding: EdgeInsets.all(gap - MonthraSpacing.x2),
             child: _Tiles(accounts: group.accounts, onOpen: open),
           ),

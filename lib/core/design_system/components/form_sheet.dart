@@ -159,7 +159,21 @@ class MonthraFormSheet extends StatelessWidget {
         namesRoute: true,
         explicitChildNodes: true,
         label: title,
-        child: surface,
+        // A tap on a control that takes no focus (a switch) after a text
+        // field drops the focus above the route, out of reach of Esc:
+        // bring it back into the route (a select's menu keeps its own).
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerUp: (_) => WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!context.mounted) return;
+            final scope = FocusScope.of(context);
+            final primary = FocusManager.instance.primaryFocus;
+            if (primary != null && scope.ancestors.contains(primary)) {
+              scope.requestFocus();
+            }
+          }),
+          child: surface,
+        ),
       ),
     );
   }

@@ -173,6 +173,8 @@ class InvoiceList extends StatelessWidget {
                     Expanded(
                       child: Text(
                         format.month(invoice.month),
+                        // The button centers its label.
+                        textAlign: TextAlign.start,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.small.copyWith(

@@ -118,6 +118,20 @@ void main() {
     expect(answers, [null]);
   });
 
+  testWidgets('Esc still asks after a tap that leaves no focus', (
+    tester,
+  ) async {
+    await pumpOpener(tester, dirty: true);
+    // Focus falls above the route, as a text field's tap outside does.
+    FocusManager.instance.rootScope.requestFocus();
+    await tester.pump();
+    await tester.tap(find.text('Campos'));
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pumpAndSettle();
+    expect(find.text(labels.discardTitle), findsOneWidget);
+  });
+
   testWidgets('a tap on the barrier asks too', (tester) async {
     await pumpOpener(tester, dirty: true);
     await tester.tapAt(const Offset(8, 8));

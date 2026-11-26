@@ -225,6 +225,16 @@ void main() {
       expect(server.adapter.count('POST', '/api/v1/accounts'), 0);
     });
 
+    testWidgets('Esc asks after a tap on the switch too', (tester) async {
+      await openNew(tester);
+      await tester.type(pt.accountFormName, 'Rascunho');
+      await tester.tap(find.byType(ShadSwitch));
+      await tester.pumpAndSettle();
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pumpAndSettle();
+      expect(find.text(pt.formDiscardTitle), findsOneWidget);
+    });
+
     testWidgets('an untouched form closes without asking', (tester) async {
       await openNew(tester);
       await tester.tap(find.text(pt.appCancel));
