@@ -166,7 +166,7 @@ Every signed-in page lives in the app shell (`lib/app/shell/`), one navigation b
 - **Tablet** (640 to 1024 px): the same sidebar with icons only; each shows its name on hover, long press or keyboard focus.
 - **Phone:** a bottom bar with the main destinations and **More**, a sheet with the account, the other destinations, the catalog link and sign-out. The new-transaction button will sit in the middle of the bar (transactions PR).
 
-The menu lists only the pages that exist: today the dashboard and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
+The menu lists only the pages that exist: today the dashboard, Accounts (in More on a phone) and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
 
 **Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app.
 
@@ -195,10 +195,24 @@ The first page (`/`, `lib/features/dashboard/`) sums up a month from `GET /dashb
 - **By currency, never converted:** the profile's default currency (Settings) gets the full dashboard, or the first currency when the person holds none in it. Each other currency follows in a compact block under its name, with its figures and accounts and no charts.
 - **Figures:** the balance (the net worth on `asOf`: the month's last day, or today; a card's debt counts against it), the month's income and expenses (the whole month, the days still to come included, with what recurrences still add) and the result (income minus expenses).
 - **Cards:** the split by category (a donut and the list, expenses or income; past six categories the smallest fold into "Others"), 12 months of income and expenses (bars, the month shown highlighted), 12 months of net worth (a line; months still to come have none) and each account's balance (an archived account only while it holds money). From 880 px the figures go four in a row and the cards two by two, each pair as tall as its taller card.
-- **States:** a skeleton while it loads, an error with "Try again", and a message when there is no account yet. The button to add one comes with the accounts page.
-- **Refresh:** the refresh button reads the three again. The server caches summaries for 5 minutes and drops them on every write, and the pages that write (transactions, accounts...) will refresh the dashboard themselves.
+- **States:** a skeleton while it loads, an error with "Try again", and, with no account yet, a message and "Create account" (the account form opens over the dashboard).
+- **Links:** each account of the accounts card opens its page.
+- **Refresh:** the refresh button reads the three again. The server caches summaries for 5 minutes and drops them on every write; a page that writes bumps the app's data revision (`dataRevisionProvider`), so the dashboard reads again by itself.
 
 **Try it locally:** sign in as the seeded demo account (`make seed` in monthra-server: reais and dollars, recurrences, a card, budgets) and walk the months back and forth; switch the default currency in Settings to see the dollars lead.
+
+## Accounts
+
+`/accounts` (`lib/features/accounts/`) lists the accounts from `GET /accounts?includeArchived=true&asOf=YYYY-MM-DD` (balances on the device's today):
+
+- **By currency, never converted:** one card per currency (the profile's default first, then alphabetical) with its total; a card's debt counts below zero. A credit card's row adds its due day and the limit left. Archived accounts wait behind "Show archived".
+- **New and edit:** the account form opens over the page, as a dialog (a bottom sheet on a phone). Name, type and currency (both fixed once created; the currency starts at the profile's default), the balance before any transaction: a card asks its **debt today** (sent negative) with a switch for a card in credit; other types ask the **initial balance** with a switch for an overdraft. A card also takes the closing and due days (in a shorter month, its last day), an optional limit, and shows when the next invoice closes and falls due. Editing sends only what changed (the card's cycle whole). Changes ask before being thrown away (close, Esc, the barrier, back).
+- **Amounts are typed cents-first** (`MoneyField`, `lib/core/forms/money_field.dart`): digits fill from the right (`1`, `2`, `3` -> `1,23`), the number keypad only, a pasted `1.234,56` keeps its digits, up to the API's 10^13. The sign is a separate switch.
+- **An account's page** (`/accounts/:id`): the balance today and with the future transactions (installments, scheduled ones). A card adds its limit (used, left or past it; the installments to come count, as banks block them) and its **invoices**: the one in focus in full (status, closing and due dates, previous balance, charges, credits, total, paid, what is left or the credit for the next one) and the months around it (five before, six after) from `GET /accounts/{id}/invoices?from&to&asOf`. The open invoice (from the card's cycle on the device's today, the server's rule in `CardCycle`) is the default; `?invoice=YYYY-MM` picks another, so the arrows and the list change the address. The statement and "Pay invoice" come with the transactions.
+- **Archive and delete:** archiving keeps the history and takes the account out of the lists (one a recurrence uses is refused, and the page says why); "Unarchive" brings it back. Deleting asks first and only works for an account without transactions: for one with history the app offers to archive it instead.
+- Every write bumps the data revision: the lists, the invoices and the dashboard read again.
+
+**Try it locally:** with the seeded demo account, open the credit card and walk its invoices (the payments of past months leave credits); create an account, give it an overdraft, then delete it; try to delete one with transactions and archive it instead.
 
 ## Routes and sign-in
 
@@ -207,6 +221,8 @@ The first page (`/`, `lib/features/dashboard/`) sums up a month from `GET /dashb
 | Path | Who | Page |
 |---|---|---|
 | `/`, `/?month=YYYY-MM` | signed in | the dashboard of the current month, or of the month given |
+| `/accounts` | signed in | the accounts by currency |
+| `/accounts/:id`, `/accounts/:id?invoice=YYYY-MM` | signed in | an account's page; for a card, the invoice given (the open one by default) |
 | `/settings` | signed in | Settings: profile, preferences, security, sessions, your data |
 | `/settings/password`, `/settings/mfa/enable`, `/settings/mfa/disable`, `/settings/mfa/recovery-codes` | signed in | change the password, turn two-step verification on or off, new recovery codes |
 | `/settings/export`, `/settings/delete-account` | signed in | export my data, delete the account |
