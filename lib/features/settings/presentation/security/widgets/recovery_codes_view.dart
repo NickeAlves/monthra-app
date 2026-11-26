@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monthra/core/dates/clock.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/files/file_saver.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
@@ -70,7 +71,7 @@ class _RecoveryCodesViewState extends ConsumerState<RecoveryCodesView> {
       l10n,
       email: email,
       codes: widget.codes,
-      at: DateTime.now(),
+      at: ref.read(clockProvider)(),
     );
     setState(() => _saving = true);
     bool? saved;
