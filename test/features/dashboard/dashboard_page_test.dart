@@ -101,7 +101,7 @@ void main() {
     });
     expect(
       server.adapter.sent.firstWhere((r) => r.path == '/api/v1/accounts').query,
-      {'includeArchived': 'true'},
+      {'includeArchived': 'true', 'asOf': '2026-11-23'},
     );
 
     // The four figures in reais.

@@ -63,7 +63,12 @@ List<Map<String, Object?>> defaultSessions() => [
 /// session that no longer exists), sign-in without MFA, sign-out and the
 /// CSRF token. It also answers the dashboard's reads: the summary of any
 /// month from [summaryFor] ([demoSummary] by default), [accounts] and
-/// [categories]. Anything else is a `404`.
+/// [categories]. The accounts are kept: created (`limit_reached` past
+/// [maxAccounts]), changed (the balances follow a new initial balance;
+/// archiving one in [usedByRecurrence] is refused), deleted (one in
+/// [accountsInUse] or [usedByRecurrence] is refused); a card's invoices
+/// come from [invoicesFor] ([demoInvoices] by default). Anything else is a
+/// `404`.
 ///
 /// [hold] makes the next `PATCH` wait for a completer, [holdSummary] the
 /// next summary; [fail] answers the next request to a path with a given
@@ -75,7 +80,14 @@ final class ProfileServer {
     Map<String, Object?> Function(YearMonth month)? summaryFor,
     List<Map<String, Object?>>? accounts,
     List<Map<String, Object?>>? categories,
+    List<Map<String, Object?>> Function(
+      String accountId,
+      YearMonth from,
+      YearMonth to,
+    )?
+    invoicesFor,
   }) : me = me ?? meJson(),
+       invoicesFor = invoicesFor ?? ((_, from, to) => demoInvoices(from, to)),
        sessions = sessions ?? defaultSessions(),
        summaryFor = summaryFor ?? demoSummary,
        accounts = accounts ?? demoAccounts(),
@@ -97,6 +109,26 @@ final class ProfileServer {
   /// What `GET /accounts` and `GET /categories` list.
   List<Map<String, Object?>> accounts;
   List<Map<String, Object?>> categories;
+
+  /// A card's invoices from a month to another.
+  List<Map<String, Object?>> Function(
+    String accountId,
+    YearMonth from,
+    YearMonth to,
+  )
+  invoicesFor;
+
+  /// How many accounts a person may hold (the server's cap is 100).
+  int maxAccounts = 100;
+
+  /// Accounts with transactions: deleting one is `409 account_in_use`.
+  Set<String> accountsInUse = {};
+
+  /// Accounts a recurrence names: archiving or deleting one is
+  /// `409 used_by_recurrence`.
+  Set<String> usedByRecurrence = {};
+
+  int _nextAccount = 1;
 
   /// The recovery codes MFA holds now (empty while off).
   List<String> recoveryCodes = const [];
@@ -202,6 +234,94 @@ final class ProfileServer {
       return Reply.problem(403, 'password_incorrect');
     }
     return mfaEnabled ? _stepUp(body) : null;
+  }
+
+  int _index(String id) => accounts.indexWhere((a) => a['id'] == id);
+
+  Reply _createAccount(Map<String, Object?> body) {
+    if (accounts.length >= maxAccounts) {
+      return Reply.problem(409, 'limit_reached');
+    }
+    final name = (body['name'] as String? ?? '').trim();
+    if (name.isEmpty) {
+      return Reply.problem(
+        422,
+        'validation_failed',
+        errors: [
+          {'field': 'name', 'code': 'required'},
+        ],
+      );
+    }
+    final initial = body['initialBalance'] as int? ?? 0;
+    final card = body['card'] as Map<String, Object?>?;
+    final account = accountJson(
+      id: 'acc-new-${_nextAccount++}',
+      name: name,
+      type: body['type']! as String,
+      currency: body['currency']! as String,
+      initialBalance: initial,
+      balance: initial,
+      card: card == null ? null : {'limit': null, ...card},
+    );
+    accounts = [...accounts, account];
+    return Reply.json(account, status: 201);
+  }
+
+  Reply _updateAccount(String id, Map<String, Object?> body) {
+    final i = _index(id);
+    if (i < 0) return Reply.problem(404, 'not_found');
+    if (body['archived'] == true && usedByRecurrence.contains(id)) {
+      return Reply.problem(409, 'used_by_recurrence');
+    }
+    var account = accounts[i];
+    if (body['name'] case final String name) {
+      account = {...account, 'name': name.trim()};
+    }
+    if (body['initialBalance'] case final int initial) {
+      final shift = initial - (account['initialBalance']! as int);
+      account = {
+        ...account,
+        'initialBalance': initial,
+        'balance': (account['balance']! as int) + shift,
+        'projectedBalance': (account['projectedBalance']! as int) + shift,
+      };
+    }
+    if (body['card'] case final Map<String, Object?> card) {
+      account = {
+        ...account,
+        'card': {'limit': null, ...card},
+      };
+    }
+    if (body['archived'] case final bool archived) {
+      account = {...account, 'archived': archived};
+    }
+    accounts = [...accounts]..[i] = account;
+    return Reply.json(account);
+  }
+
+  Reply _deleteAccount(String id) {
+    if (_index(id) < 0) return Reply.problem(404, 'not_found');
+    if (accountsInUse.contains(id)) {
+      return Reply.problem(409, 'account_in_use');
+    }
+    if (usedByRecurrence.contains(id)) {
+      return Reply.problem(409, 'used_by_recurrence');
+    }
+    accounts = [
+      for (final a in accounts)
+        if (a['id'] != id) a,
+    ];
+    return const Reply(204);
+  }
+
+  Reply _invoices(String id, Map<String, String> query) {
+    final i = _index(id);
+    if (i < 0 || accounts[i]['type'] != 'credit_card') {
+      return Reply.problem(404, 'not_found');
+    }
+    final from = YearMonth.parse(query['from']!);
+    final to = YearMonth.parse(query['to']!);
+    return Reply.json({'invoices': invoicesFor(id, from, to)});
   }
 
   Reply _password(Map<String, Object?> body) {
@@ -336,6 +456,16 @@ final class ProfileServer {
               if (archived || a['archived'] != true) a,
           ],
         });
+      case ('POST', '/api/v1/accounts'):
+        return _createAccount(body);
+      case ('GET', final path)
+          when path.startsWith('/api/v1/accounts/') &&
+              path.endsWith('/invoices'):
+        return _invoices(Uri.decodeComponent(path.split('/')[4]), r.query);
+      case ('PATCH', final path) when path.startsWith('/api/v1/accounts/'):
+        return _updateAccount(Uri.decodeComponent(path.split('/').last), body);
+      case ('DELETE', final path) when path.startsWith('/api/v1/accounts/'):
+        return _deleteAccount(Uri.decodeComponent(path.split('/').last));
       case ('GET', '/api/v1/categories'):
         return Reply.json({'categories': categories});
       case ('DELETE', '/api/v1/me/sessions'):

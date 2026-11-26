@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ProviderListenableSelect;
+import 'package:monthra/core/data/data_revision.dart';
 import 'package:monthra/core/dates/clock.dart';
 import 'package:monthra/core/dates/year_month.dart';
 import 'package:monthra/core/network/api_providers.dart';
@@ -26,6 +27,8 @@ Future<DashboardSummary?> dashboardSummary(Ref ref, YearMonth month) {
   final userId = ref.watch(
     authControllerProvider.select((s) => s is SignedIn ? s.me.id : null),
   );
+  // A write elsewhere (an account, a transaction) changes the sums.
+  ref.watch(dataRevisionProvider);
   if (userId == null) return Future.value();
   final today = ref.read(clockProvider)();
   return ref.watch(dashboardApiProvider).summary(month, today: today);
