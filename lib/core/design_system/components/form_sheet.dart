@@ -135,6 +135,9 @@ class MonthraFormSheet extends StatelessWidget {
           maxHeight: MediaQuery.sizeOf(context).height * 0.9,
         ),
         closeIcon: close,
+        // The title stays while a long form scrolls under it.
+        titlePinned: true,
+        descriptionPinned: true,
         actions: actions,
         child: content,
       );
@@ -144,6 +147,8 @@ class MonthraFormSheet extends StatelessWidget {
         description: description == null ? null : Text(description),
         constraints: const BoxConstraints(maxWidth: dialogWidth),
         closeIcon: close,
+        titlePinned: true,
+        descriptionPinned: true,
         actions: actions,
         child: content,
       );

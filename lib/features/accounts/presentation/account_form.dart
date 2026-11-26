@@ -603,26 +603,33 @@ class _DaySelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Semantics(
-      container: true,
-      button: true,
-      label: label,
-      child: ShadSelectFormField<int>(
-        id: id,
-        label: Text(label),
-        initialValue: value,
-        // Room for "Día 31" and the chevron.
-        minWidth: 120,
-        placeholder: Text(l10n.accountFormDayPlaceholder),
-        forceErrorText: serverError,
-        validator: (day) =>
-            day == null ? l10n.fieldError(FieldCode.required) : null,
-        options: [
-          for (var day = CardSettings.minDay; day <= CardSettings.maxDay; day++)
-            ShadOption(value: day, child: Text(l10n.accountFormDay(day))),
-        ],
-        selectedOptionBuilder: (_, day) => Text(l10n.accountFormDay(day)),
-        onChanged: onChanged,
+    // The form field loosens the width it gets: fill the half of the row
+    // (never under the room "Día 31" and the chevron need).
+    return LayoutBuilder(
+      builder: (context, constraints) => Semantics(
+        container: true,
+        button: true,
+        label: label,
+        child: ShadSelectFormField<int>(
+          id: id,
+          label: Text(label),
+          initialValue: value,
+          minWidth: constraints.maxWidth < 120 ? 120 : constraints.maxWidth,
+          placeholder: Text(l10n.accountFormDayPlaceholder),
+          forceErrorText: serverError,
+          validator: (day) =>
+              day == null ? l10n.fieldError(FieldCode.required) : null,
+          options: [
+            for (
+              var day = CardSettings.minDay;
+              day <= CardSettings.maxDay;
+              day++
+            )
+              ShadOption(value: day, child: Text(l10n.accountFormDay(day))),
+          ],
+          selectedOptionBuilder: (_, day) => Text(l10n.accountFormDay(day)),
+          onChanged: onChanged,
+        ),
       ),
     );
   }
