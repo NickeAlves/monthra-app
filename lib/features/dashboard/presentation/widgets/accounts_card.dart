@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+import 'package:monthra/app/routes.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/features/accounts/data/models/account.dart';
+import 'package:monthra/features/accounts/presentation/account_labels.dart';
 import 'package:monthra/features/dashboard/domain/dashboard_view.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -22,10 +25,8 @@ class AccountsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (final (i, line) in lines.indexed) ...[
-            SizedBox(height: i == 0 ? MonthraSpacing.x4 : MonthraSpacing.x3),
-            _AccountRow(line: line),
-          ],
+          const SizedBox(height: MonthraSpacing.x2),
+          for (final line in lines) _AccountRow(line: line),
         ],
       ),
     );
@@ -44,7 +45,7 @@ class _AccountRow extends StatelessWidget {
     final l10n = context.l10n;
     final account = line.account;
     final type = account?.type ?? AccountType.unknown;
-    return MergeSemantics(
+    final row = MergeSemantics(
       child: Row(
         children: [
           DecoratedBox(
@@ -100,26 +101,19 @@ class _AccountRow extends StatelessWidget {
         ],
       ),
     );
+    // A known account opens its page; an unknown one sits where it would.
+    if (account == null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: MonthraSpacing.x3,
+          vertical: MonthraSpacing.x2,
+        ),
+        child: row,
+      );
+    }
+    return TappableRow(
+      onPressed: () => context.go(AppRoutes.account(account.id)),
+      child: row,
+    );
   }
 }
-
-/// The Lucide icon of an account type.
-IconData accountTypeIcon(AccountType type) => switch (type) {
-  AccountType.checking => LucideIcons.landmark,
-  AccountType.savings => LucideIcons.piggyBank,
-  AccountType.creditCard => LucideIcons.creditCard,
-  AccountType.cash => LucideIcons.banknote,
-  AccountType.brokerage => LucideIcons.chartCandlestick,
-  AccountType.unknown => LucideIcons.wallet,
-};
-
-/// The name of an account type in the UI language.
-String accountTypeLabel(AppLocalizations l10n, AccountType type) =>
-    switch (type) {
-      AccountType.checking => l10n.accountTypeChecking,
-      AccountType.savings => l10n.accountTypeSavings,
-      AccountType.creditCard => l10n.accountTypeCreditCard,
-      AccountType.cash => l10n.accountTypeCash,
-      AccountType.brokerage => l10n.accountTypeBrokerage,
-      AccountType.unknown => l10n.accountTypeOther,
-    };

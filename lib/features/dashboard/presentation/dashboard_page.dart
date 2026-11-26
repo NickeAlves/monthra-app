@@ -8,6 +8,7 @@ import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/network/api_error_text.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/features/accounts/application/accounts_provider.dart';
+import 'package:monthra/features/accounts/presentation/account_form.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/application/auth_state.dart';
 import 'package:monthra/features/categories/application/categories_provider.dart';
@@ -152,6 +153,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         icon: LucideIcons.wallet,
         title: l10n.dashboardEmptyTitle,
         message: l10n.dashboardEmptyMessage,
+        action: ShadButton(
+          onPressed: () => showAccountForm(context),
+          leading: const Icon(LucideIcons.plus),
+          child: ButtonLabel(l10n.accountsCreateFirst),
+        ),
       );
     }
     return DashboardLayout(view: view);

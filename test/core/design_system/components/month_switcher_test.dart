@@ -5,7 +5,7 @@ import 'package:monthra/core/design_system/design_system.dart';
 
 import '../../../helpers/frame.dart';
 
-const labels = (
+const MonthSwitcherLabels labels = (
   previous: 'Mês anterior',
   next: 'Próximo mês',
   current: 'Este mês',
