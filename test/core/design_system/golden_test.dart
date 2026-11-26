@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/catalog/sample_categories.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/money/currency.dart';
+import 'package:monthra/core/money/money_format.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../../helpers/golden.dart';
@@ -320,4 +321,93 @@ void main() {
       ),
     ),
   );
+
+  goldenTest('charts', size: const Size(480, 720), () {
+    return Builder(
+      builder: (context) {
+        final scheme = ShadTheme.of(context).colorScheme;
+        const labels = [
+          'dez.', 'jan.', 'fev.', 'mar.', 'abr.', 'mai.', //
+          'jun.', 'jul.', 'ago.', 'set.', 'out.', 'nov.',
+        ];
+        String axis(double v) => MoneyFormat.compact(v.round(), _ptBR);
+        String value(double v) =>
+            MoneyFormat.format(v.round(), Currency.brl, _ptBR);
+        return MonthraCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  MonthraDonutChart(
+                    semanticLabel: 'Gastos por categoria',
+                    slices: [
+                      for (final (i, c) in sampleCategories.take(5).indexed)
+                        DonutSlice(
+                          value: (5 - i) * 10.0,
+                          color: parseHexColor(c.color)!,
+                        ),
+                      DonutSlice(value: 8, color: scheme.mutedForeground),
+                    ],
+                    center: const AmountText(
+                      412345,
+                      currency: Currency.brl,
+                      size: AmountSize.small,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                  const SizedBox(width: MonthraSpacing.x6),
+                  const MonthraDonutChart(
+                    semanticLabel: 'Nenhum gasto',
+                    slices: [],
+                    size: 96,
+                    thickness: 10,
+                  ),
+                ],
+              ),
+              const SizedBox(height: MonthraSpacing.x6),
+              MonthraBarChart(
+                semanticLabel: 'Entradas e saídas',
+                labels: labels,
+                highlight: 11,
+                formatAxis: axis,
+                formatValue: value,
+                series: [
+                  BarSeries(
+                    name: 'Entradas',
+                    color: scheme.income,
+                    values: [
+                      for (var i = 0; i < 12; i++) 800000.0 + (i % 3) * 25000,
+                    ],
+                  ),
+                  BarSeries(
+                    name: 'Saídas',
+                    color: scheme.expense,
+                    values: [
+                      for (var i = 0; i < 12; i++) 350000.0 + (i % 4) * 30000,
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: MonthraSpacing.x6),
+              MonthraLineChart(
+                semanticLabel: 'Patrimônio',
+                labels: labels,
+                values: [
+                  for (var i = 0; i < 12; i++)
+                    if (i > 9) null else 1500000.0 + i * 45000,
+                ],
+                color: scheme.accentText,
+                highlight: 9,
+                formatAxis: axis,
+                formatValue: value,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  });
 }
+
+const _ptBR = Locale('pt', 'BR');

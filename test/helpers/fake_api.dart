@@ -12,6 +12,7 @@ import 'package:monthra/core/security/token_store.dart';
 typedef SentRequest = ({
   String method,
   String path,
+  Map<String, String> query,
   Map<String, Object?> headers,
   Object? data,
   ResponseType responseType,
@@ -84,6 +85,7 @@ final class FakeAdapter implements HttpClientAdapter {
     final request = (
       method: options.method,
       path: options.uri.path,
+      query: options.uri.queryParameters,
       headers: Map<String, Object?>.of(options.headers),
       data: options.data,
       responseType: options.responseType,

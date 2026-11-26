@@ -16,7 +16,7 @@ import 'package:monthra/features/auth/presentation/mfa_page.dart';
 import 'package:monthra/features/auth/presentation/register_page.dart';
 import 'package:monthra/features/auth/presentation/reset_password_page.dart';
 import 'package:monthra/features/auth/presentation/verify_email_page.dart';
-import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/dashboard/presentation/dashboard_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
 import 'package:monthra/l10n/l10n.dart';
@@ -25,6 +25,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import '../../helpers/app.dart';
 import '../../helpers/auth_fixtures.dart';
 import '../../helpers/fake_api.dart';
+import '../../helpers/finance_fixtures.dart';
 import '../../helpers/frame.dart';
 
 /// The test device speaks en-US, and so does the profile in these tests.
@@ -212,13 +213,15 @@ void main() {
       await tester.pumpMonthraApp(
         tokens: MemoryTokenStore(savedTokens),
         api: FakeAdapter(
-          (r) => r.path == '/api/v1/me' && !expired
-              ? Reply.json(enMe())
-              : Reply.problem(401, 'unauthorized'),
+          (r) => switch ((r.path, expired)) {
+            (_, true) => Reply.problem(401, 'unauthorized'),
+            ('/api/v1/me', _) => Reply.json(enMe()),
+            _ => Reply.problem(404, 'not_found'),
+          },
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
 
       // A feature's call gets a 401, and the refresh is refused. (Dio runs
       // on timers, so the call completes while frames are pumped.)
@@ -264,12 +267,12 @@ void main() {
       await tester.enterText(field(en.authMfaCodeLabel), '123456');
       await tester.pumpAndSettle();
 
-      expect(api.sent.last.path, '/api/v1/me');
+      expect(withoutDashboardReads(api.paths).last, 'GET /api/v1/me');
       expect(api.sent.firstWhere((r) => r.path.endsWith('/mfa/verify')).data, {
         'mfaToken': 'mfa-token-secret',
         'code': '123456',
       });
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('a wrong code clears the field and says to wait', (
@@ -303,7 +306,7 @@ void main() {
         'mfaToken': 'mfa-token-secret',
         'code': 'abcd-efgh',
       });
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('a spent challenge goes back to sign-in with a notice', (
@@ -564,7 +567,7 @@ void main() {
       );
       await tester.pumpMonthraApp(api: api, tokens: tokens);
       await tester.pumpAndSettle();
-      expect(find.text(en.homeGreeting('Ana')), findsOneWidget);
+      expect(find.text(en.dashboardGreeting('Ana')), findsOneWidget);
 
       // The default 800 px window is a tablet: the rail's icon button.
       await tester.tap(find.bySemanticsLabel(en.shellSignOut));
@@ -585,7 +588,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
       expect(find.byType(RegisterPage), findsNothing);
     });
 
@@ -599,7 +602,7 @@ void main() {
       expect(find.text(en.notFoundTitle), findsOneWidget);
 
       await tester.tapButton(en.notFoundHome);
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
   });
 
@@ -627,7 +630,7 @@ void main() {
 
       await tester.signInForm();
 
-      expect(api.paths, [
+      expect(withoutDashboardReads(api.paths), [
         'GET /api/v1/auth/csrf',
         'POST /api/v1/auth/login',
         'GET /api/v1/me',
@@ -638,7 +641,7 @@ void main() {
         isTrue,
       );
       expect(hint.present, isTrue);
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('a later visit with the hint finds the session', (
@@ -653,8 +656,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(api.paths, ['GET /api/v1/me']);
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(withoutDashboardReads(api.paths), ['GET /api/v1/me']);
+      expect(find.byType(DashboardPage), findsOneWidget);
       expect(tester.appContainer.read(authControllerProvider), isA<SignedIn>());
     });
   });
@@ -675,7 +678,7 @@ void main() {
 
     online = true;
     await tester.tapButton(en.appRetry);
-    expect(find.byType(HomePage), findsOneWidget);
+    expect(find.byType(DashboardPage), findsOneWidget);
     expect(
       tester.appContainer.read(authControllerProvider),
       isA<AuthState>().having((s) => s.isSignedIn, 'signed in', isTrue),

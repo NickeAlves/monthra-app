@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/app/overrides.dart';
+import 'package:monthra/core/dates/clock.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/network/api_providers.dart';
 import 'package:monthra/core/network/session_refresher.dart';
@@ -16,6 +17,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'env.dart';
 import 'fake_api.dart';
+import 'finance_fixtures.dart';
 import 'stub_auth.dart';
 
 /// [child] on the app background of [brightness], with the Monthra theme
@@ -90,6 +92,7 @@ extension PumpFrame on WidgetTester {
           sessionModeProvider.overrideWithValue(SessionMode.bearer),
           tokenStoreProvider.overrideWithValue(MemoryTokenStore()),
           authControllerProvider.overrideWith(() => StubAuthController(auth)),
+          clockProvider.overrideWithValue(() => testNow),
         ],
         child: TestFrame(brightness: brightness, locale: locale, child: child),
       ),

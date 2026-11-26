@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/routes.dart';
-import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/dashboard/presentation/dashboard_page.dart';
 import 'package:monthra/features/settings/presentation/data/delete_account_page.dart';
 import 'package:monthra/features/settings/presentation/data/export_data_page.dart';
 import 'package:monthra/features/settings/presentation/security/change_password_page.dart';
@@ -42,7 +42,7 @@ enum ShellDestination {
   };
 
   Widget page(GoRouterState state) => switch (this) {
-    dashboard => const HomePage(),
+    dashboard => DashboardPage(month: DashboardPage.monthOf(state.uri)),
     settings => const SettingsPage(),
   };
 

@@ -208,12 +208,167 @@ class AppLocalizationsPt extends AppLocalizations {
   String get notFoundHome => 'Ir para o início';
 
   @override
-  String homeGreeting(String name) {
+  String dashboardGreeting(String name) {
     return 'Olá, $name';
   }
 
   @override
-  String get homeComingSoon => 'Seu painel chega nas próximas versões.';
+  String get dashboardPreviousMonth => 'Mês anterior';
+
+  @override
+  String get dashboardNextMonth => 'Próximo mês';
+
+  @override
+  String get dashboardThisMonth => 'Este mês';
+
+  @override
+  String get dashboardRefresh => 'Atualizar';
+
+  @override
+  String get dashboardLoading => 'Carregando o painel';
+
+  @override
+  String get dashboardLoadError => 'Não foi possível carregar o painel';
+
+  @override
+  String get dashboardEmptyTitle => 'Nenhuma conta ainda';
+
+  @override
+  String get dashboardEmptyMessage =>
+      'Seu mês aparece aqui assim que você adicionar uma conta.';
+
+  @override
+  String get dashboardBalance => 'Saldo';
+
+  @override
+  String dashboardBalanceOn(String date) {
+    return 'Em $date';
+  }
+
+  @override
+  String get dashboardIncome => 'Entradas';
+
+  @override
+  String get dashboardExpenses => 'Saídas';
+
+  @override
+  String get dashboardNet => 'Resultado do mês';
+
+  @override
+  String get dashboardNetHint => 'Entradas menos saídas';
+
+  @override
+  String dashboardScheduled(String amount) {
+    return '$amount ainda previsto';
+  }
+
+  @override
+  String get dashboardNothingScheduled => 'Nada mais previsto';
+
+  @override
+  String get dashboardByCategory => 'Por categoria';
+
+  @override
+  String get dashboardCategoryKind => 'Mostrar';
+
+  @override
+  String get dashboardNoExpenses => 'Nenhuma saída neste mês';
+
+  @override
+  String get dashboardNoIncome => 'Nenhuma entrada neste mês';
+
+  @override
+  String get dashboardOtherCategories => 'Outras';
+
+  @override
+  String get dashboardUnknownCategory => 'Categoria';
+
+  @override
+  String dashboardEntries(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lançamentos',
+      one: '1 lançamento',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dashboardCategoryShare(String name, String amount, String percent) {
+    return '$name: $amount, $percent';
+  }
+
+  @override
+  String dashboardExpensesChart(String parts) {
+    return 'Saídas por categoria: $parts';
+  }
+
+  @override
+  String dashboardIncomeChart(String parts) {
+    return 'Entradas por categoria: $parts';
+  }
+
+  @override
+  String get dashboardCashFlow => 'Entradas e saídas';
+
+  @override
+  String get dashboardLast12Months => 'Últimos 12 meses';
+
+  @override
+  String dashboardCashFlowChart(
+    String first,
+    String last,
+    String month,
+    String income,
+    String expense,
+  ) {
+    return 'Entradas e saídas de $first a $last. Em $month: entradas $income, saídas $expense.';
+  }
+
+  @override
+  String get dashboardNetWorth => 'Patrimônio';
+
+  @override
+  String dashboardNetWorthChart(
+    String first,
+    String last,
+    String start,
+    String end,
+  ) {
+    return 'Patrimônio de $first a $last: de $start para $end.';
+  }
+
+  @override
+  String get dashboardNoNetWorth =>
+      'Meses que ainda não chegaram não têm patrimônio.';
+
+  @override
+  String get dashboardAccounts => 'Contas';
+
+  @override
+  String get dashboardArchived => 'Arquivada';
+
+  @override
+  String get dashboardUnknownAccount => 'Conta';
+
+  @override
+  String get accountTypeChecking => 'Conta corrente';
+
+  @override
+  String get accountTypeSavings => 'Poupança';
+
+  @override
+  String get accountTypeCreditCard => 'Cartão de crédito';
+
+  @override
+  String get accountTypeCash => 'Dinheiro';
+
+  @override
+  String get accountTypeBrokerage => 'Corretora';
+
+  @override
+  String get accountTypeOther => 'Conta';
 
   @override
   String get errorInvalidCredentials => 'E-mail ou senha incorretos.';

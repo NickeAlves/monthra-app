@@ -98,7 +98,8 @@ Release builds are obfuscated (`--obfuscate --split-debug-info=build/symbols`); 
 - **Tokens** (`tokens/`): the brand palette and the color roles of both themes (`MonthraColorSchemes`, plus `income`, `expense`, `warning`, `accentText` and `skeleton` through the `MonthraColors` extension on `ShadColorScheme`), spacing on a 4 px grid (`MonthraSpacing`), radii 8 to 12 (`MonthraRadii`), barely-there shadows, motion (150 to 250 ms, `easeOutCubic`, zero when the platform asks for less motion), breakpoints (mobile < 640 <= tablet <= 1024 < desktop) and the type scale (`MonthraTypography`: Inter 400/500/600, Inter's dynamic tracking, tabular figures for amounts).
 - **Theme** (`theme.dart`): `monthraTheme(brightness)` builds the light and dark `ShadThemeData`. Controls are at least 44 px tall; the `sm` button size (36 px) is for pointer layouts only. The primary button is the brand green with white text in both themes; in the dark one, links, focus rings and accent text use the lifted green `#3FA37F`.
 - **Components** (`components/`): `MonthraCard` (tappable cards get keyboard focus, hover and a focus ring), `AmountText` (minor units in the locale's format, colored and signed by kind, counting to new values), `CategoryIcon`/`CategoryBadge` (a category's Lucide icon and color, with the color moved until it reads on its tint), `EmptyState`, `ErrorState`, `Skeleton`/`SkeletonText` (pulsing in step, still under reduced motion) and `ButtonLabel` (a button label that shortens instead of overflowing at large text sizes).
-- **Money** (`lib/core/money/`): `Currency` (BRL, USD, EUR) and `MoneyFormat.format(minor, currency, locale)`: `R$ 1.234,56` / `US$ 1.234,56` in pt-BR, `1.234,56 €` in es-ES, `$1,234.56` in en-US, the typographic minus (U+2212), exact up to the API's 10^13 cents.
+- **Money** (`lib/core/money/`): `Currency` (BRL, USD, EUR) and `MoneyFormat.format(minor, currency, locale)`: `R$ 1.234,56` / `US$ 1.234,56` in pt-BR, `1.234,56 €` in es-ES, `$1,234.56` in en-US, the typographic minus (U+2212), exact up to the API's 10^13 cents. `MoneyFormat.compact` rounds for tight spots such as chart axes (`8,5 mil`, `8.5K`; with a currency, `R$ 8,5 mil`).
+- **Charts** (`charts/`, on [fl_chart](https://pub.dev/packages/fl_chart)): `MonthraDonutChart` (parts of a whole on a thin ring), `MonthraBarChart` (side-by-side bars per group, one group highlighted) and `MonthraLineChart` (a line over a soft fill; a null value leaves a gap). They are styled from the theme: thin horizontal grid lines only, round ticks (`ChartScale`), as many month labels as fit (the selected one always), quiet tooltips on hover or touch, colors moved to 3:1 on the card. They hold still under reduced motion. Each chart reads as one image with a sentence (`semanticLabel`), and the screen shows the same values as text. Their height is fixed and they use no `LayoutBuilder`, so cards holding them can share an `IntrinsicHeight` row.
 - **Accessibility**: text roles read at 4.5:1 or more on every surface of both themes (`contrast_test.dart`); the catalog passes Flutter's tap target (44 px) and label guidelines, a color-based check of every text (4.5:1) and icon (3:1) against what is painted behind it (`test/helpers/contrast.dart`), and lays out at twice the text size. An icon-only button carries a label on its `Icon` (`semanticLabel`).
 - **Catalog**: `/design-system` (outside production only), with the real theme and language pickers in its header.
 
@@ -165,7 +166,7 @@ Every signed-in page lives in the app shell (`lib/app/shell/`), one navigation b
 - **Tablet** (640 to 1024 px): the same sidebar with icons only; each shows its name on hover, long press or keyboard focus.
 - **Phone:** a bottom bar with the main destinations and **More**, a sheet with the account, the other destinations, the catalog link and sign-out. The new-transaction button will sit in the middle of the bar (transactions PR).
 
-The menu lists only the pages that exist: today the dashboard placeholder and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
+The menu lists only the pages that exist: today the dashboard and Settings. A feature adds its page to `ShellDestination` (`lib/app/shell/shell_destinations.dart`), choosing the bar or More for phones.
 
 **Settings** (`/settings`, `lib/features/settings/`) holds the profile (the display name; the email is read-only, the server has no email change yet) and the preferences: language, theme, default currency (suggested when adding an account; amounts are never converted) and the budget alert emails. Language and theme apply at once; every change is saved to the profile (`PATCH /me/preferences`), one request at a time, so quick changes cost two requests at most and the last one wins. A change the server refuses goes back to the saved value and a message says so, wherever the person is in the app.
 
@@ -186,13 +187,26 @@ Files are saved through `FileSaver` (`lib/core/files/file_saver.dart`, on `file_
 
 **Try it locally:** sign in as the seeded demo account, open Settings, rename yourself and switch the theme or the language; reload or sign in on another browser and the choices are there. Turn two-step verification on with any authenticator app (or `oathtool --totp -b <key>`), sign out and back in, then look at the sessions of both browsers. Export your data and open the ZIP; the emails land in Mailpit (http://localhost:8025). Deleting the demo account is fine locally: `make seed` in monthra-server creates it again.
 
+## Dashboard
+
+The first page (`/`, `lib/features/dashboard/`) sums up a month from `GET /dashboard/summary?month=YYYY-MM&asOf=YYYY-MM-DD` (`asOf` is the device's today). It joins the account and category ids with `GET /accounts?includeArchived=true` and `GET /categories`. The three reads go out together.
+
+- **Month:** the device's current month, or the one in the address (`/?month=2026-10`; a value the API does not take, outside 1900-01 to 2100-12, shows the current month). The arrows move a month and "This month" comes back. Each step is a new address, so the browser's back and links work. While the next month loads, the last one stays on screen, dimmed.
+- **By currency, never converted:** the profile's default currency (Settings) gets the full dashboard, or the first currency when the person holds none in it. Each other currency follows in a compact block under its name, with its figures and accounts and no charts.
+- **Figures:** the balance (the net worth on `asOf`: the month's last day, or today; a card's debt counts against it), the month's income and expenses (the whole month, the days still to come included, with what recurrences still add) and the result (income minus expenses).
+- **Cards:** the split by category (a donut and the list, expenses or income; past six categories the smallest fold into "Others"), 12 months of income and expenses (bars, the month shown highlighted), 12 months of net worth (a line; months still to come have none) and each account's balance (an archived account only while it holds money). From 880 px the figures go four in a row and the cards two by two, each pair as tall as its taller card.
+- **States:** a skeleton while it loads, an error with "Try again", and a message when there is no account yet. The button to add one comes with the accounts page.
+- **Refresh:** the refresh button reads the three again. The server caches summaries for 5 minutes and drops them on every write, and the pages that write (transactions, accounts...) will refresh the dashboard themselves.
+
+**Try it locally:** sign in as the seeded demo account (`make seed` in monthra-server: reais and dollars, recurrences, a card, budgets) and walk the months back and forth; switch the default currency in Settings to see the dollars lead.
+
 ## Routes and sign-in
 
 `lib/app/router.dart` (go_router; the paths in `lib/app/routes.dart`). Paths are clean on the web and keep the fragment (`PathUrlStrategy` with `includeHash`), because the email links carry their token there:
 
 | Path | Who | Page |
 |---|---|---|
-| `/` | signed in | the dashboard's place in the app shell (a greeting until the dashboard PR) |
+| `/`, `/?month=YYYY-MM` | signed in | the dashboard of the current month, or of the month given |
 | `/settings` | signed in | Settings: profile, preferences, security, sessions, your data |
 | `/settings/password`, `/settings/mfa/enable`, `/settings/mfa/disable`, `/settings/mfa/recovery-codes` | signed in | change the password, turn two-step verification on or off, new recovery codes |
 | `/settings/export`, `/settings/delete-account` | signed in | export my data, delete the account |

@@ -18,7 +18,7 @@ import 'package:monthra/core/security/token_store.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/data/session_hint.dart';
 import 'package:monthra/features/auth/presentation/login_page.dart';
-import 'package:monthra/features/home/presentation/home_page.dart';
+import 'package:monthra/features/dashboard/presentation/dashboard_page.dart';
 import 'package:monthra/features/settings/preferences/application/preferences_providers.dart';
 import 'package:monthra/features/settings/preferences/data/preferences_store.dart';
 import 'package:monthra/features/settings/preferences/domain/app_locale.dart';
@@ -139,7 +139,7 @@ void main() {
       await tester.tap(menu('Painel'));
       await tester.pumpAndSettle();
       expect(tester.appLocation.path, '/');
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
       semantics.dispose();
     });
 
@@ -187,7 +187,7 @@ void main() {
       await tester.tap(menu('Painel'));
       await tester.pumpAndSettle();
 
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
       expect(find.text('Sua alteração não foi salva'), findsOneWidget);
     });
 
@@ -405,7 +405,7 @@ void main() {
       await tester.tap(find.byIcon(LucideIcons.x));
       await tester.pumpAndSettle();
       expect(find.text('Sair'), findsNothing);
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(DashboardPage), findsOneWidget);
     });
 
     testWidgets('signs out from More', (tester) async {

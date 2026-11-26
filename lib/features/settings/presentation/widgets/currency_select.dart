@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/money/currency.dart';
+import 'package:monthra/l10n/currency_names.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -86,13 +87,4 @@ class _CurrencySelectState extends State<CurrencySelect> {
       ),
     );
   }
-}
-
-extension CurrencyNames on AppLocalizations {
-  /// The currency's name in the UI language, with its ISO code.
-  String currencyName(Currency currency) => switch (currency) {
-    Currency.brl => currencyBrl,
-    Currency.usd => currencyUsd,
-    Currency.eur => currencyEur,
-  };
 }
