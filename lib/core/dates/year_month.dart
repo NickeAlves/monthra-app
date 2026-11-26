@@ -52,11 +52,27 @@ final class YearMonth implements Comparable<YearMonth> {
   /// month's name).
   DateTime get firstDay => DateTime(year, month);
 
+  /// How many days the month has (28 to 31).
+  int get length => DateTime(year, month + 1, 0).day;
+
+  /// Local midnight of day [day] of the month, or of its last day when the
+  /// month is shorter (the 31st of February is the 28th or the 29th), as
+  /// the server's `Month.Day` reads a card's closing and due days.
+  DateTime day(int day) {
+    assert(day >= 1 && day <= 31, 'day is 1 to 31');
+    return DateTime(year, month, day > length ? length : day);
+  }
+
+  /// How many months [other] lies after this one (negative when before).
+  int monthsUntil(YearMonth other) => other._index - _index;
+
   @override
   int compareTo(YearMonth other) => _index.compareTo(other._index);
 
   bool operator <(YearMonth other) => _index < other._index;
   bool operator >(YearMonth other) => _index > other._index;
+  bool operator <=(YearMonth other) => _index <= other._index;
+  bool operator >=(YearMonth other) => _index >= other._index;
 
   @override
   bool operator ==(Object other) =>

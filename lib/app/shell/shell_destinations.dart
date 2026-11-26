@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/routes.dart';
+import 'package:monthra/features/accounts/presentation/account_detail_page.dart';
+import 'package:monthra/features/accounts/presentation/accounts_page.dart';
 import 'package:monthra/features/dashboard/presentation/dashboard_page.dart';
 import 'package:monthra/features/settings/presentation/data/delete_account_page.dart';
 import 'package:monthra/features/settings/presentation/data/export_data_page.dart';
@@ -27,6 +29,7 @@ enum ShellPlacement { bar, more }
 /// the bar (`ShellBottomBar.centerAction`).
 enum ShellDestination {
   dashboard(AppRoutes.home, LucideIcons.layoutDashboard, ShellPlacement.bar),
+  accounts(AppRoutes.accounts, LucideIcons.wallet, ShellPlacement.more),
   settings(AppRoutes.settings, LucideIcons.settings, ShellPlacement.more);
 
   new(this.path, this.icon, this.mobile);
@@ -38,11 +41,13 @@ enum ShellDestination {
 
   String label(AppLocalizations l10n) => switch (this) {
     dashboard => l10n.navDashboard,
+    accounts => l10n.navAccounts,
     settings => l10n.navSettings,
   };
 
   Widget page(GoRouterState state) => switch (this) {
     dashboard => DashboardPage(month: DashboardPage.monthOf(state.uri)),
+    accounts => const AccountsPage(),
     settings => const SettingsPage(),
   };
 
@@ -50,6 +55,15 @@ enum ShellDestination {
   /// stays selected on them. Their paths are relative to [path].
   List<RouteBase> get routes => switch (this) {
     dashboard => const [],
+    accounts => [
+      GoRoute(
+        path: ':id',
+        builder: (_, state) => AccountDetailPage(
+          id: state.pathParameters['id']!,
+          invoice: AccountDetailPage.invoiceOf(state.uri),
+        ),
+      ),
+    ],
     settings => [
       GoRoute(
         path: _under(AppRoutes.settingsPassword),

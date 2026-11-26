@@ -982,4 +982,320 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get recoveryCodesFileNote =>
       'Cada código faz login uma vez, no lugar de um código do app autenticador.';
+
+  @override
+  String get navAccounts => 'Contas';
+
+  @override
+  String get accountsTitle => 'Contas';
+
+  @override
+  String get accountsDescription =>
+      'Contas, cartões, dinheiro e corretoras, com o saldo de hoje.';
+
+  @override
+  String get accountsNew => 'Nova conta';
+
+  @override
+  String get accountsEmptyTitle => 'Nenhuma conta ainda';
+
+  @override
+  String get accountsEmptyMessage =>
+      'Adicione onde seu dinheiro está: uma conta, um cartão, dinheiro ou uma corretora.';
+
+  @override
+  String get accountsCreateFirst => 'Criar conta';
+
+  @override
+  String get accountsLoadError => 'Não foi possível carregar suas contas';
+
+  @override
+  String get accountsLoading => 'Carregando as contas';
+
+  @override
+  String accountsGroupTotal(String currency) {
+    return 'Total em $currency';
+  }
+
+  @override
+  String accountsShowArchived(int count) {
+    return 'Mostrar arquivadas ($count)';
+  }
+
+  @override
+  String get accountsHideArchived => 'Ocultar arquivadas';
+
+  @override
+  String get accountsArchivedTitle => 'Arquivadas';
+
+  @override
+  String get accountsArchived => 'Arquivada';
+
+  @override
+  String get accountsImported => 'Importada';
+
+  @override
+  String accountsCardAvailable(String amount) {
+    return '$amount disponível';
+  }
+
+  @override
+  String accountsCardDue(int day) {
+    return 'Vence dia $day';
+  }
+
+  @override
+  String get accountFormEditTitle => 'Editar conta';
+
+  @override
+  String get accountFormNewDescription =>
+      'O tipo e a moeda não podem ser alterados depois.';
+
+  @override
+  String get accountFormName => 'Nome';
+
+  @override
+  String get accountFormType => 'Tipo';
+
+  @override
+  String get accountFormCurrency => 'Moeda';
+
+  @override
+  String get accountFormFixed => 'O tipo e a moeda de uma conta não mudam.';
+
+  @override
+  String get accountFormInitialBalance => 'Saldo inicial';
+
+  @override
+  String get accountFormInitialBalanceHint =>
+      'Quanto ela tem hoje, antes do que você registrar aqui.';
+
+  @override
+  String get accountFormInitialBalanceEditHint =>
+      'O saldo antes das transações registradas aqui: alterá-lo muda todos os saldos.';
+
+  @override
+  String get accountFormNegative => 'Saldo negativo (cheque especial)';
+
+  @override
+  String get accountFormCardDebt => 'Dívida hoje';
+
+  @override
+  String get accountFormCardDebtHint =>
+      'Quanto você deve no cartão hoje, antes do que registrar aqui.';
+
+  @override
+  String get accountFormCardDebtEdit => 'Dívida inicial';
+
+  @override
+  String get accountFormCardDebtEditHint =>
+      'Quanto o cartão devia antes das transações registradas aqui: alterá-la muda todas as faturas.';
+
+  @override
+  String get accountFormCardCredit => 'O cartão tem saldo a favor';
+
+  @override
+  String get accountFormClosingDay => 'Dia de fechamento';
+
+  @override
+  String get accountFormDueDay => 'Dia de vencimento';
+
+  @override
+  String get accountFormDayHint => 'Em meses mais curtos, o último dia.';
+
+  @override
+  String accountFormDay(int day) {
+    return 'Dia $day';
+  }
+
+  @override
+  String get accountFormLimit => 'Limite';
+
+  @override
+  String get accountFormLimitHint => 'Opcional.';
+
+  @override
+  String accountFormCyclePreview(String closing, String due) {
+    return 'A próxima fatura fecha em $closing e vence em $due.';
+  }
+
+  @override
+  String get accountFormCreate => 'Criar conta';
+
+  @override
+  String get accountFormSave => 'Salvar alterações';
+
+  @override
+  String get accountFormCreated => 'Conta criada';
+
+  @override
+  String get accountFormSaved => 'Alterações salvas';
+
+  @override
+  String get accountFormLimitReached =>
+      'Você chegou ao limite de contas. Arquive ou exclua uma antes.';
+
+  @override
+  String get formDiscardTitle => 'Descartar as alterações?';
+
+  @override
+  String get formDiscard => 'Descartar';
+
+  @override
+  String get formKeepEditing => 'Continuar editando';
+
+  @override
+  String get accountFormDayPlaceholder => 'Escolha';
+
+  @override
+  String get accountDetailBalance => 'Saldo hoje';
+
+  @override
+  String accountDetailProjected(String amount) {
+    return 'Com as transações futuras: $amount';
+  }
+
+  @override
+  String get accountDetailEdit => 'Editar';
+
+  @override
+  String get accountDetailArchive => 'Arquivar';
+
+  @override
+  String get accountDetailUnarchive => 'Desarquivar';
+
+  @override
+  String get accountDetailDelete => 'Excluir';
+
+  @override
+  String get accountDetailArchivedToast => 'Conta arquivada';
+
+  @override
+  String get accountDetailUnarchivedToast => 'Conta desarquivada';
+
+  @override
+  String get accountDetailArchivedNotice =>
+      'Arquivada: mantém o histórico, fora das suas listas e de novas transações.';
+
+  @override
+  String get accountDetailActionFailed => 'Não foi possível alterar a conta';
+
+  @override
+  String get accountDeleteTitle => 'Excluir esta conta?';
+
+  @override
+  String get accountDeleteMessage =>
+      'Ela será excluída de vez. Só uma conta sem transações pode ser excluída; arquive as que têm.';
+
+  @override
+  String get accountDeletedToast => 'Conta excluída';
+
+  @override
+  String get accountInUseTitle => 'Esta conta tem transações';
+
+  @override
+  String get accountInUseMessage =>
+      'Arquive-a: ela mantém o histórico e sai das suas listas.';
+
+  @override
+  String get accountUsedByRecurrence =>
+      'Uma recorrência usa esta conta. Encerre-a ou mova-a para outra conta antes.';
+
+  @override
+  String get accountNotFoundTitle => 'Conta não encontrada';
+
+  @override
+  String get accountNotFoundMessage => 'Ela pode ter sido excluída.';
+
+  @override
+  String get accountBackToAccounts => 'Voltar para as contas';
+
+  @override
+  String get accountCardLimit => 'Limite do cartão';
+
+  @override
+  String accountCardUsed(String amount) {
+    return '$amount usado';
+  }
+
+  @override
+  String accountCardOverLimit(String amount) {
+    return '$amount acima do limite';
+  }
+
+  @override
+  String get accountCardNoLimit => 'Sem limite definido';
+
+  @override
+  String accountCardCycle(int closing, int due) {
+    return 'Fecha dia $closing, vence dia $due';
+  }
+
+  @override
+  String get invoicesTitle => 'Faturas';
+
+  @override
+  String get invoicesPrevious => 'Fatura anterior';
+
+  @override
+  String get invoicesNext => 'Próxima fatura';
+
+  @override
+  String get invoicesOpen => 'Fatura aberta';
+
+  @override
+  String get invoicesAround => 'Meses em volta';
+
+  @override
+  String get invoicesLoadError => 'Não foi possível carregar as faturas';
+
+  @override
+  String get invoicesLoading => 'Carregando as faturas';
+
+  @override
+  String get invoiceStatusUpcoming => 'Futura';
+
+  @override
+  String get invoiceStatusOpen => 'Aberta';
+
+  @override
+  String get invoiceStatusClosed => 'Fechada';
+
+  @override
+  String get invoiceStatusPaid => 'Paga';
+
+  @override
+  String get invoiceStatusOverdue => 'Vencida';
+
+  @override
+  String get invoiceStatusCarriedOver => 'Levada à próxima';
+
+  @override
+  String get invoiceStatusUnknown => 'Outro';
+
+  @override
+  String invoiceDates(String closing, String due) {
+    return 'Fecha em $closing · vence em $due';
+  }
+
+  @override
+  String get invoicePreviousBalance => 'Saldo anterior';
+
+  @override
+  String get invoiceCharges => 'Compras e débitos';
+
+  @override
+  String get invoiceCredits => 'Estornos e créditos';
+
+  @override
+  String get invoiceTotal => 'Total da fatura';
+
+  @override
+  String get invoicePaid => 'Pago';
+
+  @override
+  String get invoiceRemaining => 'Falta pagar';
+
+  @override
+  String get invoiceCredit => 'Crédito para a próxima fatura';
 }

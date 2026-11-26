@@ -7,6 +7,7 @@ import 'package:monthra/app/routes.dart';
 import 'package:monthra/core/files/file_saver.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/application/auth_state.dart';
+import 'package:monthra/features/settings/domain/download_names.dart';
 import 'package:monthra/features/settings/presentation/security/widgets/recovery_codes_view.dart';
 import 'package:monthra/l10n/generated/app_localizations.dart';
 
@@ -14,6 +15,7 @@ import '../../helpers/app.dart';
 import '../../helpers/auth_fixtures.dart';
 import '../../helpers/fake_api.dart';
 import '../../helpers/file_saver.dart';
+import '../../helpers/finance_fixtures.dart';
 import '../../helpers/profile_server.dart';
 import 'security_test_helpers.dart';
 
@@ -96,10 +98,8 @@ void main() {
 
       expect(server.exports, 1);
       final file = saver.files.single;
-      expect(
-        file.name,
-        matches(RegExp(r'^monthra-data-\d{4}-\d{2}-\d{2}\.zip$')),
-      );
+      // The day of the app's clock (held at testNow), not the real one.
+      expect(file.name, exportFileName(testNow));
       expect(file.bytes, testExportZip);
       expect(file.mimeType, 'application/zip');
       expect(find.text(ready), findsOneWidget);

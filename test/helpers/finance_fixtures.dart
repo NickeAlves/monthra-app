@@ -20,24 +20,31 @@ List<String> withoutDashboardReads(Iterable<String> paths) => [
 /// The month of [testNow].
 const YearMonth testMonth = YearMonth(2026, 11);
 
-/// An account as `GET /accounts` lists it.
+/// An account as `GET /accounts` lists it. A credit card closes on the
+/// 3rd and falls due on the 10th unless [card] says otherwise.
 Map<String, Object?> accountJson({
   required String id,
   required String name,
   String type = 'checking',
   String currency = 'BRL',
+  int initialBalance = 0,
   int balance = 0,
+  int? projectedBalance,
+  Map<String, Object?>? card,
+  String source = 'manual',
   bool archived = false,
 }) => {
   'id': id,
   'name': name,
   'type': type,
   'currency': currency,
-  'initialBalance': 0,
+  'initialBalance': initialBalance,
   'balance': balance,
-  'projectedBalance': balance,
-  'card': type == 'credit_card' ? {'closingDay': 3, 'dueDay': 10} : null,
-  'source': 'manual',
+  'projectedBalance': projectedBalance ?? balance,
+  'card': type == 'credit_card'
+      ? card ?? {'closingDay': 3, 'dueDay': 10, 'limit': null}
+      : null,
+  'source': source,
   'archived': archived,
   'createdAt': '2026-01-05T12:00:00Z',
   'updatedAt': '2026-01-05T12:00:00Z',
@@ -77,6 +84,8 @@ List<Map<String, Object?>> demoAccounts() => [
     name: 'Cartão Roxo',
     type: 'credit_card',
     balance: -85089,
+    projectedBalance: demoCardProjected,
+    card: {'closingDay': 3, 'dueDay': 10, 'limit': demoCardLimit},
   ),
   accountJson(
     id: 'acc-usd',
@@ -86,6 +95,74 @@ List<Map<String, Object?>> demoAccounts() => [
   ),
   accountJson(id: 'acc-old', name: 'Carteira antiga', archived: true),
 ];
+
+/// The demo card's limit and what it owes counting the three installments
+/// of R$ 120,00 still to come (January to March 2027).
+const int demoCardLimit = 500000;
+const int demoCardProjected = -85089 - 3 * 12000;
+
+/// The invoice the demo card ([demoAccounts]) has open on [testNow].
+const YearMonth demoOpenInvoice = YearMonth(2026, 12);
+
+/// An invoice as `GET /accounts/{id}/invoices` lists it, of a card that
+/// closes on the 3rd and falls due on the 10th.
+Map<String, Object?> invoiceJson({
+  required YearMonth month,
+  required String status,
+  String currency = 'BRL',
+  int previousBalance = 0,
+  int charges = 0,
+  int credits = 0,
+  int paid = 0,
+}) {
+  final total = previousBalance + charges - credits;
+  return {
+    'month': month.toString(),
+    'closingDate': civilDate(month.day(3)),
+    'dueDate': civilDate(month.day(10)),
+    'status': status,
+    'currency': currency,
+    'previousBalance': previousBalance,
+    'charges': charges,
+    'credits': credits,
+    'total': total,
+    'paid': paid,
+    'remaining': total - paid,
+  };
+}
+
+/// The demo card's invoices from [from] to [to] as read on [testNow]:
+/// every one before [demoOpenInvoice] paid in full, the open one holding
+/// R$ 850,89, then the installments of R$ 120,00 until March 2027 and
+/// nothing after, each one carrying what the one before left.
+List<Map<String, Object?>> demoInvoices(YearMonth from, YearMonth to) {
+  int chargesOf(YearMonth m) {
+    if (m < demoOpenInvoice) return 60000 + (m.month % 3) * 5000;
+    if (m == demoOpenInvoice) return 85089;
+    return m <= const YearMonth(2027, 3) ? 12000 : 0;
+  }
+
+  final invoices = <Map<String, Object?>>[];
+  var carry = 0;
+  for (var m = from.addMonths(-1); m <= to; m = m.addMonths(1)) {
+    final charges = chargesOf(m);
+    final paid = m < demoOpenInvoice ? carry + charges : 0;
+    final invoice = invoiceJson(
+      month: m,
+      status: m < demoOpenInvoice
+          ? 'paid'
+          : m == demoOpenInvoice
+          ? 'open'
+          : 'upcoming',
+      previousBalance: carry,
+      charges: charges,
+      paid: paid,
+    );
+    carry = invoice['remaining']! as int;
+    if (m >= from) invoices.add(invoice);
+  }
+  return invoices;
+}
 
 /// Some of the default categories, named in pt-BR as the server does.
 List<Map<String, Object?>> demoCategories() => [

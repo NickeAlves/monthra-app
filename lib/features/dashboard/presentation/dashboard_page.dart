@@ -8,6 +8,7 @@ import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/network/api_error_text.dart';
 import 'package:monthra/core/network/api_exception.dart';
 import 'package:monthra/features/accounts/application/accounts_provider.dart';
+import 'package:monthra/features/accounts/presentation/account_form.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/application/auth_state.dart';
 import 'package:monthra/features/categories/application/categories_provider.dart';
@@ -15,7 +16,6 @@ import 'package:monthra/features/dashboard/application/dashboard_providers.dart'
 import 'package:monthra/features/dashboard/domain/dashboard_view.dart';
 import 'package:monthra/features/dashboard/presentation/widgets/dashboard_layout.dart';
 import 'package:monthra/features/dashboard/presentation/widgets/dashboard_skeleton.dart';
-import 'package:monthra/features/dashboard/presentation/widgets/month_switcher.dart';
 import 'package:monthra/l10n/l10n.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -128,6 +128,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           current: current,
           onChanged: (next) =>
               context.go(DashboardPage.location(next, current)),
+          labels: (
+            previous: l10n.dashboardPreviousMonth,
+            next: l10n.dashboardNextMonth,
+            current: l10n.dashboardThisMonth,
+          ),
         ),
         ShadIconButton.outline(
           onPressed: state.isLoading ? null : () => _refresh(month),
@@ -148,6 +153,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         icon: LucideIcons.wallet,
         title: l10n.dashboardEmptyTitle,
         message: l10n.dashboardEmptyMessage,
+        action: ShadButton(
+          onPressed: () => showAccountForm(context),
+          leading: const Icon(LucideIcons.plus),
+          child: ButtonLabel(l10n.accountsCreateFirst),
+        ),
       );
     }
     return DashboardLayout(view: view);

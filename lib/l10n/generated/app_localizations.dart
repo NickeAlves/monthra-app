@@ -1772,6 +1772,570 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Each code signs you in once, in place of a code from the authenticator app.'**
   String get recoveryCodesFileNote;
+
+  /// Navigation entry of the accounts page.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get navAccounts;
+
+  /// Title of the accounts page.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get accountsTitle;
+
+  /// Description under the title of the accounts page.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank accounts, cards, cash and brokers, with their balance today.'**
+  String get accountsDescription;
+
+  /// Button that opens the form of a new account; also the form's title.
+  ///
+  /// In en, this message translates to:
+  /// **'New account'**
+  String get accountsNew;
+
+  /// Title of the accounts page without any account.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts yet'**
+  String get accountsEmptyTitle;
+
+  /// Message of the accounts page without any account.
+  ///
+  /// In en, this message translates to:
+  /// **'Add where your money is: a bank account, a card, cash or a broker.'**
+  String get accountsEmptyMessage;
+
+  /// Button of an empty accounts page or dashboard that opens the form of a new account.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get accountsCreateFirst;
+
+  /// Title shown when the accounts could not be read.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your accounts'**
+  String get accountsLoadError;
+
+  /// Read out while the accounts load again.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading the accounts'**
+  String get accountsLoading;
+
+  /// The sum of the open accounts of one currency, beside the amount. The currency is its ISO code (BRL).
+  ///
+  /// In en, this message translates to:
+  /// **'Total in {currency}'**
+  String accountsGroupTotal(String currency);
+
+  /// Button that shows the archived accounts, with how many there are.
+  ///
+  /// In en, this message translates to:
+  /// **'Show archived ({count})'**
+  String accountsShowArchived(int count);
+
+  /// Button that hides the archived accounts again.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide archived'**
+  String get accountsHideArchived;
+
+  /// Heading of the archived accounts on the accounts page.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get accountsArchivedTitle;
+
+  /// Badge of an archived account (an account, feminine in pt/es).
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get accountsArchived;
+
+  /// Badge of an account imported through a bank connection.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported'**
+  String get accountsImported;
+
+  /// What is left of a credit card's limit, in a list.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} available'**
+  String accountsCardAvailable(String amount);
+
+  /// The day of the month a credit card's invoice falls due, in a list.
+  ///
+  /// In en, this message translates to:
+  /// **'Due on day {day}'**
+  String accountsCardDue(int day);
+
+  /// Title of the form that changes an account.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit account'**
+  String get accountFormEditTitle;
+
+  /// Description of the form of a new account.
+  ///
+  /// In en, this message translates to:
+  /// **'Its type and currency can\'t change later.'**
+  String get accountFormNewDescription;
+
+  /// Label of an account's name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get accountFormName;
+
+  /// Label of an account's type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get accountFormType;
+
+  /// Label of an account's currency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get accountFormCurrency;
+
+  /// Hint under the type and currency shown read-only while an account is edited.
+  ///
+  /// In en, this message translates to:
+  /// **'The type and currency of an account never change.'**
+  String get accountFormFixed;
+
+  /// Label of an account's initial balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial balance'**
+  String get accountFormInitialBalance;
+
+  /// Hint under the initial balance of a new account.
+  ///
+  /// In en, this message translates to:
+  /// **'What it holds today, before anything you record here.'**
+  String get accountFormInitialBalanceHint;
+
+  /// Hint under the initial balance while an account is edited.
+  ///
+  /// In en, this message translates to:
+  /// **'The balance before the transactions recorded here: changing it moves every balance.'**
+  String get accountFormInitialBalanceEditHint;
+
+  /// Switch that makes an account's initial balance negative.
+  ///
+  /// In en, this message translates to:
+  /// **'Negative balance (overdraft)'**
+  String get accountFormNegative;
+
+  /// Label of what a new credit card owes.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt today'**
+  String get accountFormCardDebt;
+
+  /// Hint under the debt of a new credit card.
+  ///
+  /// In en, this message translates to:
+  /// **'What you owe on the card today, before anything you record here.'**
+  String get accountFormCardDebtHint;
+
+  /// Label of what a credit card owed before its transactions, while it is edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening debt'**
+  String get accountFormCardDebtEdit;
+
+  /// Hint under a credit card's opening debt while it is edited.
+  ///
+  /// In en, this message translates to:
+  /// **'What the card owed before the transactions recorded here: changing it moves every invoice.'**
+  String get accountFormCardDebtEditHint;
+
+  /// Switch that turns a credit card's debt into a credit (the bank owes the person).
+  ///
+  /// In en, this message translates to:
+  /// **'The card is in credit'**
+  String get accountFormCardCredit;
+
+  /// Label of the day a credit card's invoice closes.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing day'**
+  String get accountFormClosingDay;
+
+  /// Label of the day a credit card's invoice falls due.
+  ///
+  /// In en, this message translates to:
+  /// **'Due day'**
+  String get accountFormDueDay;
+
+  /// Hint under the closing and due days of a card.
+  ///
+  /// In en, this message translates to:
+  /// **'In shorter months, the last day.'**
+  String get accountFormDayHint;
+
+  /// An option of the closing and due day pickers.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String accountFormDay(int day);
+
+  /// Label of a credit card's limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit limit'**
+  String get accountFormLimit;
+
+  /// Hint under a credit card's limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional.'**
+  String get accountFormLimitHint;
+
+  /// What the chosen closing and due days mean for the card's next invoice.
+  ///
+  /// In en, this message translates to:
+  /// **'The next invoice closes on {closing} and is due on {due}.'**
+  String accountFormCyclePreview(String closing, String due);
+
+  /// Button that creates the account of the form.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get accountFormCreate;
+
+  /// Button that saves the changes of the account form.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get accountFormSave;
+
+  /// Toast after an account was created.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created'**
+  String get accountFormCreated;
+
+  /// Toast after an account's changes were saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes saved'**
+  String get accountFormSaved;
+
+  /// Alert of the account form when the person already holds as many accounts as the server allows.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit of accounts. Archive or delete one first.'**
+  String get accountFormLimitReached;
+
+  /// Question asked before a changed form closes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get formDiscardTitle;
+
+  /// Button that closes a changed form and throws the changes away.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get formDiscard;
+
+  /// Button that keeps a changed form open.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get formKeepEditing;
+
+  /// Placeholder of the closing and due day pickers before a day is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get accountFormDayPlaceholder;
+
+  /// Label of an account's balance on the device's today.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance today'**
+  String get accountDetailBalance;
+
+  /// An account's balance counting the transactions dated after today.
+  ///
+  /// In en, this message translates to:
+  /// **'With future transactions: {amount}'**
+  String accountDetailProjected(String amount);
+
+  /// Button that opens the form of the account shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get accountDetailEdit;
+
+  /// Button that archives the account shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get accountDetailArchive;
+
+  /// Button that brings an archived account back.
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchive'**
+  String get accountDetailUnarchive;
+
+  /// Button that deletes the account shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get accountDetailDelete;
+
+  /// Toast after an account was archived.
+  ///
+  /// In en, this message translates to:
+  /// **'Account archived'**
+  String get accountDetailArchivedToast;
+
+  /// Toast after an archived account was brought back.
+  ///
+  /// In en, this message translates to:
+  /// **'Account unarchived'**
+  String get accountDetailUnarchivedToast;
+
+  /// Notice on the page of an archived account.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived: it keeps its history, out of your lists and new transactions.'**
+  String get accountDetailArchivedNotice;
+
+  /// Toast when archiving, unarchiving or deleting an account failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t change the account'**
+  String get accountDetailActionFailed;
+
+  /// Question asked before an account is deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this account?'**
+  String get accountDeleteTitle;
+
+  /// Explanation under the question asked before an account is deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'It goes for good. Only an account without transactions can be deleted; archive one that has them.'**
+  String get accountDeleteMessage;
+
+  /// Toast after an account was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted'**
+  String get accountDeletedToast;
+
+  /// Title of the dialog offering to archive an account that cannot be deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has transactions'**
+  String get accountInUseTitle;
+
+  /// Explanation of the dialog offering to archive an account that cannot be deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive it instead: it keeps its history and leaves your lists.'**
+  String get accountInUseMessage;
+
+  /// Why an account a recurrence names cannot be archived or deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'A recurring transaction uses this account. End it or move it to another account first.'**
+  String get accountUsedByRecurrence;
+
+  /// Title of the page of an account that does not exist (deleted, or not the person's).
+  ///
+  /// In en, this message translates to:
+  /// **'Account not found'**
+  String get accountNotFoundTitle;
+
+  /// Message of the page of an account that does not exist.
+  ///
+  /// In en, this message translates to:
+  /// **'It may have been deleted.'**
+  String get accountNotFoundMessage;
+
+  /// Button of a missing account's page that goes to the accounts page.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to accounts'**
+  String get accountBackToAccounts;
+
+  /// Title of a credit card's limit on its page.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit limit'**
+  String get accountCardLimit;
+
+  /// How much of a card's limit its debt takes, installments to come included.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} used'**
+  String accountCardUsed(String amount);
+
+  /// How far a card's debt goes past its limit.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} over the limit'**
+  String accountCardOverLimit(String amount);
+
+  /// A credit card without a limit.
+  ///
+  /// In en, this message translates to:
+  /// **'No limit set'**
+  String get accountCardNoLimit;
+
+  /// A credit card's closing and due days.
+  ///
+  /// In en, this message translates to:
+  /// **'Closes on day {closing}, due on day {due}'**
+  String accountCardCycle(int closing, int due);
+
+  /// Title of a credit card's invoices.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoices'**
+  String get invoicesTitle;
+
+  /// Button to the invoice of the month before.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous invoice'**
+  String get invoicesPrevious;
+
+  /// Button to the invoice of the month after.
+  ///
+  /// In en, this message translates to:
+  /// **'Next invoice'**
+  String get invoicesNext;
+
+  /// Button back to the invoice open today.
+  ///
+  /// In en, this message translates to:
+  /// **'Open invoice'**
+  String get invoicesOpen;
+
+  /// Heading of the list of the invoices before and after the one shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Months around it'**
+  String get invoicesAround;
+
+  /// Title shown when a card's invoices could not be read.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the invoices'**
+  String get invoicesLoadError;
+
+  /// Read out while a card's invoices load.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading the invoices'**
+  String get invoicesLoading;
+
+  /// Status of an invoice that has not started.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get invoiceStatusUpcoming;
+
+  /// Status of the invoice taking the purchases now.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get invoiceStatusOpen;
+
+  /// Status of an invoice that closed and is not yet due.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get invoiceStatusClosed;
+
+  /// Status of an invoice with nothing left to pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get invoiceStatusPaid;
+
+  /// Status of an invoice past its due day with something left to pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get invoiceStatusOverdue;
+
+  /// Status of an invoice whose unpaid part went into the next invoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Carried over'**
+  String get invoiceStatusCarriedOver;
+
+  /// Status of an invoice this version of the app does not know.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get invoiceStatusUnknown;
+
+  /// The closing and due dates of an invoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Closes {closing} · due {due}'**
+  String invoiceDates(String closing, String due);
+
+  /// What the invoices before left unpaid (or in credit).
+  ///
+  /// In en, this message translates to:
+  /// **'Previous balance'**
+  String get invoicePreviousBalance;
+
+  /// The expenses and transfers out of the card in an invoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases and charges'**
+  String get invoiceCharges;
+
+  /// The income on the card in an invoice (refunds, cashback).
+  ///
+  /// In en, this message translates to:
+  /// **'Refunds and credits'**
+  String get invoiceCredits;
+
+  /// What an invoice asks: the previous balance plus charges minus credits.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice total'**
+  String get invoiceTotal;
+
+  /// What the payments to an invoice brought.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get invoicePaid;
+
+  /// What is left to pay of an invoice; it goes into the next one.
+  ///
+  /// In en, this message translates to:
+  /// **'Left to pay'**
+  String get invoiceRemaining;
+
+  /// What was paid beyond an invoice's total; the next invoice starts with it.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit for the next invoice'**
+  String get invoiceCredit;
 }
 
 class _AppLocalizationsDelegate

@@ -101,7 +101,7 @@ void main() {
     });
     expect(
       server.adapter.sent.firstWhere((r) => r.path == '/api/v1/accounts').query,
-      {'includeArchived': 'true'},
+      {'includeArchived': 'true', 'asOf': '2026-11-23'},
     );
 
     // The four figures in reais.
@@ -222,6 +222,44 @@ void main() {
     expect(find.text(pt.dashboardEmptyTitle), findsOneWidget);
     expect(find.text(pt.dashboardEmptyMessage), findsOneWidget);
     expect(find.byType(MonthraBarChart), findsNothing);
+  });
+
+  testWidgets('no account yet: creating one shows the month', (tester) async {
+    final server = ProfileServer(summaryFor: emptySummary, accounts: const []);
+    await pumpDashboard(tester, server: server);
+    final summaries = summaryQueries(server).length;
+    await tester.tapLabel(pt.accountsCreateFirst);
+    expect(find.text(pt.accountFormNewDescription), findsOneWidget);
+
+    // The server now has an account and a month to show.
+    server.summaryFor = demoSummary;
+    final field = find.descendant(
+      of: find.ancestor(
+        of: find.text(pt.accountFormName),
+        matching: find.byType(ShadInputFormField),
+      ),
+      matching: find.byType(EditableText),
+    );
+    await tester.enterText(field, 'Banco Azul');
+    // The empty state behind the form reads the same.
+    await tester.tap(find.text(pt.accountFormCreate).last);
+    await tester.settle();
+
+    expect(server.accounts, hasLength(1));
+    expect(find.text(pt.accountFormNewDescription), findsNothing);
+    expect(find.text(pt.accountFormCreated), findsOneWidget);
+    // Still on the dashboard, read again.
+    expect(tester.appLocation.path, '/');
+    expect(summaryQueries(server).length, greaterThan(summaries));
+    expect(find.text(pt.dashboardEmptyTitle), findsNothing);
+  });
+
+  testWidgets('an account of the list opens its page', (tester) async {
+    await pumpDashboard(tester);
+    await tester.ensureVisible(find.text('Reserva'));
+    await tester.tap(find.text('Reserva'));
+    await tester.settle();
+    expect(tester.appLocation.path, '/accounts/acc-savings');
   });
 
   testWidgets('moves month by month in the address', (tester) async {

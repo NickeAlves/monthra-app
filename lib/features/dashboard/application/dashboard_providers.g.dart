@@ -79,7 +79,7 @@ final class DashboardSummaryProvider
   }
 }
 
-String _$dashboardSummaryHash() => r'05ebf23e74ddd3c6044d4a8463da7ef5dabc8261';
+String _$dashboardSummaryHash() => r'0e7715c3ad7ebf0099e291792be2e6af388f321d';
 
 /// The summary of [month] for the signed-in person, with balances up to
 /// the device's today; null signed out. Reset when the person changes.

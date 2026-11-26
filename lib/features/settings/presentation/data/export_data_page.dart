@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monthra/app/routes.dart';
+import 'package:monthra/core/dates/clock.dart';
 import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/core/files/file_saver.dart';
 import 'package:monthra/core/forms/form_alert.dart';
@@ -59,7 +60,10 @@ class _ExportDataPageState extends ConsumerState<ExportDataPage> {
     }
     if (!mounted) return;
     setState(
-      () => _file = (name: exportFileName(DateTime.now()), bytes: bytes),
+      () => _file = (
+        name: exportFileName(ref.read(clockProvider)()),
+        bytes: bytes,
+      ),
     );
     unawaited(_saveFile());
   }

@@ -6,11 +6,11 @@ import 'package:monthra/core/money/money_format.dart';
 
 /// The dashboard's numbers and dates in the UI locale.
 @immutable
-final class DashboardFormat {
+final class DisplayFormat {
   const new _(this.locale);
 
   factory of(BuildContext context) =>
-      DashboardFormat._(Localizations.localeOf(context));
+      DisplayFormat._(Localizations.localeOf(context));
 
   final Locale locale;
 
