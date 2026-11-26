@@ -14,6 +14,10 @@ abstract final class AppRoutes {
   static const resetPassword = '/reset-password';
   static const verifyEmail = '/verify-email';
   static const designSystem = '/design-system';
+  static const accounts = '/accounts';
+
+  /// The page of account [id].
+  static String account(String id) => '$accounts/${Uri.encodeComponent(id)}';
   static const settings = '/settings';
   static const settingsPassword = '/settings/password';
   static const settingsMfaEnable = '/settings/mfa/enable';

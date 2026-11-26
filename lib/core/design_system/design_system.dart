@@ -20,6 +20,7 @@ export 'components/monthra_toast.dart';
 export 'components/qr_code_view.dart';
 export 'components/skeleton.dart';
 export 'components/state_message.dart';
+export 'components/tappable_row.dart';
 export 'theme.dart';
 export 'tokens/breakpoints.dart';
 export 'tokens/colors.dart';

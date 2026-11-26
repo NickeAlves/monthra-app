@@ -1322,5 +1322,459 @@
   "recoveryCodesFileNote": "Each code signs you in once, in place of a code from the authenticator app.",
   "@recoveryCodesFileNote": {
     "description": "Last line of the recovery codes text file."
+  },
+  "navAccounts": "Accounts",
+  "@navAccounts": {
+    "description": "Navigation entry of the accounts page."
+  },
+  "accountsTitle": "Accounts",
+  "@accountsTitle": {
+    "description": "Title of the accounts page."
+  },
+  "accountsDescription": "Bank accounts, cards, cash and brokers, with their balance today.",
+  "@accountsDescription": {
+    "description": "Description under the title of the accounts page."
+  },
+  "accountsNew": "New account",
+  "@accountsNew": {
+    "description": "Button that opens the form of a new account; also the form's title."
+  },
+  "accountsEmptyTitle": "No accounts yet",
+  "@accountsEmptyTitle": {
+    "description": "Title of the accounts page without any account."
+  },
+  "accountsEmptyMessage": "Add where your money is: a bank account, a card, cash or a broker.",
+  "@accountsEmptyMessage": {
+    "description": "Message of the accounts page without any account."
+  },
+  "accountsCreateFirst": "Create account",
+  "@accountsCreateFirst": {
+    "description": "Button of an empty accounts page or dashboard that opens the form of a new account."
+  },
+  "accountsLoadError": "Couldn't load your accounts",
+  "@accountsLoadError": {
+    "description": "Title shown when the accounts could not be read."
+  },
+  "accountsLoading": "Loading the accounts",
+  "@accountsLoading": {
+    "description": "Read out while the accounts load again."
+  },
+  "accountsGroupTotal": "Total in {currency}",
+  "@accountsGroupTotal": {
+    "description": "The sum of the open accounts of one currency, beside the amount. The currency is its ISO code (BRL).",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "BRL"
+      }
+    }
+  },
+  "accountsShowArchived": "Show archived ({count})",
+  "@accountsShowArchived": {
+    "description": "Button that shows the archived accounts, with how many there are.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "accountsHideArchived": "Hide archived",
+  "@accountsHideArchived": {
+    "description": "Button that hides the archived accounts again."
+  },
+  "accountsArchivedTitle": "Archived",
+  "@accountsArchivedTitle": {
+    "description": "Heading of the archived accounts on the accounts page."
+  },
+  "accountsArchived": "Archived",
+  "@accountsArchived": {
+    "description": "Badge of an archived account (an account, feminine in pt/es)."
+  },
+  "accountsImported": "Imported",
+  "@accountsImported": {
+    "description": "Badge of an account imported through a bank connection."
+  },
+  "accountsCardAvailable": "{amount} available",
+  "@accountsCardAvailable": {
+    "description": "What is left of a credit card's limit, in a list.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "R$ 3.789,11"
+      }
+    }
+  },
+  "accountsCardDue": "Due on day {day}",
+  "@accountsCardDue": {
+    "description": "The day of the month a credit card's invoice falls due, in a list.",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "accountFormEditTitle": "Edit account",
+  "@accountFormEditTitle": {
+    "description": "Title of the form that changes an account."
+  },
+  "accountFormNewDescription": "Its type and currency can't change later.",
+  "@accountFormNewDescription": {
+    "description": "Description of the form of a new account."
+  },
+  "accountFormName": "Name",
+  "@accountFormName": {
+    "description": "Label of an account's name."
+  },
+  "accountFormType": "Type",
+  "@accountFormType": {
+    "description": "Label of an account's type."
+  },
+  "accountFormCurrency": "Currency",
+  "@accountFormCurrency": {
+    "description": "Label of an account's currency."
+  },
+  "accountFormFixed": "The type and currency of an account never change.",
+  "@accountFormFixed": {
+    "description": "Hint under the type and currency shown read-only while an account is edited."
+  },
+  "accountFormInitialBalance": "Initial balance",
+  "@accountFormInitialBalance": {
+    "description": "Label of an account's initial balance."
+  },
+  "accountFormInitialBalanceHint": "What it holds today, before anything you record here.",
+  "@accountFormInitialBalanceHint": {
+    "description": "Hint under the initial balance of a new account."
+  },
+  "accountFormInitialBalanceEditHint": "The balance before the transactions recorded here: changing it moves every balance.",
+  "@accountFormInitialBalanceEditHint": {
+    "description": "Hint under the initial balance while an account is edited."
+  },
+  "accountFormNegative": "Negative balance (overdraft)",
+  "@accountFormNegative": {
+    "description": "Switch that makes an account's initial balance negative."
+  },
+  "accountFormCardDebt": "Debt today",
+  "@accountFormCardDebt": {
+    "description": "Label of what a new credit card owes."
+  },
+  "accountFormCardDebtHint": "What you owe on the card today, before anything you record here.",
+  "@accountFormCardDebtHint": {
+    "description": "Hint under the debt of a new credit card."
+  },
+  "accountFormCardDebtEdit": "Opening debt",
+  "@accountFormCardDebtEdit": {
+    "description": "Label of what a credit card owed before its transactions, while it is edited."
+  },
+  "accountFormCardDebtEditHint": "What the card owed before the transactions recorded here: changing it moves every invoice.",
+  "@accountFormCardDebtEditHint": {
+    "description": "Hint under a credit card's opening debt while it is edited."
+  },
+  "accountFormCardCredit": "The card is in credit",
+  "@accountFormCardCredit": {
+    "description": "Switch that turns a credit card's debt into a credit (the bank owes the person)."
+  },
+  "accountFormClosingDay": "Closing day",
+  "@accountFormClosingDay": {
+    "description": "Label of the day a credit card's invoice closes."
+  },
+  "accountFormDueDay": "Due day",
+  "@accountFormDueDay": {
+    "description": "Label of the day a credit card's invoice falls due."
+  },
+  "accountFormDayHint": "In shorter months, the last day.",
+  "@accountFormDayHint": {
+    "description": "Hint under the closing and due days of a card."
+  },
+  "accountFormDay": "Day {day}",
+  "@accountFormDay": {
+    "description": "An option of the closing and due day pickers.",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "accountFormLimit": "Credit limit",
+  "@accountFormLimit": {
+    "description": "Label of a credit card's limit."
+  },
+  "accountFormLimitHint": "Optional.",
+  "@accountFormLimitHint": {
+    "description": "Hint under a credit card's limit."
+  },
+  "accountFormCyclePreview": "The next invoice closes on {closing} and is due on {due}.",
+  "@accountFormCyclePreview": {
+    "description": "What the chosen closing and due days mean for the card's next invoice.",
+    "placeholders": {
+      "closing": {
+        "type": "String",
+        "example": "3 Dec 2026"
+      },
+      "due": {
+        "type": "String",
+        "example": "10 Dec 2026"
+      }
+    }
+  },
+  "accountFormCreate": "Create account",
+  "@accountFormCreate": {
+    "description": "Button that creates the account of the form."
+  },
+  "accountFormSave": "Save changes",
+  "@accountFormSave": {
+    "description": "Button that saves the changes of the account form."
+  },
+  "accountFormCreated": "Account created",
+  "@accountFormCreated": {
+    "description": "Toast after an account was created."
+  },
+  "accountFormSaved": "Changes saved",
+  "@accountFormSaved": {
+    "description": "Toast after an account's changes were saved."
+  },
+  "accountFormLimitReached": "You've reached the limit of accounts. Archive or delete one first.",
+  "@accountFormLimitReached": {
+    "description": "Alert of the account form when the person already holds as many accounts as the server allows."
+  },
+  "formDiscardTitle": "Discard changes?",
+  "@formDiscardTitle": {
+    "description": "Question asked before a changed form closes."
+  },
+  "formDiscard": "Discard",
+  "@formDiscard": {
+    "description": "Button that closes a changed form and throws the changes away."
+  },
+  "formKeepEditing": "Keep editing",
+  "@formKeepEditing": {
+    "description": "Button that keeps a changed form open."
+  },
+  "accountFormDayPlaceholder": "Choose",
+  "@accountFormDayPlaceholder": {
+    "description": "Placeholder of the closing and due day pickers before a day is chosen."
+  },
+  "accountDetailBalance": "Balance today",
+  "@accountDetailBalance": {
+    "description": "Label of an account's balance on the device's today."
+  },
+  "accountDetailProjected": "With future transactions: {amount}",
+  "@accountDetailProjected": {
+    "description": "An account's balance counting the transactions dated after today.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "R$ 4.010,20"
+      }
+    }
+  },
+  "accountDetailEdit": "Edit",
+  "@accountDetailEdit": {
+    "description": "Button that opens the form of the account shown."
+  },
+  "accountDetailArchive": "Archive",
+  "@accountDetailArchive": {
+    "description": "Button that archives the account shown."
+  },
+  "accountDetailUnarchive": "Unarchive",
+  "@accountDetailUnarchive": {
+    "description": "Button that brings an archived account back."
+  },
+  "accountDetailDelete": "Delete",
+  "@accountDetailDelete": {
+    "description": "Button that deletes the account shown."
+  },
+  "accountDetailArchivedToast": "Account archived",
+  "@accountDetailArchivedToast": {
+    "description": "Toast after an account was archived."
+  },
+  "accountDetailUnarchivedToast": "Account unarchived",
+  "@accountDetailUnarchivedToast": {
+    "description": "Toast after an archived account was brought back."
+  },
+  "accountDetailArchivedNotice": "Archived: it keeps its history, out of your lists and new transactions.",
+  "@accountDetailArchivedNotice": {
+    "description": "Notice on the page of an archived account."
+  },
+  "accountDetailActionFailed": "Couldn't change the account",
+  "@accountDetailActionFailed": {
+    "description": "Toast when archiving, unarchiving or deleting an account failed."
+  },
+  "accountDeleteTitle": "Delete this account?",
+  "@accountDeleteTitle": {
+    "description": "Question asked before an account is deleted."
+  },
+  "accountDeleteMessage": "It goes for good. Only an account without transactions can be deleted; archive one that has them.",
+  "@accountDeleteMessage": {
+    "description": "Explanation under the question asked before an account is deleted."
+  },
+  "accountDeletedToast": "Account deleted",
+  "@accountDeletedToast": {
+    "description": "Toast after an account was deleted."
+  },
+  "accountInUseTitle": "This account has transactions",
+  "@accountInUseTitle": {
+    "description": "Title of the dialog offering to archive an account that cannot be deleted."
+  },
+  "accountInUseMessage": "Archive it instead: it keeps its history and leaves your lists.",
+  "@accountInUseMessage": {
+    "description": "Explanation of the dialog offering to archive an account that cannot be deleted."
+  },
+  "accountUsedByRecurrence": "A recurring transaction uses this account. End it or move it to another account first.",
+  "@accountUsedByRecurrence": {
+    "description": "Why an account a recurrence names cannot be archived or deleted."
+  },
+  "accountNotFoundTitle": "Account not found",
+  "@accountNotFoundTitle": {
+    "description": "Title of the page of an account that does not exist (deleted, or not the person's)."
+  },
+  "accountNotFoundMessage": "It may have been deleted.",
+  "@accountNotFoundMessage": {
+    "description": "Message of the page of an account that does not exist."
+  },
+  "accountBackToAccounts": "Back to accounts",
+  "@accountBackToAccounts": {
+    "description": "Button of a missing account's page that goes to the accounts page."
+  },
+  "accountCardLimit": "Credit limit",
+  "@accountCardLimit": {
+    "description": "Title of a credit card's limit on its page."
+  },
+  "accountCardUsed": "{amount} used",
+  "@accountCardUsed": {
+    "description": "How much of a card's limit its debt takes, installments to come included.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "R$ 1.210,89"
+      }
+    }
+  },
+  "accountCardOverLimit": "{amount} over the limit",
+  "@accountCardOverLimit": {
+    "description": "How far a card's debt goes past its limit.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "R$ 120,00"
+      }
+    }
+  },
+  "accountCardNoLimit": "No limit set",
+  "@accountCardNoLimit": {
+    "description": "A credit card without a limit."
+  },
+  "accountCardCycle": "Closes on day {closing}, due on day {due}",
+  "@accountCardCycle": {
+    "description": "A credit card's closing and due days.",
+    "placeholders": {
+      "closing": {
+        "type": "int",
+        "example": "3"
+      },
+      "due": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "invoicesTitle": "Invoices",
+  "@invoicesTitle": {
+    "description": "Title of a credit card's invoices."
+  },
+  "invoicesPrevious": "Previous invoice",
+  "@invoicesPrevious": {
+    "description": "Button to the invoice of the month before."
+  },
+  "invoicesNext": "Next invoice",
+  "@invoicesNext": {
+    "description": "Button to the invoice of the month after."
+  },
+  "invoicesOpen": "Open invoice",
+  "@invoicesOpen": {
+    "description": "Button back to the invoice open today."
+  },
+  "invoicesAround": "Months around it",
+  "@invoicesAround": {
+    "description": "Heading of the list of the invoices before and after the one shown."
+  },
+  "invoicesLoadError": "Couldn't load the invoices",
+  "@invoicesLoadError": {
+    "description": "Title shown when a card's invoices could not be read."
+  },
+  "invoicesLoading": "Loading the invoices",
+  "@invoicesLoading": {
+    "description": "Read out while a card's invoices load."
+  },
+  "invoiceStatusUpcoming": "Upcoming",
+  "@invoiceStatusUpcoming": {
+    "description": "Status of an invoice that has not started."
+  },
+  "invoiceStatusOpen": "Open",
+  "@invoiceStatusOpen": {
+    "description": "Status of the invoice taking the purchases now."
+  },
+  "invoiceStatusClosed": "Closed",
+  "@invoiceStatusClosed": {
+    "description": "Status of an invoice that closed and is not yet due."
+  },
+  "invoiceStatusPaid": "Paid",
+  "@invoiceStatusPaid": {
+    "description": "Status of an invoice with nothing left to pay."
+  },
+  "invoiceStatusOverdue": "Overdue",
+  "@invoiceStatusOverdue": {
+    "description": "Status of an invoice past its due day with something left to pay."
+  },
+  "invoiceStatusCarriedOver": "Carried over",
+  "@invoiceStatusCarriedOver": {
+    "description": "Status of an invoice whose unpaid part went into the next invoice."
+  },
+  "invoiceStatusUnknown": "Other",
+  "@invoiceStatusUnknown": {
+    "description": "Status of an invoice this version of the app does not know."
+  },
+  "invoiceDates": "Closes {closing} · due {due}",
+  "@invoiceDates": {
+    "description": "The closing and due dates of an invoice.",
+    "placeholders": {
+      "closing": {
+        "type": "String",
+        "example": "3 Dec 2026"
+      },
+      "due": {
+        "type": "String",
+        "example": "10 Dec 2026"
+      }
+    }
+  },
+  "invoicePreviousBalance": "Previous balance",
+  "@invoicePreviousBalance": {
+    "description": "What the invoices before left unpaid (or in credit)."
+  },
+  "invoiceCharges": "Purchases and charges",
+  "@invoiceCharges": {
+    "description": "The expenses and transfers out of the card in an invoice."
+  },
+  "invoiceCredits": "Refunds and credits",
+  "@invoiceCredits": {
+    "description": "The income on the card in an invoice (refunds, cashback)."
+  },
+  "invoiceTotal": "Invoice total",
+  "@invoiceTotal": {
+    "description": "What an invoice asks: the previous balance plus charges minus credits."
+  },
+  "invoicePaid": "Paid",
+  "@invoicePaid": {
+    "description": "What the payments to an invoice brought."
+  },
+  "invoiceRemaining": "Left to pay",
+  "@invoiceRemaining": {
+    "description": "What is left to pay of an invoice; it goes into the next one."
+  },
+  "invoiceCredit": "Credit for the next invoice",
+  "@invoiceCredit": {
+    "description": "What was paid beyond an invoice's total; the next invoice starts with it."
   }
 }

@@ -11,6 +11,8 @@ import 'package:monthra/core/design_system/catalog/design_system_catalog.dart';
 import 'package:monthra/core/network/api_providers.dart';
 import 'package:monthra/core/network/session_refresher.dart';
 import 'package:monthra/core/security/token_store.dart';
+import 'package:monthra/features/accounts/presentation/account_detail_page.dart';
+import 'package:monthra/features/accounts/presentation/accounts_page.dart';
 import 'package:monthra/features/auth/application/auth_controller.dart';
 import 'package:monthra/features/auth/captcha/captcha_view.dart';
 import 'package:monthra/features/auth/data/session_hint.dart';
@@ -90,6 +92,8 @@ extension PumpMonthraApp on WidgetTester {
     (w) =>
         w is AuthLayout ||
         w is DashboardPage ||
+        w is AccountsPage ||
+        w is AccountDetailPage ||
         w is SettingsPage ||
         w is NotFoundPage ||
         w is DesignSystemCatalog ||
