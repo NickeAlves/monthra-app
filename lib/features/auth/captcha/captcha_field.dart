@@ -38,16 +38,16 @@ class CaptchaField extends ConsumerWidget {
         CaptchaStatus.unsupported => FormAlert(
           message: l10n.authCaptchaUnsupported,
           destructive: true,
-          icon: LucideIcons.circleAlert,
+          icon: LucideIcons.circleAlert300,
         ),
         CaptchaStatus.failed => FormAlert(
           message: l10n.authCaptchaFailed,
           destructive: true,
-          icon: LucideIcons.circleAlert,
+          icon: LucideIcons.circleAlert300,
           action: MonthraTapTarget(
             child: ShadButton.outline(
               onPressed: gate.retry,
-              leading: const Icon(LucideIcons.rotateCw),
+              leading: const Icon(LucideIcons.rotateCw300),
               child: ButtonLabel(l10n.appRetry),
             ),
           ),
@@ -134,6 +134,6 @@ Widget? captchaAlert(
       ? FormAlert.error((message: l10n.authCaptchaRejected, reference: null))
       : FormAlert(
           message: l10n.authCaptchaPrompt,
-          icon: LucideIcons.shieldCheck,
+          icon: LucideIcons.shieldCheck300,
         );
 }

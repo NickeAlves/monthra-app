@@ -10,7 +10,7 @@ void main() {
     final semantics = tester.ensureSemantics();
     await tester.pumpFrame(const CategoryIcon(icon: 'shopping-cart'));
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.icon, LucideIcons.shoppingCart);
+    expect(icon.icon, LucideIcons.shoppingCart300);
     expect(icon.size, CategoryIconSize.md.glyph);
     expect(find.bySemanticsLabel('Mercado'), findsNothing);
 

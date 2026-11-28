@@ -290,7 +290,7 @@ class _ControlsState extends State<_Controls> {
               MonthraTapTarget(
                 child: ShadButton(
                   onPressed: noop,
-                  leading: const Icon(LucideIcons.plus),
+                  leading: const Icon(LucideIcons.plus300),
                   child: const ButtonLabel('Nova transação'),
                 ),
               ),
@@ -335,7 +335,7 @@ class _ControlsState extends State<_Controls> {
                 child: ShadIconButton.outline(
                   onPressed: noop,
                   icon: const Icon(
-                    LucideIcons.slidersHorizontal,
+                    LucideIcons.slidersHorizontal300,
                     semanticLabel: 'Filtros',
                   ),
                 ),
@@ -466,7 +466,7 @@ class _Cards extends StatelessWidget {
             title: const Text('Nubank'),
             description: const Text('Cartão de crédito · fecha dia 3'),
             trailing: Icon(
-              LucideIcons.chevronRight,
+              LucideIcons.chevronRight300,
               size: 16,
               color: theme.colorScheme.mutedForeground,
             ),
@@ -582,7 +582,7 @@ class _AmountsState extends State<_Amounts> {
                   onPressed: () => setState(
                     () => _total = _random.nextInt(5000000) - 1000000,
                   ),
-                  leading: const Icon(LucideIcons.shuffle),
+                  leading: const Icon(LucideIcons.shuffle300),
                   child: const ButtonLabel('Shuffle'),
                 ),
               ),
@@ -750,11 +750,11 @@ class _States extends StatelessWidget {
           child: EmptyState(
             title: 'Nenhuma transação ainda',
             message: 'As transações do mês aparecem aqui.',
-            icon: LucideIcons.receipt,
+            icon: LucideIcons.receipt300,
             action: MonthraTapTarget(
               child: ShadButton(
                 onPressed: () => _toast(context, 'Create tapped'),
-                leading: const Icon(LucideIcons.plus),
+                leading: const Icon(LucideIcons.plus300),
                 child: const ButtonLabel('Nova transação'),
               ),
             ),
@@ -846,7 +846,7 @@ class _Pages extends StatelessWidget {
                   'Nome salvo.',
                   description: 'Aparece em todos os dispositivos.',
                 ),
-                leading: const Icon(LucideIcons.bell),
+                leading: const Icon(LucideIcons.bell300),
                 child: const ButtonLabel('Toast'),
               ),
             ),
@@ -867,7 +867,7 @@ class _Pages extends StatelessWidget {
                     _toast(context, confirmed ? 'Confirmed' : 'Cancelled');
                   }
                 },
-                leading: const Icon(LucideIcons.messageSquareWarning),
+                leading: const Icon(LucideIcons.messageSquareWarning300),
                 child: const ButtonLabel('Confirm'),
               ),
             ),
@@ -879,7 +879,7 @@ class _Pages extends StatelessWidget {
                   description: 'Verifique sua conexão e tente de novo.',
                   destructive: true,
                 ),
-                leading: const Icon(LucideIcons.circleAlert),
+                leading: const Icon(LucideIcons.circleAlert300),
                 child: const ButtonLabel('Error toast'),
               ),
             ),

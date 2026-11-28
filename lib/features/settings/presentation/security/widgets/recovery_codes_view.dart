@@ -154,7 +154,7 @@ class _RecoveryCodesViewState extends ConsumerState<RecoveryCodesView> {
                 MonthraTapTarget(
                   child: ShadButton.outline(
                     onPressed: _copy,
-                    leading: const Icon(LucideIcons.copy),
+                    leading: const Icon(LucideIcons.copy300),
                     child: ButtonLabel(l10n.recoveryCodesCopy),
                   ),
                 ),
@@ -162,7 +162,7 @@ class _RecoveryCodesViewState extends ConsumerState<RecoveryCodesView> {
                   child: ShadButton.outline(
                     enabled: !_saving,
                     onPressed: _download,
-                    leading: const Icon(LucideIcons.download),
+                    leading: const Icon(LucideIcons.download300),
                     child: ButtonLabel(l10n.recoveryCodesDownload),
                   ),
                 ),

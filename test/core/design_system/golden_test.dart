@@ -89,7 +89,7 @@ void main() {
             MonthraTapTarget(
               child: ShadButton(
                 onPressed: noop,
-                leading: const Icon(LucideIcons.plus),
+                leading: const Icon(LucideIcons.plus300),
                 child: const ButtonLabel('Nova transação'),
               ),
             ),
@@ -320,11 +320,11 @@ void main() {
           child: EmptyState(
             title: 'Nenhuma transação ainda',
             message: 'As transações do mês aparecem aqui.',
-            icon: LucideIcons.receipt,
+            icon: LucideIcons.receipt300,
             action: MonthraTapTarget(
               child: ShadButton(
                 onPressed: () {},
-                leading: const Icon(LucideIcons.plus),
+                leading: const Icon(LucideIcons.plus300),
                 child: const ButtonLabel('Nova transação'),
               ),
             ),

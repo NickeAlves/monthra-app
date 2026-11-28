@@ -159,7 +159,7 @@ class _AppShellState extends ConsumerState<AppShell> {
                         onPressed: () => _select(d),
                       ),
                     ShellBarEntry(
-                      icon: LucideIcons.ellipsis,
+                      icon: LucideIcons.ellipsis300,
                       label: l10n.navMore,
                       selected: current.mobile == ShellPlacement.more,
                       onPressed: () => unawaited(_openMore()),

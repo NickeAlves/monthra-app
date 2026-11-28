@@ -52,9 +52,13 @@ class ThemePreferencePicker extends ConsumerWidget {
       label: l10n.preferencesTheme,
       child: Wrap(
         children: [
-          option(ThemePreference.system, LucideIcons.monitor, l10n.themeSystem),
-          option(ThemePreference.light, LucideIcons.sun, l10n.themeLight),
-          option(ThemePreference.dark, LucideIcons.moon, l10n.themeDark),
+          option(
+            ThemePreference.system,
+            LucideIcons.monitor300,
+            l10n.themeSystem,
+          ),
+          option(ThemePreference.light, LucideIcons.sun300, l10n.themeLight),
+          option(ThemePreference.dark, LucideIcons.moon300, l10n.themeDark),
         ],
       ),
     );

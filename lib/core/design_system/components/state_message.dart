@@ -10,7 +10,7 @@ class EmptyState extends StatelessWidget {
   const new({
     required this.title,
     this.message,
-    this.icon = LucideIcons.inbox,
+    this.icon = LucideIcons.inbox300,
     this.action,
     super.key,
   });
@@ -53,7 +53,7 @@ class ErrorState extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       child: _StateMessage(
-        icon: LucideIcons.circleAlert,
+        icon: LucideIcons.circleAlert300,
         title: title,
         message: message,
         action: retry == null || label == null
@@ -61,7 +61,7 @@ class ErrorState extends StatelessWidget {
             : MonthraTapTarget(
                 child: ShadButton.outline(
                   onPressed: retry,
-                  leading: const Icon(LucideIcons.rotateCw),
+                  leading: const Icon(LucideIcons.rotateCw300),
                   child: ButtonLabel(label),
                 ),
               ),

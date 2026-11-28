@@ -247,7 +247,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } else if (resentTo != null) {
       alert = FormAlert(
         message: l10n.authVerificationSent(resentTo),
-        icon: LucideIcons.mailCheck,
+        icon: LucideIcons.mailCheck300,
       );
     } else if (notice != null) {
       alert = FormAlert(message: noticeText(l10n, notice));
@@ -263,7 +263,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       child: ShadButton.outline(
         enabled: !_busy && seconds == 0,
         onPressed: _resendVerification,
-        leading: const Icon(LucideIcons.mail),
+        leading: const Icon(LucideIcons.mail300),
         child: ButtonLabel(
           seconds > 0
               ? l10n.authResendIn(seconds)

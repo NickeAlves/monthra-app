@@ -81,7 +81,7 @@ class _RegenerateRecoveryCodesPageState
                       onSubmit: _regenerate,
                     )
                   : EmptyState(
-                      icon: LucideIcons.shieldOff,
+                      icon: LucideIcons.shieldOff300,
                       title: l10n.mfaAlreadyOff,
                       action: MonthraTapTarget(
                         child: ShadButton.outline(

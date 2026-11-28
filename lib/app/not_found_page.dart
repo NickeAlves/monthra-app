@@ -21,7 +21,7 @@ class NotFoundPage extends StatelessWidget {
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(MonthraSpacing.x6),
               child: EmptyState(
-                icon: LucideIcons.mapPinOff,
+                icon: LucideIcons.mapPinOff300,
                 title: l10n.notFoundTitle,
                 message: l10n.notFoundMessage,
                 action: MonthraTapTarget(

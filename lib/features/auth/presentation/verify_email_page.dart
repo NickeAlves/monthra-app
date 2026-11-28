@@ -132,7 +132,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
             MonthraTapTarget(
               child: ShadButton(
                 onPressed: _verify,
-                leading: const Icon(LucideIcons.rotateCw),
+                leading: const Icon(LucideIcons.rotateCw300),
                 child: ButtonLabel(l10n.appRetry),
               ),
             ),
@@ -159,7 +159,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
         ] else if (resentTo != null) ...[
           FormAlert(
             message: l10n.authVerificationSent(resentTo),
-            icon: LucideIcons.mailCheck,
+            icon: LucideIcons.mailCheck300,
           ),
           const SizedBox(height: MonthraSpacing.x6),
         ],
@@ -181,7 +181,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
             child: ShadButton(
               enabled: !_busy && seconds == 0,
               onPressed: _resend,
-              leading: const Icon(LucideIcons.mail),
+              leading: const Icon(LucideIcons.mail300),
               child: ButtonLabel(
                 seconds > 0
                     ? l10n.authResendIn(seconds)
@@ -195,7 +195,7 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
           child: MonthraTapTarget(
             child: ShadButton.link(
               onPressed: () => context.go(AppRoutes.login),
-              leading: const Icon(LucideIcons.arrowLeft),
+              leading: const Icon(LucideIcons.arrowLeft300),
               child: ButtonLabel(l10n.authBackToSignIn),
             ),
           ),

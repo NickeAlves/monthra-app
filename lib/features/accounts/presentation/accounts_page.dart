@@ -52,13 +52,13 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
       final view = AccountsView.build(accounts, preferred: preferred);
       body = view.isEmpty
           ? EmptyState(
-              icon: LucideIcons.wallet,
+              icon: LucideIcons.wallet300,
               title: l10n.accountsEmptyTitle,
               message: l10n.accountsEmptyMessage,
               action: MonthraTapTarget(
                 child: ShadButton(
                   onPressed: _create,
-                  leading: const Icon(LucideIcons.plus),
+                  leading: const Icon(LucideIcons.plus300),
                   child: ButtonLabel(l10n.accountsCreateFirst),
                 ),
               ),
@@ -87,7 +87,7 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
           MonthraTapTarget(
             child: ShadButton(
               onPressed: _create,
-              leading: const Icon(LucideIcons.plus),
+              leading: const Icon(LucideIcons.plus300),
               child: ButtonLabel(l10n.accountsNew),
             ),
           ),
@@ -135,7 +135,9 @@ class _AccountsList extends StatelessWidget {
               child: ShadButton.ghost(
                 onPressed: onToggleArchived,
                 leading: Icon(
-                  showArchived ? LucideIcons.chevronUp : LucideIcons.archive,
+                  showArchived
+                      ? LucideIcons.chevronUp300
+                      : LucideIcons.archive300,
                 ),
                 child: ButtonLabel(
                   showArchived

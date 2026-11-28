@@ -70,7 +70,7 @@ class MonthraPage extends StatelessWidget {
                           padding: const EdgeInsetsDirectional.only(
                             end: MonthraSpacing.x2,
                           ),
-                          leading: const Icon(LucideIcons.arrowLeft),
+                          leading: const Icon(LucideIcons.arrowLeft300),
                           child: ButtonLabel(back.label),
                         ),
                       ),

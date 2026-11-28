@@ -221,7 +221,7 @@ class _AccountFormState extends ConsumerState<AccountForm> {
       return FormAlert(
         message: l10n.accountFormLimitReached,
         destructive: true,
-        icon: LucideIcons.circleAlert,
+        icon: LucideIcons.circleAlert300,
       );
     }
     final problem = _problem;

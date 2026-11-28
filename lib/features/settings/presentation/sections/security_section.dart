@@ -93,7 +93,7 @@ class SecuritySection extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: Icon(
-                        LucideIcons.triangleAlert,
+                        LucideIcons.triangleAlert300,
                         size: 16,
                         color: theme.colorScheme.warning,
                       ),

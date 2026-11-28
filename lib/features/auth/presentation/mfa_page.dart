@@ -130,7 +130,7 @@ class _MfaPageState extends ConsumerState<MfaPage> {
             child: MonthraTapTarget(
               child: ShadButton.link(
                 onPressed: _back,
-                leading: const Icon(LucideIcons.arrowLeft),
+                leading: const Icon(LucideIcons.arrowLeft300),
                 child: ButtonLabel(l10n.authBackToSignIn),
               ),
             ),

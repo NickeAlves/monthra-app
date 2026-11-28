@@ -177,7 +177,7 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
         title: l10n.accountNotFoundTitle,
         back: back,
         child: EmptyState(
-          icon: LucideIcons.searchX,
+          icon: LucideIcons.searchX300,
           title: l10n.accountNotFoundTitle,
           message: l10n.accountNotFoundMessage,
           action: MonthraTapTarget(
@@ -203,7 +203,7 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
             enabled: !_busy,
             onPressed: () =>
                 unawaited(showAccountForm(context, account: account)),
-            leading: const Icon(LucideIcons.pencil),
+            leading: const Icon(LucideIcons.pencil300),
             child: ButtonLabel(l10n.accountDetailEdit),
           ),
         ),
@@ -214,8 +214,8 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
                 unawaited(_archive(account, archived: !account.archived)),
             leading: Icon(
               account.archived
-                  ? LucideIcons.archiveRestore
-                  : LucideIcons.archive,
+                  ? LucideIcons.archiveRestore300
+                  : LucideIcons.archive300,
             ),
             child: ButtonLabel(
               account.archived
@@ -230,7 +230,7 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
             onPressed: () => unawaited(_delete(account)),
             foregroundColor: ShadTheme.of(context).colorScheme.destructive,
             hoverForegroundColor: ShadTheme.of(context).colorScheme.destructive,
-            leading: const Icon(LucideIcons.trash2),
+            leading: const Icon(LucideIcons.trash2300),
             child: ButtonLabel(l10n.accountDetailDelete),
           ),
         ),
@@ -241,7 +241,7 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
           if (account.archived) ...[
             FormAlert(
               message: l10n.accountDetailArchivedNotice,
-              icon: LucideIcons.archive,
+              icon: LucideIcons.archive300,
             ),
             SizedBox(height: gap),
           ],

@@ -11,7 +11,7 @@ class FormAlert extends StatelessWidget {
     required this.message,
     this.reference,
     this.destructive = false,
-    this.icon = LucideIcons.info,
+    this.icon = LucideIcons.info300,
     this.action,
     super.key,
   });
@@ -21,7 +21,7 @@ class FormAlert extends StatelessWidget {
     message: error.message,
     reference: error.reference,
     destructive: true,
-    icon: LucideIcons.circleAlert,
+    icon: LucideIcons.circleAlert300,
     action: action,
     key: key,
   );

@@ -246,7 +246,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         ] else if (_resent) ...[
           FormAlert(
             message: l10n.authVerificationSent(email),
-            icon: LucideIcons.mailCheck,
+            icon: LucideIcons.mailCheck300,
           ),
           const SizedBox(height: MonthraSpacing.x6),
         ],
@@ -256,7 +256,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             child: ShadButton.outline(
               enabled: !_busy && seconds == 0,
               onPressed: _resend,
-              leading: const Icon(LucideIcons.mail),
+              leading: const Icon(LucideIcons.mail300),
               child: ButtonLabel(
                 seconds > 0
                     ? l10n.authResendIn(seconds)
@@ -270,7 +270,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           child: MonthraTapTarget(
             child: ShadButton.link(
               onPressed: () => context.go(AppRoutes.login),
-              leading: const Icon(LucideIcons.arrowLeft),
+              leading: const Icon(LucideIcons.arrowLeft300),
               child: ButtonLabel(l10n.authBackToSignIn),
             ),
           ),

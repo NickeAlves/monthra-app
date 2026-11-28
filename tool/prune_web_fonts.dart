@@ -4,16 +4,21 @@
 //
 // The web engine downloads every family of FontManifest.json before the
 // first frame. lucide_icons_flutter declares six weight variants of its icon
-// font (Lucide100 to Lucide600, ~1.4 MB gzipped) that icon tree shaking
-// leaves whole because nothing uses them: the app and shadcn_ui draw with
-// the base `Lucide` family only (test/tool/prune_web_fonts_test.dart keeps
-// lib/ that way).
+// font (Lucide100 to Lucide600, ~1.4 MB gzipped) besides the base `Lucide`,
+// and icon tree shaking leaves whole the ones nothing uses. The app draws
+// with the 1.5 px stroke, Lucide300 ("Silêncio"), and shadcn_ui with the
+// base family: every other weight goes (test/tool/prune_web_fonts_test.dart
+// keeps lib/ on Lucide300).
 import 'dart:convert';
 import 'dart:io';
 
-/// Families removed from the web build.
+/// The Lucide weight the app draws with (`LucideIcons.<name>300`).
+const int lucideWeight = 300;
+
+/// Families removed from the web build: the Lucide weights but
+/// [lucideWeight].
 final RegExp unusedFamily = RegExp(
-  r'^packages/lucide_icons_flutter/Lucide[1-9]00$',
+  '^packages/lucide_icons_flutter/Lucide(?!$lucideWeight\$)[1-9]00\$',
 );
 
 /// The manifest without the [unusedFamily] entries, and their asset paths.

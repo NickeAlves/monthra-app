@@ -130,7 +130,7 @@ class _PasswordFieldState extends State<PasswordField> {
       trailing: MonthraTapTarget(
         child: ShadIconButton.ghost(
           icon: Icon(
-            _visible ? LucideIcons.eyeOff : LucideIcons.eye,
+            _visible ? LucideIcons.eyeOff300 : LucideIcons.eye300,
             semanticLabel: _visible
                 ? l10n.authHidePassword
                 : l10n.authShowPassword,

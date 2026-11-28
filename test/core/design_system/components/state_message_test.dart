@@ -34,7 +34,7 @@ void main() {
         onRetry: () => retries++,
       ),
     );
-    expect(find.byIcon(LucideIcons.circleAlert), findsOneWidget);
+    expect(find.byIcon(LucideIcons.circleAlert300), findsOneWidget);
     await tester.tap(find.text('Tentar de novo'));
     expect(retries, 1);
     expect(

@@ -28,9 +28,9 @@ enum ShellPlacement { bar, more }
 /// new-transaction button lands with the transactions PR, in the middle of
 /// the bar (`ShellBottomBar.centerAction`).
 enum ShellDestination {
-  dashboard(AppRoutes.home, LucideIcons.layoutDashboard, ShellPlacement.bar),
-  accounts(AppRoutes.accounts, LucideIcons.wallet, ShellPlacement.more),
-  settings(AppRoutes.settings, LucideIcons.settings, ShellPlacement.more);
+  dashboard(AppRoutes.home, LucideIcons.layoutDashboard300, ShellPlacement.bar),
+  accounts(AppRoutes.accounts, LucideIcons.wallet300, ShellPlacement.more),
+  settings(AppRoutes.settings, LucideIcons.settings300, ShellPlacement.more);
 
   new(this.path, this.icon, this.mobile);
 

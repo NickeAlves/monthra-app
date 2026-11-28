@@ -55,7 +55,7 @@ class _LanguagePickerState extends ConsumerState<LanguagePicker> {
         selectedOptionBuilder: (context, locale) => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.languages, size: 16),
+            const Icon(LucideIcons.languages300, size: 16),
             const SizedBox(width: MonthraSpacing.x2),
             Flexible(
               child: Text(

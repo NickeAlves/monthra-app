@@ -76,7 +76,7 @@ class MonthSwitcher extends StatelessWidget {
         : MonthraTapTarget(
             child: ShadButton.outline(
               onPressed: () => onChanged(current),
-              leading: const Icon(LucideIcons.calendarCheck),
+              leading: const Icon(LucideIcons.calendarCheck300),
               child: ButtonLabel(labels.current),
             ),
           );
@@ -88,7 +88,10 @@ class MonthSwitcher extends StatelessWidget {
             onPressed: month > min
                 ? () => onChanged(month.addMonths(-1))
                 : null,
-            icon: Icon(LucideIcons.chevronLeft, semanticLabel: labels.previous),
+            icon: Icon(
+              LucideIcons.chevronLeft300,
+              semanticLabel: labels.previous,
+            ),
           ),
         ),
         // Wraps at a large text size on a phone rather than overflow.
@@ -112,7 +115,7 @@ class MonthSwitcher extends StatelessWidget {
         MonthraTapTarget(
           child: ShadIconButton.ghost(
             onPressed: month < max ? () => onChanged(month.addMonths(1)) : null,
-            icon: Icon(LucideIcons.chevronRight, semanticLabel: labels.next),
+            icon: Icon(LucideIcons.chevronRight300, semanticLabel: labels.next),
           ),
         ),
       ],

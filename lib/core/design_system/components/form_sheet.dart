@@ -118,7 +118,7 @@ class MonthraFormSheet extends StatelessWidget {
     final close = ShadIconButton.ghost(
       width: MonthraLayout.minTouchTarget,
       height: MonthraLayout.minTouchTarget,
-      icon: Icon(LucideIcons.x, size: 16, semanticLabel: labels.close),
+      icon: Icon(LucideIcons.x300, size: 16, semanticLabel: labels.close),
       // maybePop, so the guard below hears it (shadcn's own close pops).
       onPressed: busy ? null : () => Navigator.of(context).maybePop(),
     );

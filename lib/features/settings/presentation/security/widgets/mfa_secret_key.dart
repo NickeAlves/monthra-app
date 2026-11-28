@@ -53,7 +53,7 @@ class MfaSecretKey extends StatelessWidget {
         MonthraTapTarget(
           child: ShadButton.outline(
             onPressed: () => _copy(context),
-            leading: const Icon(LucideIcons.copy),
+            leading: const Icon(LucideIcons.copy300),
             child: ButtonLabel(l10n.mfaCopySecret),
           ),
         ),

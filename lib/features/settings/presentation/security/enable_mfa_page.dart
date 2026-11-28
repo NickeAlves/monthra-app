@@ -182,7 +182,7 @@ class _EnableMfaPageState extends ConsumerState<EnableMfaPage> {
     } else if (enabled) {
       body = MonthraCard(
         child: EmptyState(
-          icon: LucideIcons.shieldCheck,
+          icon: LucideIcons.shieldCheck300,
           title: l10n.mfaAlreadyOn,
           action: MonthraTapTarget(
             child: ShadButton.outline(
@@ -209,7 +209,10 @@ class _EnableMfaPageState extends ConsumerState<EnableMfaPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (_expired) ...[
-              FormAlert(message: l10n.mfaSetupExpired, icon: LucideIcons.clock),
+              FormAlert(
+                message: l10n.mfaSetupExpired,
+                icon: LucideIcons.clock300,
+              ),
               const SizedBox(height: MonthraSpacing.x6),
             ],
             StepUpForm(
@@ -283,7 +286,7 @@ class _ScanStep extends StatelessWidget {
               child: MonthraTapTarget(
                 child: ShadButton.outline(
                   onPressed: onOpenApp,
-                  leading: const Icon(LucideIcons.externalLink),
+                  leading: const Icon(LucideIcons.externalLink300),
                   child: ButtonLabel(l10n.mfaOpenAuthenticator),
                 ),
               ),

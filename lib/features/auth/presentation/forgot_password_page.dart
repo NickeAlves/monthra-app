@@ -68,7 +68,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       child: MonthraTapTarget(
         child: ShadButton.link(
           onPressed: () => context.go(AppRoutes.login),
-          leading: const Icon(LucideIcons.arrowLeft),
+          leading: const Icon(LucideIcons.arrowLeft300),
           child: ButtonLabel(l10n.authBackToSignIn),
         ),
       ),
