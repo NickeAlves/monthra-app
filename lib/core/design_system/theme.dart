@@ -7,6 +7,9 @@ import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:monthra/core/design_system/tokens/typography.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
+/// How much of the destructive red tints its button under the pointer.
+const double destructiveHoverAlpha = 0.08;
+
 /// The shadcn theme of [brightness], built from the Monthra tokens. Both
 /// brightnesses share every size; only the color roles differ. Buttons are
 /// drawn at 34 px everywhere (a `MonthraTapTarget` gives them the touch
@@ -41,6 +44,22 @@ ShadThemeData monthraTheme(
     linkButtonTheme: ShadButtonTheme(
       foregroundColor: scheme.accentText,
       hoverForegroundColor: scheme.accentText,
+    ),
+    // Red only as a signal: the label and a hairline, no fill.
+    destructiveButtonTheme: ShadButtonTheme(
+      backgroundColor: const Color(0x00000000),
+      hoverBackgroundColor: scheme.destructive.withValues(
+        alpha: destructiveHoverAlpha,
+      ),
+      foregroundColor: scheme.destructive,
+      hoverForegroundColor: scheme.destructive,
+      decoration: ShadDecoration(
+        border: ShadBorder.all(
+          color: scheme.destructiveBorder,
+          radius: MonthraRadii.smAll,
+          width: 1,
+        ),
+      ),
     ),
     // Cards: the lifted surface, a hairline and no shadow.
     cardTheme: const ShadCardTheme(

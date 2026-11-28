@@ -60,6 +60,11 @@ abstract final class MonthraPalette {
   // Semantic tones: errors and warnings only (money out reads in ink).
   static const red700 = Color(0xFFA8362A);
   static const red300 = Color(0xFFF28B82);
+
+  /// The hairline of a destructive button: red700's on light surfaces,
+  /// red300's on the graphites.
+  static const red100 = Color(0xFFEBD5D1);
+  static const red900 = Color(0xFF4A2C29);
   static const amber700 = Color(0xFF9A5B00);
   static const amber300 = Color(0xFFF5B44A);
 }

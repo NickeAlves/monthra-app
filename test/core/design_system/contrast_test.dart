@@ -42,6 +42,18 @@ void main() {
         }
       }
 
+      test('the destructive label reads on its hover tint', () {
+        final tint = scheme.destructive.withValues(
+          alpha: destructiveHoverAlpha,
+        );
+        for (final surface in [scheme.background, scheme.card]) {
+          expect(
+            contrastRatio(scheme.destructive, Color.alphaBlend(tint, surface)),
+            greaterThanOrEqualTo(4.5),
+          );
+        }
+      });
+
       test('button labels read on their fills', () {
         expect(
           contrastRatio(scheme.primaryForeground, scheme.primary),

@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../helpers/frame.dart';
 
 void main() {
   group('MonthraBreakpoint', () {
@@ -156,4 +159,37 @@ void main() {
       expect(theme.textTheme.family, 'Inter');
     }
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('a destructive button is a red label in a hairline, '
+        '${brightness.name}', (tester) async {
+      await tester.pumpFrame(
+        MonthraTapTarget(
+          child: ShadButton.destructive(
+            onPressed: () {},
+            child: const Text('Excluir'),
+          ),
+        ),
+        brightness: brightness,
+      );
+      final scheme = tester.themeAt(find.text('Excluir')).colorScheme;
+      final box = tester
+          .widgetList<Container>(
+            find.descendant(
+              of: find.byType(ShadButton),
+              matching: find.byType(Container),
+            ),
+          )
+          .map((c) => c.decoration)
+          .whereType<BoxDecoration>()
+          .first;
+      expect(box.color, const Color(0x00000000));
+      expect((box.border! as Border).top.color, scheme.destructiveBorder);
+      expect((box.border! as Border).top.width, 1);
+      expect(
+        DefaultTextStyle.of(tester.element(find.text('Excluir'))).style.color,
+        scheme.destructive,
+      );
+    });
+  }
 }

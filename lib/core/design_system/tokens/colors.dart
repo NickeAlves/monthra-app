@@ -13,6 +13,7 @@ abstract final class _Role {
   static const brand = 'monthra.brand';
   static const onBrand = 'monthra.onBrand';
   static const chartMuted = 'monthra.chartMuted';
+  static const destructiveBorder = 'monthra.destructiveBorder';
   static const ramp = [
     'monthra.ramp0',
     'monthra.ramp1',
@@ -28,7 +29,8 @@ abstract final class _Role {
 ///
 /// "Silêncio" (user decision of 2026-11-26): the primary button is ink (the
 /// light text color on dark), money out reads in ink with its minus, and
-/// green marks the brand, focus, "on" states, money in and the charts.
+/// green marks the brand, focus, "on" states, money in and the charts. Red
+/// is for errors: a destructive button is its red label in a hairline.
 /// Sections sit on the page itself; cards and popovers are the one lifted
 /// surface.
 abstract final class MonthraColorSchemes {
@@ -62,6 +64,7 @@ abstract final class MonthraColorSchemes {
       _Role.brand: MonthraPalette.accent,
       _Role.onBrand: MonthraPalette.white,
       _Role.chartMuted: MonthraPalette.stone500,
+      _Role.destructiveBorder: MonthraPalette.red100,
       'monthra.ramp0': MonthraPalette.accent,
       'monthra.ramp1': MonthraPalette.greenLight1,
       'monthra.ramp2': MonthraPalette.greenLight2,
@@ -103,6 +106,7 @@ abstract final class MonthraColorSchemes {
       _Role.brand: MonthraPalette.accent,
       _Role.onBrand: MonthraPalette.white,
       _Role.chartMuted: MonthraPalette.graphite400,
+      _Role.destructiveBorder: MonthraPalette.red900,
       'monthra.ramp0': MonthraPalette.greenDark0,
       'monthra.ramp1': MonthraPalette.greenDark1,
       'monthra.ramp2': MonthraPalette.greenDark2,
@@ -136,6 +140,10 @@ extension MonthraColors on ShadColorScheme {
 
   /// A neutral mark in charts (money out beside money in, "others").
   Color get chartMuted => custom[_Role.chartMuted] ?? mutedForeground;
+
+  /// The border of a destructive button, whose label is [destructive] on
+  /// the surface it sits on.
+  Color get destructiveBorder => custom[_Role.destructiveBorder] ?? border;
 
   /// Greens for the ranked parts of a whole (a donut's slices), the
   /// strongest first; each reads at 3:1 on the surfaces.
