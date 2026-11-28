@@ -344,7 +344,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byType(ShellSidebar),
-          matching: find.byIcon(LucideIcons.settings),
+          matching: find.byIcon(LucideIcons.settings300),
         ),
       );
       await tester.pumpAndSettle();
@@ -402,7 +402,7 @@ void main() {
       await tester.tap(find.text('Mais'));
       await tester.pumpAndSettle();
       expect(find.bySemanticsLabel('Fechar'), findsWidgets);
-      await tester.tap(find.byIcon(LucideIcons.x));
+      await tester.tap(find.byIcon(LucideIcons.x300));
       await tester.pumpAndSettle();
       expect(find.text('Sair'), findsNothing);
       expect(find.byType(DashboardPage), findsOneWidget);

@@ -3,7 +3,7 @@ import 'package:monthra/core/design_system/design_system.dart';
 import 'package:monthra/features/dashboard/presentation/widgets/dashboard_layout.dart';
 import 'package:monthra/l10n/l10n.dart';
 
-/// The dashboard's shape while it loads: the figures and two cards, read
+/// The dashboard's shape while it loads: the figures and two sections, read
 /// once as "loading".
 class DashboardSkeleton extends StatelessWidget {
   const new({super.key});
@@ -11,7 +11,7 @@ class DashboardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final narrow = context.monthraBreakpoint == MonthraBreakpoint.mobile;
-    final gap = narrow ? MonthraSpacing.x4 : MonthraSpacing.x6;
+    final gap = narrow ? MonthraSpacing.x6 : MonthraSpacing.x8;
     return Semantics(
       container: true,
       liveRegion: true,
@@ -20,19 +20,17 @@ class DashboardSkeleton extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final wide = constraints.maxWidth >= dashboardTwoColumnsFrom;
-            const tile = MonthraCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Skeleton(width: 96, height: MonthraSpacing.x3),
-                  SizedBox(height: MonthraSpacing.x4),
-                  Skeleton(width: 160, height: MonthraSpacing.x6),
-                  SizedBox(height: MonthraSpacing.x3),
-                  Skeleton(width: 120, height: MonthraSpacing.x3),
-                ],
-              ),
+            const figure = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Skeleton(width: 96, height: MonthraSpacing.x3),
+                SizedBox(height: MonthraSpacing.x3),
+                Skeleton(width: 160, height: MonthraSpacing.x6),
+                SizedBox(height: MonthraSpacing.x2),
+                Skeleton(width: 120, height: MonthraSpacing.x3),
+              ],
             );
-            const card = MonthraCard(
+            const section = MonthraSection(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -42,15 +40,15 @@ class DashboardSkeleton extends StatelessWidget {
                 ],
               ),
             );
-            final tiles = wide ? 4 : 2;
+            final figures = wide ? 4 : 2;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
-                    for (var i = 0; i < tiles; i++) ...[
+                    for (var i = 0; i < figures; i++) ...[
                       if (i > 0) SizedBox(width: gap),
-                      const Expanded(child: tile),
+                      const Expanded(child: figure),
                     ],
                   ],
                 ),
@@ -59,13 +57,13 @@ class DashboardSkeleton extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Expanded(flex: 7, child: card),
+                      const Expanded(flex: 7, child: section),
                       SizedBox(width: gap),
-                      const Expanded(flex: 5, child: card),
+                      const Expanded(flex: 5, child: section),
                     ],
                   )
                 else
-                  card,
+                  section,
               ],
             );
           },

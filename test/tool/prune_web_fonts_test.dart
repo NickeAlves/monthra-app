@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../tool/prune_web_fonts.dart';
 
 void main() {
-  test('drops the Lucide weight variants and nothing else', () {
+  test('drops the Lucide weights the app does not draw with', () {
     final result = pruneFontManifest([
       {
         'family': 'Inter',
@@ -19,7 +19,7 @@ void main() {
           {'asset': 'packages/lucide_icons_flutter/assets/lucide.ttf'},
         ],
       },
-      for (final w in [100, 600])
+      for (final w in [100, 300, 600])
         {
           'family': 'packages/lucide_icons_flutter/Lucide$w',
           'fonts': [
@@ -42,6 +42,7 @@ void main() {
     expect(result.manifest.map((e) => (e! as Map<String, Object?>)['family']), [
       'Inter',
       'packages/lucide_icons_flutter/Lucide',
+      'packages/lucide_icons_flutter/Lucide300',
       'packages/shadcn_ui/GeistMono',
     ]);
     expect(result.dropped, [
@@ -50,16 +51,26 @@ void main() {
     ]);
   });
 
-  test('lib/ draws Lucide icons from the base family only', () {
-    // LucideIcons.house100 and friends live in the pruned fonts.
-    final weighted = RegExp(r'LucideIcons\.\w+?[1-9]00(Dir)?\b');
-    final offenders = [
-      for (final file in Directory('lib').listSync(recursive: true))
-        if (file is File &&
-            file.path.endsWith('.dart') &&
-            weighted.hasMatch(file.readAsStringSync()))
-          file.path,
-    ];
+  test('lib/ draws Lucide icons with the 1.5 px stroke (300) only', () {
+    // "Silêncio" draws a 1.5 px stroke, and the other weights are pruned
+    // from the web build: LucideIcons.house would show the 2 px weight.
+    final icon = RegExp(r'\bLucideIcons\.([a-zA-Z][a-zA-Z0-9]*)');
+    final drawn = RegExp('$lucideWeight(Dir)?\$');
+    final offenders = <String>[];
+    final files = Directory('lib')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.dart'));
+    for (final file in files) {
+      final lines = file.readAsLinesSync();
+      for (var i = 0; i < lines.length; i++) {
+        for (final match in icon.allMatches(lines[i])) {
+          if (!drawn.hasMatch(match.group(1)!)) {
+            offenders.add('${file.path}:${i + 1} ${match.group(0)}');
+          }
+        }
+      }
+    }
     expect(offenders, isEmpty);
   });
 }

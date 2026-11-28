@@ -115,7 +115,7 @@ final class ChartStyle {
     style: selected
         ? axisLabel.copyWith(
             color: _scheme.foreground,
-            fontWeight: MonthraTypography.semiBold,
+            fontWeight: MonthraTypography.medium,
           )
         : axisLabel,
     maxLines: 1,

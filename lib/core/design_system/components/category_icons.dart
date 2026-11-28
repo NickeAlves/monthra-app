@@ -8,32 +8,32 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 /// `internal/domain/category_defaults.go`); the categories PR adds the
 /// picker's set, and the 3D icons PR draws its art behind this API.
 abstract final class CategoryIcons {
-  static const IconData fallback = LucideIcons.tag;
+  static const IconData fallback = LucideIcons.tag300;
 
   static const Map<String, IconData> byName = {
-    'house': LucideIcons.house,
-    'shopping-cart': LucideIcons.shoppingCart,
-    'utensils': LucideIcons.utensils,
-    'car': LucideIcons.car,
-    'heart-pulse': LucideIcons.heartPulse,
-    'graduation-cap': LucideIcons.graduationCap,
-    'party-popper': LucideIcons.partyPopper,
-    'shopping-bag': LucideIcons.shoppingBag,
-    'zap': LucideIcons.zap,
-    'repeat': LucideIcons.repeat,
-    'sparkles': LucideIcons.sparkles,
-    'paw-print': LucideIcons.pawPrint,
-    'plane': LucideIcons.plane,
-    'landmark': LucideIcons.landmark,
-    'gift': LucideIcons.gift,
-    'circle-ellipsis': LucideIcons.circleEllipsis,
-    'briefcase': LucideIcons.briefcase,
-    'laptop': LucideIcons.laptop,
-    'trending-up': LucideIcons.trendingUp,
-    'rotate-ccw': LucideIcons.rotateCcw,
-    'hand-heart': LucideIcons.handHeart,
-    'circle-plus': LucideIcons.circlePlus,
-    'tag': LucideIcons.tag,
+    'house': LucideIcons.house300,
+    'shopping-cart': LucideIcons.shoppingCart300,
+    'utensils': LucideIcons.utensils300,
+    'car': LucideIcons.car300,
+    'heart-pulse': LucideIcons.heartPulse300,
+    'graduation-cap': LucideIcons.graduationCap300,
+    'party-popper': LucideIcons.partyPopper300,
+    'shopping-bag': LucideIcons.shoppingBag300,
+    'zap': LucideIcons.zap300,
+    'repeat': LucideIcons.repeat300,
+    'sparkles': LucideIcons.sparkles300,
+    'paw-print': LucideIcons.pawPrint300,
+    'plane': LucideIcons.plane300,
+    'landmark': LucideIcons.landmark300,
+    'gift': LucideIcons.gift300,
+    'circle-ellipsis': LucideIcons.circleEllipsis300,
+    'briefcase': LucideIcons.briefcase300,
+    'laptop': LucideIcons.laptop300,
+    'trending-up': LucideIcons.trendingUp300,
+    'rotate-ccw': LucideIcons.rotateCcw300,
+    'hand-heart': LucideIcons.handHeart300,
+    'circle-plus': LucideIcons.circlePlus300,
+    'tag': LucideIcons.tag300,
   };
 
   /// The icon named [name], or [fallback] for a name this build lacks.

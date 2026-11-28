@@ -9,9 +9,11 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 /// Which flow the category card splits.
 enum CategoryFlow { expenses, income }
 
-/// The month split by category: a donut and the list of parts (icon, name,
-/// entries, amount and share), expenses or income. The donut sits beside
-/// the list when [wide], above it otherwise.
+/// The month split by category: a donut and the list of parts (a dot of
+/// the slice's color, name, entries, amount and share), expenses or income.
+/// The slices are ranked greens ("Silêncio": `chartRamp`, "others" in grey),
+/// not the categories' own colors. The donut sits beside the list when
+/// [wide], above it otherwise.
 class CategoryCard extends StatefulWidget {
   const new({
     required this.currency,
@@ -44,6 +46,13 @@ class _CategoryCardState extends State<CategoryCard> {
       CategoryFlow.income => widget.currency.income,
     };
     final total = slices.fold(0, (sum, s) => sum + s.amount);
+    final scheme = theme.colorScheme;
+    final ramp = scheme.chartRamp;
+    // The parts come largest first, "others" last.
+    Color colorOf(int index, CategorySlice slice) =>
+        slice.kind == CategorySliceKind.category
+        ? ramp[index.clamp(0, ramp.length - 1)]
+        : scheme.chartMuted;
 
     Widget body;
     if (slices.isEmpty) {
@@ -76,13 +85,8 @@ class _CategoryCardState extends State<CategoryCard> {
             ? l10n.dashboardExpensesChart(parts)
             : l10n.dashboardIncomeChart(parts),
         slices: [
-          for (final s in slices)
-            DonutSlice(
-              value: s.amount.toDouble(),
-              color:
-                  parseHexColor(s.category?.color) ??
-                  theme.colorScheme.mutedForeground,
-            ),
+          for (final (i, s) in slices.indexed)
+            DonutSlice(value: s.amount.toDouble(), color: colorOf(i, s)),
         ],
         center: AmountText(
           total,
@@ -98,6 +102,7 @@ class _CategoryCardState extends State<CategoryCard> {
             if (i > 0) const SizedBox(height: MonthraSpacing.x3),
             _SliceRow(
               slice: s,
+              color: colorOf(i, s),
               name: _name(l10n, s),
               currency: currency,
               share: format.percent(s.amount / total),
@@ -124,17 +129,16 @@ class _CategoryCardState extends State<CategoryCard> {
             );
     }
 
-    return MonthraCard(
+    return MonthraSection(
       title: Text(l10n.dashboardByCategory),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: MonthraSpacing.x2),
           _FlowSwitch(
             flow: _flow,
             onChanged: (flow) => setState(() => _flow = flow),
           ),
-          const SizedBox(height: MonthraSpacing.x4),
+          const SizedBox(height: MonthraSpacing.x5),
           body,
         ],
       ),
@@ -164,7 +168,7 @@ class _FlowSwitch extends StatelessWidget {
       final selected = value == flow;
       void select() => onChanged(value);
       final child = ButtonLabel(label);
-      return MergeSemantics(
+      return MonthraTapTarget(
         child: Semantics(
           selected: selected,
           inMutuallyExclusiveGroup: true,
@@ -192,12 +196,16 @@ class _FlowSwitch extends StatelessWidget {
 class _SliceRow extends StatelessWidget {
   const new({
     required this.slice,
+    required this.color,
     required this.name,
     required this.currency,
     required this.share,
   });
 
   final CategorySlice slice;
+
+  /// The slice's color in the donut.
+  final Color color;
   final String name;
   final Currency currency;
   final String share;
@@ -209,19 +217,16 @@ class _SliceRow extends StatelessWidget {
     final muted = theme.textTheme.caption.copyWith(
       color: theme.colorScheme.mutedForeground,
     );
-    final category = slice.category;
     return MergeSemantics(
       child: Row(
         children: [
-          CategoryIcon(
-            icon:
-                category?.icon ??
-                (slice.kind == CategorySliceKind.others
-                    ? 'circle-ellipsis'
-                    : 'tag'),
-            // An invalid color paints muted.
-            color: category?.color ?? '',
-            size: CategoryIconSize.sm,
+          ExcludeSemantics(
+            child: SizedBox.square(
+              dimension: MonthraSpacing.x2,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              ),
+            ),
           ),
           const SizedBox(width: MonthraSpacing.x3),
           Expanded(

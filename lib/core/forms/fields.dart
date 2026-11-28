@@ -127,14 +127,16 @@ class _PasswordFieldState extends State<PasswordField> {
       onSubmitted: widget.onSubmitted,
       // The button fills the field's end: a full 44 px target.
       padding: const EdgeInsetsDirectional.only(start: MonthraSpacing.x3),
-      trailing: ShadIconButton.ghost(
-        icon: Icon(
-          _visible ? LucideIcons.eyeOff : LucideIcons.eye,
-          semanticLabel: _visible
-              ? l10n.authHidePassword
-              : l10n.authShowPassword,
+      trailing: MonthraTapTarget(
+        child: ShadIconButton.ghost(
+          icon: Icon(
+            _visible ? LucideIcons.eyeOff300 : LucideIcons.eye300,
+            semanticLabel: _visible
+                ? l10n.authHidePassword
+                : l10n.authShowPassword,
+          ),
+          onPressed: () => setState(() => _visible = !_visible),
         ),
-        onPressed: () => setState(() => _visible = !_visible),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/components/button_label.dart';
+import 'package:monthra/core/design_system/components/tap_target.dart';
 import 'package:monthra/core/design_system/tokens/breakpoints.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -62,14 +63,16 @@ class MonthraPage extends StatelessWidget {
                   if (back case final back?) ...[
                     Align(
                       alignment: AlignmentDirectional.centerStart,
-                      child: ShadButton.link(
-                        onPressed: back.onPressed,
-                        // The arrow lines up with the title.
-                        padding: const EdgeInsetsDirectional.only(
-                          end: MonthraSpacing.x2,
+                      child: MonthraTapTarget(
+                        child: ShadButton.link(
+                          onPressed: back.onPressed,
+                          // The arrow lines up with the title.
+                          padding: const EdgeInsetsDirectional.only(
+                            end: MonthraSpacing.x2,
+                          ),
+                          leading: const Icon(LucideIcons.arrowLeft300),
+                          child: ButtonLabel(back.label),
                         ),
-                        leading: const Icon(LucideIcons.arrowLeft),
-                        child: ButtonLabel(back.label),
                       ),
                     ),
                     const SizedBox(height: MonthraSpacing.x2),

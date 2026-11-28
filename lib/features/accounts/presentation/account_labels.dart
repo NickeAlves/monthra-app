@@ -5,12 +5,12 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// The Lucide icon of an account type.
 IconData accountTypeIcon(AccountType type) => switch (type) {
-  AccountType.checking => LucideIcons.landmark,
-  AccountType.savings => LucideIcons.piggyBank,
-  AccountType.creditCard => LucideIcons.creditCard,
-  AccountType.cash => LucideIcons.banknote,
-  AccountType.brokerage => LucideIcons.chartCandlestick,
-  AccountType.unknown => LucideIcons.wallet,
+  AccountType.checking => LucideIcons.landmark300,
+  AccountType.savings => LucideIcons.piggyBank300,
+  AccountType.creditCard => LucideIcons.creditCard300,
+  AccountType.cash => LucideIcons.banknote300,
+  AccountType.brokerage => LucideIcons.chartCandlestick300,
+  AccountType.unknown => LucideIcons.wallet300,
 };
 
 /// The name of an account type in the UI language.

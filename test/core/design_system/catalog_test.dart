@@ -124,7 +124,7 @@ void main() {
       'Typography',
       'Color roles',
       'Controls',
-      'Cards',
+      'Sections and cards',
       'Amounts',
       'Categories',
       'States',

@@ -38,9 +38,11 @@ void main() {
                 dirty: dirty,
                 busy: busy,
                 actions: [
-                  ShadButton(
-                    onPressed: () => Navigator.of(context).pop('saved'),
-                    child: const Text('Salvar'),
+                  MonthraTapTarget(
+                    child: ShadButton(
+                      onPressed: () => Navigator.of(context).pop('saved'),
+                      child: const Text('Salvar'),
+                    ),
                   ),
                 ],
                 child: const Text('Campos'),

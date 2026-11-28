@@ -3,7 +3,7 @@
 # The web splash is hand-written (web/index.html + web/splash.css) to keep the
 # page free of inline styles and scripts for the CSP.
 flutter_native_splash:
-  color: "#F5F5F3"
+  color: "#FCFCFB"
   color_dark: "#141414"
   image: assets/brand/monthra-simbolo-512.png
   image_dark: assets/brand/monthra-simbolo-branco-512.png
@@ -11,7 +11,7 @@ flutter_native_splash:
   web: false
 
   android_12:
-    color: "#F5F5F3"
+    color: "#FCFCFB"
     color_dark: "#141414"
     image: assets/icon/splash-android12.png
     image_dark: assets/icon/splash-android12-dark.png

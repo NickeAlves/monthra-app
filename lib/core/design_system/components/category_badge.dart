@@ -18,42 +18,12 @@ enum CategoryIconSize {
   final double glyph;
 }
 
-/// The colors a category paints with on the current theme: a soft tint of
-/// its color (opaque, over the card surface) and the color itself, moved
-/// until it reads on that tint.
-@immutable
-class CategoryColors {
-  const new({required this.tint, required this.icon, required this.text});
-
-  /// [hex] is the category's `#RRGGBB`; an invalid one paints muted.
-  factory of(ShadThemeData theme, String hex) {
-    final scheme = theme.colorScheme;
-    final base = parseHexColor(hex) ?? scheme.mutedForeground;
-    final alpha = theme.brightness == Brightness.light ? 0.12 : 0.18;
-    final tint = Color.alphaBlend(base.withValues(alpha: alpha), scheme.card);
-    return CategoryColors(
-      tint: tint,
-      icon: ensureContrast(base, tint),
-      // A hair above 4.5: antialiased glyphs read slightly lighter.
-      text: ensureContrast(base, tint, minRatio: 4.7),
-    );
-  }
-
-  final Color tint;
-
-  /// At least 3:1 on [tint] (WCAG 1.4.11, graphics).
-  final Color icon;
-
-  /// At least 4.5:1 on [tint] (WCAG 1.4.3, text), with a margin.
-  final Color text;
-}
-
-/// A category's Lucide icon on a tile of its color. Decorative unless
-/// [semanticLabel] is given (lists read the category name next to it).
+/// A category's Lucide icon on a neutral tile ("Silêncio": a category's
+/// color shows only as a [CategoryDot]). Decorative unless [semanticLabel]
+/// is given (lists read the category name next to it).
 class CategoryIcon extends StatelessWidget {
   const new({
     required this.icon,
-    required this.color,
     this.size = CategoryIconSize.md,
     this.semanticLabel,
     super.key,
@@ -61,27 +31,24 @@ class CategoryIcon extends StatelessWidget {
 
   /// The Lucide name in kebab-case, as stored by the API.
   final String icon;
-
-  /// `#RRGGBB`, as stored by the API.
-  final String color;
   final CategoryIconSize size;
   final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
-    final colors = CategoryColors.of(ShadTheme.of(context), color);
+    final scheme = ShadTheme.of(context).colorScheme;
     final tile = SizedBox.square(
       dimension: size.box,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: colors.tint,
-          borderRadius: MonthraRadii.smAll,
+          color: scheme.muted,
+          borderRadius: MonthraRadii.mdAll,
         ),
         child: Center(
           child: Icon(
             CategoryIcons.resolve(icon),
             size: size.glyph,
-            color: colors.icon,
+            color: scheme.mutedForeground,
           ),
         ),
       ),
@@ -96,50 +63,70 @@ class CategoryIcon extends StatelessWidget {
   }
 }
 
-/// A pill with a category's icon and name, for chips and details.
-class CategoryBadge extends StatelessWidget {
-  const new({
-    required this.icon,
-    required this.color,
-    required this.label,
-    super.key,
-  });
+/// A category's color as a small dot, moved until it reads at 3:1 on the
+/// page (WCAG 1.4.11): user colors are mid tones. An invalid color paints
+/// muted. Decorative: the name beside it says which category it is.
+class CategoryDot extends StatelessWidget {
+  const new(this.color, {this.size = 8, super.key});
 
-  final String icon;
+  /// `#RRGGBB`, as stored by the API.
+  final String color;
+  final double size;
+
+  /// [hex] as the dot paints it on the theme's background.
+  static Color colorOf(ShadThemeData theme, String hex) {
+    final scheme = theme.colorScheme;
+    final base = parseHexColor(hex) ?? scheme.mutedForeground;
+    return ensureContrast(base, scheme.background);
+  }
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: SizedBox.square(
+      dimension: size,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colorOf(ShadTheme.of(context), color),
+          shape: BoxShape.circle,
+        ),
+      ),
+    ),
+  );
+}
+
+/// A neutral pill with a category's dot and name, for chips and details.
+class CategoryBadge extends StatelessWidget {
+  const new({required this.color, required this.label, super.key});
+
+  /// `#RRGGBB`, as stored by the API.
   final String color;
   final String label;
 
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
-    final colors = CategoryColors.of(theme, color);
+    final scheme = theme.colorScheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.tint,
+        color: scheme.muted,
         borderRadius: MonthraRadii.pillAll,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: MonthraSpacing.x3,
+          horizontal: MonthraSpacing.x3 - 2,
           vertical: MonthraSpacing.x1,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ExcludeSemantics(
-              child: Icon(
-                CategoryIcons.resolve(icon),
-                size: 14,
-                color: colors.icon,
-              ),
-            ),
-            const SizedBox(width: MonthraSpacing.x1 + 2),
+            CategoryDot(color, size: 7),
+            const SizedBox(width: MonthraSpacing.x2 - 2),
             Flexible(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.label.copyWith(color: colors.text),
+                style: theme.textTheme.label.copyWith(color: scheme.foreground),
               ),
             ),
           ],

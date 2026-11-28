@@ -68,7 +68,7 @@ class _CurrencySelectState extends State<CurrencySelect> {
         selectedOptionBuilder: (context, currency) => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.coins, size: 16),
+            const Icon(LucideIcons.coins300, size: 16),
             const SizedBox(width: MonthraSpacing.x2),
             Flexible(
               child: Text(

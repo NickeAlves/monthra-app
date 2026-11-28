@@ -172,10 +172,12 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
               alignment: AlignmentDirectional.centerStart,
               child: ValueListenableBuilder(
                 valueListenable: _locked,
-                builder: (context, _, _) => ShadButton(
-                  enabled: !_busy && !_locked.running,
-                  onPressed: _submit,
-                  child: ButtonLabel(l10n.passwordSubmit),
+                builder: (context, _, _) => MonthraTapTarget(
+                  child: ShadButton(
+                    enabled: !_busy && !_locked.running,
+                    onPressed: _submit,
+                    child: ButtonLabel(l10n.passwordSubmit),
+                  ),
                 ),
               ),
             ),

@@ -40,9 +40,11 @@ class SecuritySection extends ConsumerWidget {
             SettingsRow(
               title: l10n.settingsPasswordLabel,
               description: l10n.settingsPasswordDescription,
-              control: ShadButton.outline(
-                onPressed: () => context.go(AppRoutes.settingsPassword),
-                child: ButtonLabel(l10n.settingsPasswordChange),
+              control: MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: () => context.go(AppRoutes.settingsPassword),
+                  child: ButtonLabel(l10n.settingsPasswordChange),
+                ),
               ),
             ),
             gap,
@@ -55,13 +57,19 @@ class SecuritySection extends ConsumerWidget {
                   ? l10n.settingsMfaOnDescription
                   : l10n.settingsMfaOffDescription,
               control: mfa.enabled
-                  ? ShadButton.outline(
-                      onPressed: () => context.go(AppRoutes.settingsMfaDisable),
-                      child: ButtonLabel(l10n.settingsMfaTurnOff),
+                  ? MonthraTapTarget(
+                      child: ShadButton.outline(
+                        onPressed: () =>
+                            context.go(AppRoutes.settingsMfaDisable),
+                        child: ButtonLabel(l10n.settingsMfaTurnOff),
+                      ),
                     )
-                  : ShadButton(
-                      onPressed: () => context.go(AppRoutes.settingsMfaEnable),
-                      child: ButtonLabel(l10n.settingsMfaTurnOn),
+                  : MonthraTapTarget(
+                      child: ShadButton(
+                        onPressed: () =>
+                            context.go(AppRoutes.settingsMfaEnable),
+                        child: ButtonLabel(l10n.settingsMfaTurnOn),
+                      ),
                     ),
             ),
             if (mfa.enabled) ...[
@@ -69,9 +77,12 @@ class SecuritySection extends ConsumerWidget {
               SettingsRow(
                 title: l10n.settingsRecoveryCodesLabel,
                 description: l10n.settingsRecoveryCodesLeft(left),
-                control: ShadButton.outline(
-                  onPressed: () => context.go(AppRoutes.settingsRecoveryCodes),
-                  child: ButtonLabel(l10n.settingsRecoveryCodesNew),
+                control: MonthraTapTarget(
+                  child: ShadButton.outline(
+                    onPressed: () =>
+                        context.go(AppRoutes.settingsRecoveryCodes),
+                    child: ButtonLabel(l10n.settingsRecoveryCodesNew),
+                  ),
                 ),
               ),
               if (left <= lowRecoveryCodes) ...[
@@ -82,7 +93,7 @@ class SecuritySection extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: Icon(
-                        LucideIcons.triangleAlert,
+                        LucideIcons.triangleAlert300,
                         size: 16,
                         color: theme.colorScheme.warning,
                       ),

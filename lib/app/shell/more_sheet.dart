@@ -77,7 +77,7 @@ class _MoreSheet extends StatelessWidget {
         closeIcon: ShadIconButton.ghost(
           width: MonthraLayout.minTouchTarget,
           height: MonthraLayout.minTouchTarget,
-          icon: Icon(LucideIcons.x, size: 16, semanticLabel: l10n.appClose),
+          icon: Icon(LucideIcons.x300, size: 16, semanticLabel: l10n.appClose),
           onPressed: () => Navigator.of(context).pop(),
         ),
         child: Padding(
@@ -113,14 +113,14 @@ class _MoreSheet extends StatelessWidget {
               ),
               if (catalog) ...[
                 ShellNavItem(
-                  icon: LucideIcons.palette,
+                  icon: LucideIcons.palette300,
                   label: l10n.shellDesignSystem,
                   onPressed: () => close(const MoreCatalog()),
                 ),
                 gap,
               ],
               ShellNavItem(
-                icon: LucideIcons.logOut,
+                icon: LucideIcons.logOut300,
                 label: l10n.shellSignOut,
                 onPressed: () => close(const MoreSignOut()),
               ),

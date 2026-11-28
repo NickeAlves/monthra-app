@@ -134,11 +134,13 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             current: l10n.dashboardThisMonth,
           ),
         ),
-        ShadIconButton.outline(
-          onPressed: state.isLoading ? null : () => _refresh(month),
-          icon: Icon(
-            LucideIcons.refreshCw,
-            semanticLabel: l10n.dashboardRefresh,
+        MonthraTapTarget(
+          child: ShadIconButton.outline(
+            onPressed: state.isLoading ? null : () => _refresh(month),
+            icon: Icon(
+              LucideIcons.refreshCw300,
+              semanticLabel: l10n.dashboardRefresh,
+            ),
           ),
         ),
       ],
@@ -150,13 +152,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     final l10n = context.l10n;
     if (!view.hasAccounts) {
       return EmptyState(
-        icon: LucideIcons.wallet,
+        icon: LucideIcons.wallet300,
         title: l10n.dashboardEmptyTitle,
         message: l10n.dashboardEmptyMessage,
-        action: ShadButton(
-          onPressed: () => showAccountForm(context),
-          leading: const Icon(LucideIcons.plus),
-          child: ButtonLabel(l10n.accountsCreateFirst),
+        action: MonthraTapTarget(
+          child: ShadButton(
+            onPressed: () => showAccountForm(context),
+            leading: const Icon(LucideIcons.plus300),
+            child: ButtonLabel(l10n.accountsCreateFirst),
+          ),
         ),
       );
     }

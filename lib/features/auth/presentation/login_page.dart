@@ -181,9 +181,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
           Align(
             alignment: AlignmentDirectional.centerEnd,
-            child: ShadButton.link(
-              onPressed: () => context.go(AppRoutes.forgotPassword),
-              child: ButtonLabel(l10n.authForgotPasswordLink),
+            child: MonthraTapTarget(
+              child: ShadButton.link(
+                onPressed: () => context.go(AppRoutes.forgotPassword),
+                child: ButtonLabel(l10n.authForgotPasswordLink),
+              ),
             ),
           ),
           const SizedBox(height: MonthraSpacing.x2),
@@ -197,10 +199,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ],
           ValueListenableBuilder(
             valueListenable: _locked,
-            builder: (context, _, _) => ShadButton(
-              enabled: !_busy && !_locked.running && !_captcha.waitingForToken,
-              onPressed: _submit,
-              child: ButtonLabel(l10n.authSignInButton),
+            builder: (context, _, _) => MonthraTapTarget(
+              child: ShadButton(
+                enabled:
+                    !_busy && !_locked.running && !_captcha.waitingForToken,
+                onPressed: _submit,
+                child: ButtonLabel(l10n.authSignInButton),
+              ),
             ),
           ),
           const SizedBox(height: MonthraSpacing.x6),
@@ -242,7 +247,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } else if (resentTo != null) {
       alert = FormAlert(
         message: l10n.authVerificationSent(resentTo),
-        icon: LucideIcons.mailCheck,
+        icon: LucideIcons.mailCheck300,
       );
     } else if (notice != null) {
       alert = FormAlert(message: noticeText(l10n, notice));
@@ -254,12 +259,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Widget _resendButton(AppLocalizations l10n) => ValueListenableBuilder(
     valueListenable: _resendWait,
-    builder: (context, seconds, _) => ShadButton.outline(
-      enabled: !_busy && seconds == 0,
-      onPressed: _resendVerification,
-      leading: const Icon(LucideIcons.mail),
-      child: ButtonLabel(
-        seconds > 0 ? l10n.authResendIn(seconds) : l10n.authResendVerification,
+    builder: (context, seconds, _) => MonthraTapTarget(
+      child: ShadButton.outline(
+        enabled: !_busy && seconds == 0,
+        onPressed: _resendVerification,
+        leading: const Icon(LucideIcons.mail300),
+        child: ButtonLabel(
+          seconds > 0
+              ? l10n.authResendIn(seconds)
+              : l10n.authResendVerification,
+        ),
       ),
     ),
   );

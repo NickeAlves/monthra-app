@@ -81,11 +81,13 @@ class _RegenerateRecoveryCodesPageState
                       onSubmit: _regenerate,
                     )
                   : EmptyState(
-                      icon: LucideIcons.shieldOff,
+                      icon: LucideIcons.shieldOff300,
                       title: l10n.mfaAlreadyOff,
-                      action: ShadButton.outline(
-                        onPressed: _back,
-                        child: ButtonLabel(l10n.navSettings),
+                      action: MonthraTapTarget(
+                        child: ShadButton.outline(
+                          onPressed: _back,
+                          child: ButtonLabel(l10n.navSettings),
+                        ),
                       ),
                     ),
             ),

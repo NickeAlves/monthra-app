@@ -33,13 +33,12 @@ class CashFlowCard extends StatelessWidget {
     final history = s.history;
     final last = history.isEmpty ? null : history.last;
     String value(double v) => format.money(v.round(), s.currency);
-    return MonthraCard(
+    return MonthraSection(
       title: Text(l10n.dashboardCashFlow),
       description: Text(l10n.dashboardLast12Months),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: MonthraSpacing.x4),
           MonthraBarChart(
             semanticLabel: last == null
                 ? l10n.dashboardCashFlow
@@ -53,7 +52,7 @@ class CashFlowCard extends StatelessWidget {
             labels: [for (final p in history) format.monthShort(p.month)],
             highlight: history.isEmpty ? null : history.length - 1,
             height: chartHeight,
-            barWidth: narrow ? 6 : 10,
+            barWidth: narrow ? 5 : 6,
             formatAxis: format.axis,
             formatValue: value,
             series: [
@@ -62,9 +61,10 @@ class CashFlowCard extends StatelessWidget {
                 color: scheme.income,
                 values: [for (final p in history) p.income.toDouble()],
               ),
+              // Money out in grey beside the green ("Silêncio").
               BarSeries(
                 name: l10n.dashboardExpenses,
-                color: scheme.expense,
+                color: scheme.chartMuted,
                 values: [for (final p in history) p.expense.toDouble()],
               ),
             ],
@@ -75,7 +75,7 @@ class CashFlowCard extends StatelessWidget {
               spacing: MonthraSpacing.x4,
               children: [
                 _Key(color: scheme.income, label: l10n.dashboardIncome),
-                _Key(color: scheme.expense, label: l10n.dashboardExpenses),
+                _Key(color: scheme.chartMuted, label: l10n.dashboardExpenses),
               ],
             ),
           ),
@@ -135,13 +135,10 @@ class NetWorthCard extends StatelessWidget {
         formatValue: (v) => format.money(v.round(), s.currency),
       );
     }
-    return MonthraCard(
+    return MonthraSection(
       title: Text(l10n.dashboardNetWorth),
       description: Text(l10n.dashboardLast12Months),
-      child: Padding(
-        padding: const EdgeInsets.only(top: MonthraSpacing.x4),
-        child: body,
-      ),
+      child: body,
     );
   }
 }
@@ -161,10 +158,10 @@ class _Key extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color: ensureContrast(color, theme.colorScheme.card),
+            color: ensureContrast(color, theme.colorScheme.background),
             borderRadius: MonthraRadii.xsAll,
           ),
-          child: const SizedBox.square(dimension: MonthraSpacing.x3),
+          child: const SizedBox.square(dimension: MonthraSpacing.x2),
         ),
         const SizedBox(width: MonthraSpacing.x2),
         Text(

@@ -100,9 +100,11 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
               title: l10n.authLinkInvalidTitle,
               subtitle: l10n.authResetLinkInvalidMessage,
             ),
-            ShadButton(
-              onPressed: () => context.go(AppRoutes.forgotPassword),
-              child: ButtonLabel(l10n.authRequestNewLink),
+            MonthraTapTarget(
+              child: ShadButton(
+                onPressed: () => context.go(AppRoutes.forgotPassword),
+                child: ButtonLabel(l10n.authRequestNewLink),
+              ),
             ),
           ],
         ),
@@ -146,10 +148,12 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
             ),
           ),
           const SizedBox(height: MonthraSpacing.x6),
-          ShadButton(
-            enabled: !_busy,
-            onPressed: _submit,
-            child: ButtonLabel(l10n.authResetButton),
+          MonthraTapTarget(
+            child: ShadButton(
+              enabled: !_busy,
+              onPressed: _submit,
+              child: ButtonLabel(l10n.authResetButton),
+            ),
           ),
         ],
       ),

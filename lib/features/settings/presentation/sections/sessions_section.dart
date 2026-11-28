@@ -131,11 +131,13 @@ class _SessionsSectionState extends ConsumerState<SessionsSection> {
         else
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: ShadButton.outline(
-              enabled: _busy.isEmpty,
-              onPressed: _revokeOthers,
-              leading: const Icon(LucideIcons.logOut),
-              child: ButtonLabel(l10n.sessionsRevokeOthers),
+            child: MonthraTapTarget(
+              child: ShadButton.outline(
+                enabled: _busy.isEmpty,
+                onPressed: _revokeOthers,
+                leading: const Icon(LucideIcons.logOut300),
+                child: ButtonLabel(l10n.sessionsRevokeOthers),
+              ),
             ),
           ),
       ],
@@ -165,9 +167,9 @@ class _SessionRow extends StatelessWidget {
   final VoidCallback onRevoke;
 
   static IconData _icon(DeviceLabel device) => switch (device.os) {
-    'iPadOS' => LucideIcons.tablet,
-    'iOS' || 'Android' => LucideIcons.smartphone,
-    _ => LucideIcons.monitor,
+    'iPadOS' => LucideIcons.tablet300,
+    'iOS' || 'Android' => LucideIcons.smartphone300,
+    _ => LucideIcons.monitor300,
   };
 
   @override
@@ -214,12 +216,14 @@ class _SessionRow extends StatelessWidget {
     );
     final revoke = session.current
         ? null
-        : ShadButton.outline(
-            enabled: !busy,
-            onPressed: onRevoke,
-            child: ButtonLabel(
-              l10n.sessionsRevoke,
-              semanticsLabel: l10n.sessionsRevokeLabel(name),
+        : MonthraTapTarget(
+            child: ShadButton.outline(
+              enabled: !busy,
+              onPressed: onRevoke,
+              child: ButtonLabel(
+                l10n.sessionsRevoke,
+                semanticsLabel: l10n.sessionsRevokeLabel(name),
+              ),
             ),
           );
     return LayoutBuilder(

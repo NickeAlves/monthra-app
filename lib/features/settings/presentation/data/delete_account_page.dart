@@ -79,39 +79,41 @@ class DeleteAccountPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   DataPoint(
-                    icon: LucideIcons.trash2,
+                    icon: LucideIcons.trash2300,
                     text: l10n.deleteAccountErased,
                   ),
                   between,
                   DataPoint(
-                    icon: LucideIcons.logOut,
+                    icon: LucideIcons.logOut300,
                     text: l10n.deleteAccountSignedOut,
                   ),
                   between,
                   DataPoint(
-                    icon: LucideIcons.shieldCheck,
+                    icon: LucideIcons.shieldCheck300,
                     text: l10n.deleteAccountKept,
                   ),
                   if (email != null) ...[
                     between,
                     DataPoint(
-                      icon: LucideIcons.mail,
+                      icon: LucideIcons.mail300,
                       text: l10n.deleteAccountEmail(email),
                     ),
                   ],
                   between,
                   DataPoint(
-                    icon: LucideIcons.triangleAlert,
+                    icon: LucideIcons.triangleAlert300,
                     color: destructive,
                     text: l10n.deleteAccountFinal,
                   ),
                   const SizedBox(height: MonthraSpacing.x6),
                   Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: ShadButton.outline(
-                      onPressed: () => context.go(AppRoutes.settingsExport),
-                      leading: const Icon(LucideIcons.download),
-                      child: ButtonLabel(l10n.deleteAccountExportFirst),
+                    child: MonthraTapTarget(
+                      child: ShadButton.outline(
+                        onPressed: () => context.go(AppRoutes.settingsExport),
+                        leading: const Icon(LucideIcons.download300),
+                        child: ButtonLabel(l10n.deleteAccountExportFirst),
+                      ),
                     ),
                   ),
                 ],

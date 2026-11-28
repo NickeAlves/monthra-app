@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monthra/core/design_system/design_system.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../helpers/frame.dart';
 
 void main() {
   group('MonthraBreakpoint', () {
@@ -120,22 +123,73 @@ void main() {
     });
   });
 
-  test('the theme keeps controls at 44 px and the brand radius', () {
+  group('MonthraDensity', () {
+    test('drops to pointer controls on a desktop layout only', () {
+      expect(MonthraDensity.forWidth(390), MonthraDensity.touch);
+      expect(MonthraDensity.forWidth(1024), MonthraDensity.touch);
+      expect(MonthraDensity.forWidth(1025), MonthraDensity.pointer);
+      // Touch: 44 px fields and targets; pointer: fields as tall as buttons.
+      expect(MonthraDensity.touch.fieldHeight, MonthraLayout.minTouchTarget);
+      expect(MonthraDensity.touch.minTapTarget, MonthraLayout.minTouchTarget);
+      expect(MonthraDensity.pointer.fieldHeight, MonthraLayout.controlHeight);
+      expect(MonthraDensity.pointer.minTapTarget, 0);
+      expect(MonthraLayout.controlHeight, 34);
+    });
+  });
+
+  test('the theme draws 34 px buttons and sizes fields by density', () {
     for (final brightness in Brightness.values) {
+      for (final density in MonthraDensity.values) {
+        final theme = monthraTheme(brightness, density: density);
+        final sizes = theme.buttonSizesTheme;
+        expect(sizes.regular!.height, MonthraLayout.controlHeight);
+        expect(sizes.icon!.width, MonthraLayout.controlHeight);
+        expect(sizes.icon!.height, MonthraLayout.controlHeight);
+        expect(sizes.sm!.height, lessThan(MonthraLayout.controlHeight));
+        expect(theme.inputTheme.constraints!.minHeight, density.fieldHeight);
+      }
       final theme = monthraTheme(brightness);
       expect(
-        theme.buttonSizesTheme.regular!.height,
+        theme.inputTheme.constraints!.minHeight,
         MonthraLayout.minTouchTarget,
       );
-      expect(theme.buttonSizesTheme.icon!.width, MonthraLayout.minTouchTarget);
-      expect(theme.radius, MonthraRadii.mdAll);
+      expect(theme.radius, MonthraRadii.smAll);
       expect(theme.cardTheme.radius, MonthraRadii.lgAll);
+      expect(theme.cardTheme.shadows, isEmpty);
       expect(theme.textTheme.family, 'Inter');
     }
-    expect(monthraTheme(Brightness.dark).cardTheme.shadows, isEmpty);
-    expect(
-      monthraTheme(Brightness.light).cardTheme.shadows,
-      MonthraShadows.subtle,
-    );
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('a destructive button is a red label in a hairline, '
+        '${brightness.name}', (tester) async {
+      await tester.pumpFrame(
+        MonthraTapTarget(
+          child: ShadButton.destructive(
+            onPressed: () {},
+            child: const Text('Excluir'),
+          ),
+        ),
+        brightness: brightness,
+      );
+      final scheme = tester.themeAt(find.text('Excluir')).colorScheme;
+      final box = tester
+          .widgetList<Container>(
+            find.descendant(
+              of: find.byType(ShadButton),
+              matching: find.byType(Container),
+            ),
+          )
+          .map((c) => c.decoration)
+          .whereType<BoxDecoration>()
+          .first;
+      expect(box.color, const Color(0x00000000));
+      expect((box.border! as Border).top.color, scheme.destructiveBorder);
+      expect((box.border! as Border).top.width, 1);
+      expect(
+        DefaultTextStyle.of(tester.element(find.text('Excluir'))).style.color,
+        scheme.destructive,
+      );
+    });
+  }
 }

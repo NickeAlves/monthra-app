@@ -65,10 +65,12 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       _ => null,
     };
     final back = Center(
-      child: ShadButton.link(
-        onPressed: () => context.go(AppRoutes.login),
-        leading: const Icon(LucideIcons.arrowLeft),
-        child: ButtonLabel(l10n.authBackToSignIn),
+      child: MonthraTapTarget(
+        child: ShadButton.link(
+          onPressed: () => context.go(AppRoutes.login),
+          leading: const Icon(LucideIcons.arrowLeft300),
+          child: ButtonLabel(l10n.authBackToSignIn),
+        ),
       ),
     );
     if (sentTo != null) {
@@ -116,10 +118,12 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
             ),
           ),
           const SizedBox(height: MonthraSpacing.x6),
-          ShadButton(
-            enabled: !_busy,
-            onPressed: _submit,
-            child: ButtonLabel(l10n.authForgotButton),
+          MonthraTapTarget(
+            child: ShadButton(
+              enabled: !_busy,
+              onPressed: _submit,
+              child: ButtonLabel(l10n.authForgotButton),
+            ),
           ),
           const SizedBox(height: MonthraSpacing.x4),
           back,

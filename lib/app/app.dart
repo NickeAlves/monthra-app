@@ -69,13 +69,18 @@ class _MonthraAppState extends ConsumerState<MonthraApp> {
         },
       ),
     );
+    // Lighter controls on a desktop layout; the window size comes from the
+    // View, above the app.
+    final density = MonthraDensity.forWidth(
+      MediaQuery.maybeSizeOf(context)?.width ?? 0,
+    );
     return ShadApp.router(
       routerConfig: ref.watch(routerProvider),
       // The brand name, the same in every language.
       title: 'Monthra',
       themeMode: theme.themeMode,
-      theme: monthraTheme(Brightness.light),
-      darkTheme: monthraTheme(Brightness.dark),
+      theme: monthraTheme(Brightness.light, density: density),
+      darkTheme: monthraTheme(Brightness.dark, density: density),
       themeCurve: MonthraMotion.curve,
       locale: locale.locale,
       supportedLocales: AppLocale.supportedLocales,

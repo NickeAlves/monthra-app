@@ -55,7 +55,7 @@ void main() {
     final close = find.bySemanticsLabel('Fechar');
     expect(close, findsOneWidget);
     final button = find.ancestor(
-      of: find.byIcon(LucideIcons.x),
+      of: find.byIcon(LucideIcons.x300),
       matching: find.byType(ShadIconButton),
     );
     expect(tester.getSize(button), const Size(44, 44));

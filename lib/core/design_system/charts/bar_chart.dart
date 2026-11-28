@@ -37,7 +37,7 @@ class MonthraBarChart extends StatelessWidget {
     required this.formatValue,
     this.highlight,
     this.height = 220,
-    this.barWidth = 10,
+    this.barWidth = 6,
     super.key,
   });
 
@@ -59,7 +59,8 @@ class MonthraBarChart extends StatelessWidget {
     final style = ChartStyle.of(theme);
     final scale = ChartScale.fit([for (final s in series) ...s.values]);
     final colors = [
-      for (final s in series) ensureContrast(s.color, scheme.card),
+      // Charts sit on the page, in sections.
+      for (final s in series) ensureContrast(s.color, scheme.background),
     ];
     return Semantics(
       container: true,
@@ -118,8 +119,8 @@ class MonthraBarChart extends StatelessWidget {
                             toY: i < line.values.length ? line.values[i] : 0,
                             color: colors[s],
                             width: barWidth,
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(barWidth / 3),
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(1),
                             ),
                           ),
                       ],

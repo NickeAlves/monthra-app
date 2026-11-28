@@ -18,13 +18,13 @@ void main() {
         reason: category.key,
       );
     }
-    expect(CategoryIcons.resolve('shopping-cart'), LucideIcons.shoppingCart);
-    expect(CategoryIcons.resolve('hand-heart'), LucideIcons.handHeart);
+    expect(CategoryIcons.resolve('shopping-cart'), LucideIcons.shoppingCart300);
+    expect(CategoryIcons.resolve('hand-heart'), LucideIcons.handHeart300);
   });
 
   test('an unknown name falls back to the tag icon', () {
     expect(CategoryIcons.resolve('not-an-icon'), CategoryIcons.fallback);
-    expect(CategoryIcons.resolve(''), LucideIcons.tag);
+    expect(CategoryIcons.resolve(''), LucideIcons.tag300);
   });
 
   test('every default color parses', () {

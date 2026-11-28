@@ -119,7 +119,7 @@ class ShellSidebar extends StatelessWidget {
                     const SizedBox(height: MonthraSpacing.x6),
                     if (onCatalog != null) ...[
                       ShellNavItem(
-                        icon: LucideIcons.palette,
+                        icon: LucideIcons.palette300,
                         label: l10n.shellDesignSystem,
                         compact: compact,
                         onPressed: onCatalog,
@@ -146,7 +146,7 @@ class ShellSidebar extends StatelessWidget {
                                   ),
                           ),
                           ShellNavItem(
-                            icon: LucideIcons.logOut,
+                            icon: LucideIcons.logOut300,
                             label: l10n.shellSignOut,
                             compact: true,
                             enabled: !signingOut,
@@ -166,7 +166,7 @@ class ShellSidebar extends StatelessWidget {
                         ),
                       const SizedBox(height: MonthraSpacing.x2),
                       ShellNavItem(
-                        icon: LucideIcons.logOut,
+                        icon: LucideIcons.logOut300,
                         label: l10n.shellSignOut,
                         compact: true,
                         enabled: !signingOut,

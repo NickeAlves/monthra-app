@@ -52,13 +52,15 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
       final view = AccountsView.build(accounts, preferred: preferred);
       body = view.isEmpty
           ? EmptyState(
-              icon: LucideIcons.wallet,
+              icon: LucideIcons.wallet300,
               title: l10n.accountsEmptyTitle,
               message: l10n.accountsEmptyMessage,
-              action: ShadButton(
-                onPressed: _create,
-                leading: const Icon(LucideIcons.plus),
-                child: ButtonLabel(l10n.accountsCreateFirst),
+              action: MonthraTapTarget(
+                child: ShadButton(
+                  onPressed: _create,
+                  leading: const Icon(LucideIcons.plus300),
+                  child: ButtonLabel(l10n.accountsCreateFirst),
+                ),
               ),
             )
           : _AccountsList(
@@ -82,10 +84,12 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
       description: l10n.accountsDescription,
       actions: [
         if (accounts?.isNotEmpty ?? false)
-          ShadButton(
-            onPressed: _create,
-            leading: const Icon(LucideIcons.plus),
-            child: ButtonLabel(l10n.accountsNew),
+          MonthraTapTarget(
+            child: ShadButton(
+              onPressed: _create,
+              leading: const Icon(LucideIcons.plus300),
+              child: ButtonLabel(l10n.accountsNew),
+            ),
           ),
       ],
       child: body,
@@ -108,24 +112,18 @@ class _AccountsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final narrow = context.monthraBreakpoint == MonthraBreakpoint.mobile;
-    final gap = narrow ? MonthraSpacing.x4 : MonthraSpacing.x6;
+    final gap = narrow ? MonthraSpacing.x6 : MonthraSpacing.x8;
     void open(String id) => context.go(AppRoutes.account(id));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (final (i, group) in view.groups.indexed) ...[
           if (i > 0) SizedBox(height: gap),
-          MonthraCard(
-            // The total in the title's row: a card's trailing slot would
-            // take a column beside the rows.
-            title: Row(
-              children: [
-                Expanded(child: Text(l10n.currencyName(group.currency))),
-                const SizedBox(width: MonthraSpacing.x3),
-                _GroupTotal(group: group),
-              ],
-            ),
-            padding: EdgeInsets.all(gap - MonthraSpacing.x2),
+          MonthraSection(
+            // The first group sits right under the page's title.
+            divider: i > 0,
+            title: Text(l10n.currencyName(group.currency)),
+            trailing: _GroupTotal(group: group),
             child: _Tiles(accounts: group.accounts, onOpen: open),
           ),
         ],
@@ -133,23 +131,26 @@ class _AccountsList extends StatelessWidget {
           SizedBox(height: gap),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: ShadButton.ghost(
-              onPressed: onToggleArchived,
-              leading: Icon(
-                showArchived ? LucideIcons.chevronUp : LucideIcons.archive,
-              ),
-              child: ButtonLabel(
-                showArchived
-                    ? l10n.accountsHideArchived
-                    : l10n.accountsShowArchived(view.archived.length),
+            child: MonthraTapTarget(
+              child: ShadButton.ghost(
+                onPressed: onToggleArchived,
+                leading: Icon(
+                  showArchived
+                      ? LucideIcons.chevronUp300
+                      : LucideIcons.archive300,
+                ),
+                child: ButtonLabel(
+                  showArchived
+                      ? l10n.accountsHideArchived
+                      : l10n.accountsShowArchived(view.archived.length),
+                ),
               ),
             ),
           ),
           if (showArchived) ...[
             const SizedBox(height: MonthraSpacing.x2),
-            MonthraCard(
+            MonthraSection(
               title: Text(l10n.accountsArchivedTitle),
-              padding: EdgeInsets.all(gap - MonthraSpacing.x2),
               child: _Tiles(accounts: view.archived, onOpen: open),
             ),
           ],
@@ -195,15 +196,12 @@ class _Tiles extends StatelessWidget {
   final ValueChanged<String> onOpen;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: MonthraSpacing.x2),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (final account in accounts)
-          AccountTile(account: account, onPressed: () => onOpen(account.id)),
-      ],
-    ),
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      for (final account in accounts)
+        AccountTile(account: account, onPressed: () => onOpen(account.id)),
+    ],
   );
 }
 
@@ -217,7 +215,8 @@ class AccountsSkeleton extends StatelessWidget {
     liveRegion: true,
     label: context.l10n.accountsLoading,
     child: ExcludeSemantics(
-      child: MonthraCard(
+      child: MonthraSection(
+        divider: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

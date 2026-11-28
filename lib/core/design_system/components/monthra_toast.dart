@@ -36,7 +36,7 @@ void showMonthraToast(
         hoverForegroundColor: color,
         pressedForegroundColor: color,
         hoverBackgroundColor: color.withValues(alpha: 0.1),
-        icon: Icon(LucideIcons.x, size: 16, semanticLabel: closeLabel),
+        icon: Icon(LucideIcons.x300, size: 16, semanticLabel: closeLabel),
         onPressed: () => ShadToaster.of(context).hide(),
       );
     },

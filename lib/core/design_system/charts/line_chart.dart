@@ -7,7 +7,7 @@ import 'package:monthra/core/design_system/tokens/motion.dart';
 import 'package:monthra/core/design_system/tokens/radii.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// One value per label (months, say) on a thin line over a soft fill,
+/// One value per label (months, say) on a thin line (no fill),
 /// with round ticks and thin horizontal lines only. A null value leaves its
 /// label without a point (a month still to come), and the line stops there.
 /// The [highlight]ed point gets a dot and a stronger label. Hovering or
@@ -42,7 +42,8 @@ class MonthraLineChart extends StatelessWidget {
     final theme = ShadTheme.of(context);
     final scheme = theme.colorScheme;
     final style = ChartStyle.of(theme);
-    final line = ensureContrast(color, scheme.card);
+    // Charts sit on the page, in sections.
+    final line = ensureContrast(color, scheme.background);
     final known = [for (final v in values) ?v];
     final scale = ChartScale.fit(known, includeZero: false);
     final spots = [
@@ -107,7 +108,7 @@ class MonthraLineChart extends StatelessWidget {
                             radius: 4,
                             color: line,
                             strokeWidth: 2,
-                            strokeColor: scheme.card,
+                            strokeColor: scheme.background,
                           ),
                         ),
                       ),
@@ -117,6 +118,7 @@ class MonthraLineChart extends StatelessWidget {
                   LineChartBarData(
                     spots: spots,
                     color: line,
+                    barWidth: 1.75,
                     isCurved: true,
                     preventCurveOverShooting: true,
                     isStrokeCapRound: true,
@@ -127,18 +129,7 @@ class MonthraLineChart extends StatelessWidget {
                         radius: 4,
                         color: line,
                         strokeWidth: 2,
-                        strokeColor: scheme.card,
-                      ),
-                    ),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          line.withValues(alpha: 0.18),
-                          line.withValues(alpha: 0),
-                        ],
+                        strokeColor: scheme.background,
                       ),
                     ),
                   ),

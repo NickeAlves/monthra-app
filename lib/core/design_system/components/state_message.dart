@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/components/button_label.dart';
+import 'package:monthra/core/design_system/components/tap_target.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -9,7 +10,7 @@ class EmptyState extends StatelessWidget {
   const new({
     required this.title,
     this.message,
-    this.icon = LucideIcons.inbox,
+    this.icon = LucideIcons.inbox300,
     this.action,
     super.key,
   });
@@ -52,15 +53,17 @@ class ErrorState extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       child: _StateMessage(
-        icon: LucideIcons.circleAlert,
+        icon: LucideIcons.circleAlert300,
         title: title,
         message: message,
         action: retry == null || label == null
             ? null
-            : ShadButton.outline(
-                onPressed: retry,
-                leading: const Icon(LucideIcons.rotateCw),
-                child: ButtonLabel(label),
+            : MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: retry,
+                  leading: const Icon(LucideIcons.rotateCw300),
+                  child: ButtonLabel(label),
+                ),
               ),
       ),
     );

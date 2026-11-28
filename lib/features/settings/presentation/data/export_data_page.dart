@@ -128,18 +128,18 @@ class _ExportDataPageState extends ConsumerState<ExportDataPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 DataPoint(
-                  icon: LucideIcons.fileJson,
+                  icon: LucideIcons.fileJson300,
                   text: l10n.exportDataIncludes,
                 ),
                 between,
                 DataPoint(
-                  icon: LucideIcons.lock,
+                  icon: LucideIcons.lock300,
                   text: l10n.exportDataExcludes,
                 ),
                 if (email != null) ...[
                   between,
                   DataPoint(
-                    icon: LucideIcons.mail,
+                    icon: LucideIcons.mail300,
                     text: l10n.exportDataEmail(email),
                   ),
                 ],
@@ -180,7 +180,7 @@ class _ExportDataPageState extends ConsumerState<ExportDataPage> {
                 FormAlert(
                   message: l10n.fileSaveFailed,
                   destructive: true,
-                  icon: LucideIcons.circleAlert,
+                  icon: LucideIcons.circleAlert300,
                 )
               else
                 FormAlert(message: l10n.fileNotSaved),
@@ -190,15 +190,19 @@ class _ExportDataPageState extends ConsumerState<ExportDataPage> {
               spacing: MonthraSpacing.x4,
               runSpacing: MonthraSpacing.x2,
               children: [
-                ShadButton(
-                  enabled: save != _Save.saving,
-                  onPressed: _saveFile,
-                  leading: const Icon(LucideIcons.download),
-                  child: ButtonLabel(l10n.exportDataSave),
+                MonthraTapTarget(
+                  child: ShadButton(
+                    enabled: save != _Save.saving,
+                    onPressed: _saveFile,
+                    leading: const Icon(LucideIcons.download300),
+                    child: ButtonLabel(l10n.exportDataSave),
+                  ),
                 ),
-                ShadButton.outline(
-                  onPressed: _back,
-                  child: ButtonLabel(l10n.navSettings),
+                MonthraTapTarget(
+                  child: ShadButton.outline(
+                    onPressed: _back,
+                    child: ButtonLabel(l10n.navSettings),
+                  ),
                 ),
               ],
             ),

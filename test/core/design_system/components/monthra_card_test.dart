@@ -22,7 +22,7 @@ void main() {
     }
     expect(find.byType(FocusableActionDetector), findsNothing);
     final card = tester.widget<ShadCard>(find.byType(ShadCard));
-    expect(card.padding, const EdgeInsets.all(MonthraSpacing.x6));
+    expect(card.padding, const EdgeInsets.all(MonthraSpacing.x5));
   });
 
   testWidgets('pads less on mobile', (tester) async {

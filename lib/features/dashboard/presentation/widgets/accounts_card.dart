@@ -20,14 +20,11 @@ class AccountsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final lines = currency.accounts;
-    return MonthraCard(
+    return MonthraSection(
       title: Text(l10n.dashboardAccounts),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: MonthraSpacing.x2),
-          for (final line in lines) _AccountRow(line: line),
-        ],
+        children: [for (final line in lines) _AccountRow(line: line)],
       ),
     );
   }
@@ -51,7 +48,7 @@ class _AccountRow extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               color: scheme.muted,
-              borderRadius: MonthraRadii.smAll,
+              borderRadius: MonthraRadii.mdAll,
             ),
             child: SizedBox.square(
               dimension: CategoryIconSize.md.box,

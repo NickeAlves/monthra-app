@@ -34,7 +34,8 @@ class DashboardLayout extends StatelessWidget {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final wide = width >= dashboardTwoColumnsFrom;
-        final gap = narrow ? MonthraSpacing.x4 : MonthraSpacing.x6;
+        // Sections stand apart by space and their hairline.
+        final gap = narrow ? MonthraSpacing.x6 : MonthraSpacing.x8;
         final primary = view.currencies.first;
         final (startFlex, endFlex) = width >= dashboardUnevenPairsFrom
             ? (7, 5)
@@ -103,7 +104,7 @@ class DashboardLayout extends StatelessWidget {
   }
 }
 
-/// Two cards side by side, sharing the width by [flex], as tall as the
+/// Two sections side by side, sharing the width by [flex], as tall as the
 /// taller one.
 class _Pair extends StatelessWidget {
   const new({

@@ -38,8 +38,8 @@ void main() {
         white,
         const Column(
           children: [
-            Icon(LucideIcons.tag, color: Color(0xFF8A8A8A)), // 3.4:1
-            Icon(LucideIcons.tag, color: Color(0xFFB0B0B0)), // 2.1:1
+            Icon(LucideIcons.tag300, color: Color(0xFF8A8A8A)), // 3.4:1
+            Icon(LucideIcons.tag300, color: Color(0xFFB0B0B0)), // 2.1:1
           ],
         ),
       ),

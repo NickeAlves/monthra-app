@@ -139,10 +139,12 @@ class _ProfileSectionState extends ConsumerState<ProfileSection> {
             const SizedBox(height: MonthraSpacing.x4),
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: ShadButton(
-                enabled: _changed && !_busy,
-                onPressed: _save,
-                child: ButtonLabel(l10n.settingsSaveName),
+              child: MonthraTapTarget(
+                child: ShadButton(
+                  enabled: _changed && !_busy,
+                  onPressed: _save,
+                  child: ButtonLabel(l10n.settingsSaveName),
+                ),
               ),
             ),
             const SizedBox(height: MonthraSpacing.x6),

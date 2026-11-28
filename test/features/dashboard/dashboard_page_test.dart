@@ -19,6 +19,7 @@ import '../../helpers/fake_api.dart';
 import '../../helpers/finance_fixtures.dart';
 import '../../helpers/frame.dart';
 import '../../helpers/profile_server.dart';
+import '../settings/security_test_helpers.dart' show expectGuidelines;
 
 final pt = AppLocalizationsPt();
 const ptBR = Locale('pt', 'BR');
@@ -369,6 +370,21 @@ void main() {
     expect(category.dx, cashFlow.dx);
     expect(category.dy, lessThan(cashFlow.dy));
   });
+
+  for (final (name, size) in [
+    ('phone', phone),
+    ('tablet', const Size(800, 1100)),
+    ('desktop', desktop),
+  ]) {
+    testWidgets('meets the tap target and label guidelines on a $name', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      await pumpDashboard(tester, size: size);
+      await expectGuidelines(tester, phone: name != 'desktop');
+      semantics.dispose();
+    });
+  }
 
   test('the address of a month', () {
     const now = YearMonth(2026, 11);

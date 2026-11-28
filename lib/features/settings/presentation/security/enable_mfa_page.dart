@@ -182,11 +182,13 @@ class _EnableMfaPageState extends ConsumerState<EnableMfaPage> {
     } else if (enabled) {
       body = MonthraCard(
         child: EmptyState(
-          icon: LucideIcons.shieldCheck,
+          icon: LucideIcons.shieldCheck300,
           title: l10n.mfaAlreadyOn,
-          action: ShadButton.outline(
-            onPressed: _back,
-            child: ButtonLabel(l10n.navSettings),
+          action: MonthraTapTarget(
+            child: ShadButton.outline(
+              onPressed: _back,
+              child: ButtonLabel(l10n.navSettings),
+            ),
           ),
         ),
       );
@@ -207,7 +209,10 @@ class _EnableMfaPageState extends ConsumerState<EnableMfaPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (_expired) ...[
-              FormAlert(message: l10n.mfaSetupExpired, icon: LucideIcons.clock),
+              FormAlert(
+                message: l10n.mfaSetupExpired,
+                icon: LucideIcons.clock300,
+              ),
               const SizedBox(height: MonthraSpacing.x6),
             ],
             StepUpForm(
@@ -278,10 +283,12 @@ class _ScanStep extends StatelessWidget {
           if (canOpenApp) ...[
             const SizedBox(height: MonthraSpacing.x4),
             Center(
-              child: ShadButton.outline(
-                onPressed: onOpenApp,
-                leading: const Icon(LucideIcons.externalLink),
-                child: ButtonLabel(l10n.mfaOpenAuthenticator),
+              child: MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: onOpenApp,
+                  leading: const Icon(LucideIcons.externalLink300),
+                  child: ButtonLabel(l10n.mfaOpenAuthenticator),
+                ),
               ),
             ),
           ],
@@ -305,10 +312,12 @@ class _ScanStep extends StatelessWidget {
           const SizedBox(height: MonthraSpacing.x6),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: ShadButton(
-              enabled: !busy,
-              onPressed: onEnable,
-              child: ButtonLabel(l10n.mfaEnableSubmit),
+            child: MonthraTapTarget(
+              child: ShadButton(
+                enabled: !busy,
+                onPressed: onEnable,
+                child: ButtonLabel(l10n.mfaEnableSubmit),
+              ),
             ),
           ),
         ],

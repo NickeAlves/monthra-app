@@ -55,11 +55,13 @@ class DisableMfaPage extends ConsumerWidget {
                 onSubmit: disable,
               )
             : EmptyState(
-                icon: LucideIcons.shieldOff,
+                icon: LucideIcons.shieldOff300,
                 title: l10n.mfaAlreadyOff,
-                action: ShadButton.outline(
-                  onPressed: back,
-                  child: ButtonLabel(l10n.navSettings),
+                action: MonthraTapTarget(
+                  child: ShadButton.outline(
+                    onPressed: back,
+                    child: ButtonLabel(l10n.navSettings),
+                  ),
                 ),
               ),
       ),

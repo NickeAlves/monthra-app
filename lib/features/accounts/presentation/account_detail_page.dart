@@ -177,18 +177,20 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
         title: l10n.accountNotFoundTitle,
         back: back,
         child: EmptyState(
-          icon: LucideIcons.searchX,
+          icon: LucideIcons.searchX300,
           title: l10n.accountNotFoundTitle,
           message: l10n.accountNotFoundMessage,
-          action: ShadButton.outline(
-            onPressed: back.onPressed,
-            child: ButtonLabel(l10n.accountBackToAccounts),
+          action: MonthraTapTarget(
+            child: ShadButton.outline(
+              onPressed: back.onPressed,
+              child: ButtonLabel(l10n.accountBackToAccounts),
+            ),
           ),
         ),
       );
     }
     final narrow = context.monthraBreakpoint == MonthraBreakpoint.mobile;
-    final gap = narrow ? MonthraSpacing.x4 : MonthraSpacing.x6;
+    final gap = narrow ? MonthraSpacing.x6 : MonthraSpacing.x8;
     final card = account.card;
     return MonthraPage(
       title: account.name,
@@ -196,33 +198,41 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
           '${accountTypeLabel(l10n, account.type)} · ${account.currency.code}',
       back: back,
       actions: [
-        ShadButton.outline(
-          enabled: !_busy,
-          onPressed: () =>
-              unawaited(showAccountForm(context, account: account)),
-          leading: const Icon(LucideIcons.pencil),
-          child: ButtonLabel(l10n.accountDetailEdit),
-        ),
-        ShadButton.outline(
-          enabled: !_busy,
-          onPressed: () =>
-              unawaited(_archive(account, archived: !account.archived)),
-          leading: Icon(
-            account.archived ? LucideIcons.archiveRestore : LucideIcons.archive,
-          ),
-          child: ButtonLabel(
-            account.archived
-                ? l10n.accountDetailUnarchive
-                : l10n.accountDetailArchive,
+        MonthraTapTarget(
+          child: ShadButton.outline(
+            enabled: !_busy,
+            onPressed: () =>
+                unawaited(showAccountForm(context, account: account)),
+            leading: const Icon(LucideIcons.pencil300),
+            child: ButtonLabel(l10n.accountDetailEdit),
           ),
         ),
-        ShadButton.ghost(
-          enabled: !_busy,
-          onPressed: () => unawaited(_delete(account)),
-          foregroundColor: ShadTheme.of(context).colorScheme.destructive,
-          hoverForegroundColor: ShadTheme.of(context).colorScheme.destructive,
-          leading: const Icon(LucideIcons.trash2),
-          child: ButtonLabel(l10n.accountDetailDelete),
+        MonthraTapTarget(
+          child: ShadButton.outline(
+            enabled: !_busy,
+            onPressed: () =>
+                unawaited(_archive(account, archived: !account.archived)),
+            leading: Icon(
+              account.archived
+                  ? LucideIcons.archiveRestore300
+                  : LucideIcons.archive300,
+            ),
+            child: ButtonLabel(
+              account.archived
+                  ? l10n.accountDetailUnarchive
+                  : l10n.accountDetailArchive,
+            ),
+          ),
+        ),
+        MonthraTapTarget(
+          child: ShadButton.ghost(
+            enabled: !_busy,
+            onPressed: () => unawaited(_delete(account)),
+            foregroundColor: ShadTheme.of(context).colorScheme.destructive,
+            hoverForegroundColor: ShadTheme.of(context).colorScheme.destructive,
+            leading: const Icon(LucideIcons.trash2300),
+            child: ButtonLabel(l10n.accountDetailDelete),
+          ),
         ),
       ],
       child: Column(
@@ -231,7 +241,7 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
           if (account.archived) ...[
             FormAlert(
               message: l10n.accountDetailArchivedNotice,
-              icon: LucideIcons.archive,
+              icon: LucideIcons.archive300,
             ),
             SizedBox(height: gap),
           ],
@@ -262,7 +272,9 @@ class _BalanceCard extends StatelessWidget {
     final theme = ShadTheme.of(context);
     final l10n = context.l10n;
     final format = DisplayFormat.of(context);
-    return MonthraCard(
+    // The page's first block, right under its title: no line above.
+    return MonthraSection(
+      divider: false,
       child: Row(
         children: [
           AccountTypeIcon(account.type),
@@ -326,7 +338,7 @@ class _LimitCard extends StatelessWidget {
     final available = account.availableLimit;
     final muted = theme.textTheme.small.copyWith(color: scheme.mutedForeground);
     String money(int minor) => format.money(minor, account.currency);
-    return MonthraCard(
+    return MonthraSection(
       title: MergeSemantics(
         child: Row(
           children: [
@@ -342,52 +354,49 @@ class _LimitCard extends StatelessWidget {
           ],
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: MonthraSpacing.x4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (limit == null || available == null)
-              Text(l10n.accountCardNoLimit, style: muted)
-            else ...[
-              ExcludeSemantics(
-                child: ShadProgress(
-                  value: limit == 0
-                      ? 1
-                      : (account.cardDebt / limit).clamp(0, 1).toDouble(),
-                  color: available < 0 ? scheme.destructive : scheme.primary,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (limit == null || available == null)
+            Text(l10n.accountCardNoLimit, style: muted)
+          else ...[
+            ExcludeSemantics(
+              child: ShadProgress(
+                value: limit == 0
+                    ? 1
+                    : (account.cardDebt / limit).clamp(0, 1).toDouble(),
+                color: available < 0 ? scheme.destructive : scheme.expense,
+              ),
+            ),
+            const SizedBox(height: MonthraSpacing.x2),
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              spacing: MonthraSpacing.x3,
+              runSpacing: MonthraSpacing.x1,
+              children: [
+                Text(
+                  l10n.accountCardUsed(money(account.cardDebt)),
+                  style: muted,
                 ),
-              ),
-              const SizedBox(height: MonthraSpacing.x2),
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                spacing: MonthraSpacing.x3,
-                runSpacing: MonthraSpacing.x1,
-                children: [
-                  Text(
-                    l10n.accountCardUsed(money(account.cardDebt)),
-                    style: muted,
+                Text(
+                  available < 0
+                      ? l10n.accountCardOverLimit(money(-available))
+                      : l10n.accountsCardAvailable(money(available)),
+                  style: muted.copyWith(
+                    color: available < 0
+                        ? scheme.destructive
+                        : scheme.foreground,
                   ),
-                  Text(
-                    available < 0
-                        ? l10n.accountCardOverLimit(money(-available))
-                        : l10n.accountsCardAvailable(money(available)),
-                    style: muted.copyWith(
-                      color: available < 0
-                          ? scheme.destructive
-                          : scheme.foreground,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            const SizedBox(height: MonthraSpacing.x3),
-            Text(
-              l10n.accountCardCycle(card.closingDay, card.dueDay),
-              style: muted,
+                ),
+              ],
             ),
           ],
-        ),
+          const SizedBox(height: MonthraSpacing.x3),
+          Text(
+            l10n.accountCardCycle(card.closingDay, card.dueDay),
+            style: muted,
+          ),
+        ],
       ),
     );
   }
@@ -492,35 +501,31 @@ class _InvoicesCardState extends ConsumerState<_InvoicesCard> {
         ),
       );
     }
-    return MonthraCard(
+    return MonthraSection(
       title: Text(l10n.invoicesTitle),
-      child: Padding(
-        padding: const EdgeInsets.only(top: MonthraSpacing.x4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Align(
-              // Pinned like the dashboard's: the arrows never move.
-              alignment:
-                  MonthSwitcher.defaultAnchor(context) ==
-                      MonthSwitcherAnchor.end
-                  ? AlignmentDirectional.centerEnd
-                  : AlignmentDirectional.centerStart,
-              child: MonthSwitcher(
-                month: focus,
-                current: open,
-                onChanged: go,
-                labels: (
-                  previous: l10n.invoicesPrevious,
-                  next: l10n.invoicesNext,
-                  current: l10n.invoicesOpen,
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Align(
+            // Pinned like the dashboard's: the arrows never move.
+            alignment:
+                MonthSwitcher.defaultAnchor(context) == MonthSwitcherAnchor.end
+                ? AlignmentDirectional.centerEnd
+                : AlignmentDirectional.centerStart,
+            child: MonthSwitcher(
+              month: focus,
+              current: open,
+              onChanged: go,
+              labels: (
+                previous: l10n.invoicesPrevious,
+                next: l10n.invoicesNext,
+                current: l10n.invoicesOpen,
               ),
             ),
-            const SizedBox(height: MonthraSpacing.x4),
-            body,
-          ],
-        ),
+          ),
+          const SizedBox(height: MonthraSpacing.x4),
+          body,
+        ],
       ),
     );
   }

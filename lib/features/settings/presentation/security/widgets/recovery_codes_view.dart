@@ -151,16 +151,20 @@ class _RecoveryCodesViewState extends ConsumerState<RecoveryCodesView> {
               spacing: MonthraSpacing.x4,
               runSpacing: MonthraSpacing.x2,
               children: [
-                ShadButton.outline(
-                  onPressed: _copy,
-                  leading: const Icon(LucideIcons.copy),
-                  child: ButtonLabel(l10n.recoveryCodesCopy),
+                MonthraTapTarget(
+                  child: ShadButton.outline(
+                    onPressed: _copy,
+                    leading: const Icon(LucideIcons.copy300),
+                    child: ButtonLabel(l10n.recoveryCodesCopy),
+                  ),
                 ),
-                ShadButton.outline(
-                  enabled: !_saving,
-                  onPressed: _download,
-                  leading: const Icon(LucideIcons.download),
-                  child: ButtonLabel(l10n.recoveryCodesDownload),
+                MonthraTapTarget(
+                  child: ShadButton.outline(
+                    enabled: !_saving,
+                    onPressed: _download,
+                    leading: const Icon(LucideIcons.download300),
+                    child: ButtonLabel(l10n.recoveryCodesDownload),
+                  ),
                 ),
               ],
             ),
@@ -173,10 +177,12 @@ class _RecoveryCodesViewState extends ConsumerState<RecoveryCodesView> {
             const SizedBox(height: MonthraSpacing.x4),
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: ShadButton(
-                enabled: _saved,
-                onPressed: widget.onDone,
-                child: ButtonLabel(l10n.recoveryCodesDone),
+              child: MonthraTapTarget(
+                child: ShadButton(
+                  enabled: _saved,
+                  onPressed: widget.onDone,
+                  child: ButtonLabel(l10n.recoveryCodesDone),
+                ),
               ),
             ),
           ],
