@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/components/button_label.dart';
+import 'package:monthra/core/design_system/components/tap_target.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -57,10 +58,12 @@ class ErrorState extends StatelessWidget {
         message: message,
         action: retry == null || label == null
             ? null
-            : ShadButton.outline(
-                onPressed: retry,
-                leading: const Icon(LucideIcons.rotateCw),
-                child: ButtonLabel(label),
+            : MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: retry,
+                  leading: const Icon(LucideIcons.rotateCw),
+                  child: ButtonLabel(label),
+                ),
               ),
       ),
     );

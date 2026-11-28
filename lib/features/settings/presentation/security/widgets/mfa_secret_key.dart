@@ -50,10 +50,12 @@ class MfaSecretKey extends StatelessWidget {
           ),
         ),
         const SizedBox(height: MonthraSpacing.x2),
-        ShadButton.outline(
-          onPressed: () => _copy(context),
-          leading: const Icon(LucideIcons.copy),
-          child: ButtonLabel(l10n.mfaCopySecret),
+        MonthraTapTarget(
+          child: ShadButton.outline(
+            onPressed: () => _copy(context),
+            leading: const Icon(LucideIcons.copy),
+            child: ButtonLabel(l10n.mfaCopySecret),
+          ),
         ),
       ],
     );

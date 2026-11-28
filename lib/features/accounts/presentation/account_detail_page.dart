@@ -180,9 +180,11 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
           icon: LucideIcons.searchX,
           title: l10n.accountNotFoundTitle,
           message: l10n.accountNotFoundMessage,
-          action: ShadButton.outline(
-            onPressed: back.onPressed,
-            child: ButtonLabel(l10n.accountBackToAccounts),
+          action: MonthraTapTarget(
+            child: ShadButton.outline(
+              onPressed: back.onPressed,
+              child: ButtonLabel(l10n.accountBackToAccounts),
+            ),
           ),
         ),
       );
@@ -196,33 +198,41 @@ class _AccountDetailPageState extends ConsumerState<AccountDetailPage> {
           '${accountTypeLabel(l10n, account.type)} · ${account.currency.code}',
       back: back,
       actions: [
-        ShadButton.outline(
-          enabled: !_busy,
-          onPressed: () =>
-              unawaited(showAccountForm(context, account: account)),
-          leading: const Icon(LucideIcons.pencil),
-          child: ButtonLabel(l10n.accountDetailEdit),
-        ),
-        ShadButton.outline(
-          enabled: !_busy,
-          onPressed: () =>
-              unawaited(_archive(account, archived: !account.archived)),
-          leading: Icon(
-            account.archived ? LucideIcons.archiveRestore : LucideIcons.archive,
-          ),
-          child: ButtonLabel(
-            account.archived
-                ? l10n.accountDetailUnarchive
-                : l10n.accountDetailArchive,
+        MonthraTapTarget(
+          child: ShadButton.outline(
+            enabled: !_busy,
+            onPressed: () =>
+                unawaited(showAccountForm(context, account: account)),
+            leading: const Icon(LucideIcons.pencil),
+            child: ButtonLabel(l10n.accountDetailEdit),
           ),
         ),
-        ShadButton.ghost(
-          enabled: !_busy,
-          onPressed: () => unawaited(_delete(account)),
-          foregroundColor: ShadTheme.of(context).colorScheme.destructive,
-          hoverForegroundColor: ShadTheme.of(context).colorScheme.destructive,
-          leading: const Icon(LucideIcons.trash2),
-          child: ButtonLabel(l10n.accountDetailDelete),
+        MonthraTapTarget(
+          child: ShadButton.outline(
+            enabled: !_busy,
+            onPressed: () =>
+                unawaited(_archive(account, archived: !account.archived)),
+            leading: Icon(
+              account.archived
+                  ? LucideIcons.archiveRestore
+                  : LucideIcons.archive,
+            ),
+            child: ButtonLabel(
+              account.archived
+                  ? l10n.accountDetailUnarchive
+                  : l10n.accountDetailArchive,
+            ),
+          ),
+        ),
+        MonthraTapTarget(
+          child: ShadButton.ghost(
+            enabled: !_busy,
+            onPressed: () => unawaited(_delete(account)),
+            foregroundColor: ShadTheme.of(context).colorScheme.destructive,
+            hoverForegroundColor: ShadTheme.of(context).colorScheme.destructive,
+            leading: const Icon(LucideIcons.trash2),
+            child: ButtonLabel(l10n.accountDetailDelete),
+          ),
         ),
       ],
       child: Column(

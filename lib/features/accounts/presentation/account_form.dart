@@ -252,16 +252,20 @@ class _AccountFormState extends ConsumerState<AccountForm> {
       dirty: _dirty,
       busy: _busy,
       actions: [
-        ShadButton.outline(
-          enabled: !_busy,
-          onPressed: () => Navigator.of(context).maybePop(),
-          child: ButtonLabel(l10n.appCancel),
+        MonthraTapTarget(
+          child: ShadButton.outline(
+            enabled: !_busy,
+            onPressed: () => Navigator.of(context).maybePop(),
+            child: ButtonLabel(l10n.appCancel),
+          ),
         ),
-        ShadButton(
-          enabled: !_busy,
-          onPressed: _submit,
-          child: ButtonLabel(
-            _editing ? l10n.accountFormSave : l10n.accountFormCreate,
+        MonthraTapTarget(
+          child: ShadButton(
+            enabled: !_busy,
+            onPressed: _submit,
+            child: ButtonLabel(
+              _editing ? l10n.accountFormSave : l10n.accountFormCreate,
+            ),
           ),
         ),
       ],

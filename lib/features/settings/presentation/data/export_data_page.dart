@@ -190,15 +190,19 @@ class _ExportDataPageState extends ConsumerState<ExportDataPage> {
               spacing: MonthraSpacing.x4,
               runSpacing: MonthraSpacing.x2,
               children: [
-                ShadButton(
-                  enabled: save != _Save.saving,
-                  onPressed: _saveFile,
-                  leading: const Icon(LucideIcons.download),
-                  child: ButtonLabel(l10n.exportDataSave),
+                MonthraTapTarget(
+                  child: ShadButton(
+                    enabled: save != _Save.saving,
+                    onPressed: _saveFile,
+                    leading: const Icon(LucideIcons.download),
+                    child: ButtonLabel(l10n.exportDataSave),
+                  ),
                 ),
-                ShadButton.outline(
-                  onPressed: _back,
-                  child: ButtonLabel(l10n.navSettings),
+                MonthraTapTarget(
+                  child: ShadButton.outline(
+                    onPressed: _back,
+                    child: ButtonLabel(l10n.navSettings),
+                  ),
                 ),
               ],
             ),

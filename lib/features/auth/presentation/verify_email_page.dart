@@ -113,9 +113,11 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
               title: l10n.authVerifiedTitle,
               subtitle: l10n.authVerifiedMessage,
             ),
-            ShadButton(
-              onPressed: () => context.go(AppRoutes.login),
-              child: ButtonLabel(l10n.authContinue),
+            MonthraTapTarget(
+              child: ShadButton(
+                onPressed: () => context.go(AppRoutes.login),
+                child: ButtonLabel(l10n.authContinue),
+              ),
             ),
           ],
         ),
@@ -127,10 +129,12 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
               FormAlert.error(l10n.apiError(error)),
               const SizedBox(height: MonthraSpacing.x6),
             ],
-            ShadButton(
-              onPressed: _verify,
-              leading: const Icon(LucideIcons.rotateCw),
-              child: ButtonLabel(l10n.appRetry),
+            MonthraTapTarget(
+              child: ShadButton(
+                onPressed: _verify,
+                leading: const Icon(LucideIcons.rotateCw),
+                child: ButtonLabel(l10n.appRetry),
+              ),
             ),
           ],
         ),
@@ -173,23 +177,27 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage> {
         const SizedBox(height: MonthraSpacing.x6),
         ValueListenableBuilder(
           valueListenable: _resendWait,
-          builder: (context, seconds, _) => ShadButton(
-            enabled: !_busy && seconds == 0,
-            onPressed: _resend,
-            leading: const Icon(LucideIcons.mail),
-            child: ButtonLabel(
-              seconds > 0
-                  ? l10n.authResendIn(seconds)
-                  : l10n.authResendVerification,
+          builder: (context, seconds, _) => MonthraTapTarget(
+            child: ShadButton(
+              enabled: !_busy && seconds == 0,
+              onPressed: _resend,
+              leading: const Icon(LucideIcons.mail),
+              child: ButtonLabel(
+                seconds > 0
+                    ? l10n.authResendIn(seconds)
+                    : l10n.authResendVerification,
+              ),
             ),
           ),
         ),
         const SizedBox(height: MonthraSpacing.x4),
         Center(
-          child: ShadButton.link(
-            onPressed: () => context.go(AppRoutes.login),
-            leading: const Icon(LucideIcons.arrowLeft),
-            child: ButtonLabel(l10n.authBackToSignIn),
+          child: MonthraTapTarget(
+            child: ShadButton.link(
+              onPressed: () => context.go(AppRoutes.login),
+              leading: const Icon(LucideIcons.arrowLeft),
+              child: ButtonLabel(l10n.authBackToSignIn),
+            ),
           ),
         ),
       ],

@@ -135,18 +135,22 @@ class SecondFactorToggle extends StatelessWidget {
     final l10n = context.l10n;
     return ListenableBuilder(
       listenable: controller,
-      builder: (context, _) => ShadButton.link(
-        onPressed: () {
-          controller.toggle();
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (controller.focusNode.context != null) {
-              controller.focusNode.requestFocus();
-            }
-          });
-          onToggled?.call();
-        },
-        child: ButtonLabel(
-          controller.useRecovery ? l10n.authMfaUseApp : l10n.authMfaUseRecovery,
+      builder: (context, _) => MonthraTapTarget(
+        child: ShadButton.link(
+          onPressed: () {
+            controller.toggle();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (controller.focusNode.context != null) {
+                controller.focusNode.requestFocus();
+              }
+            });
+            onToggled?.call();
+          },
+          child: ButtonLabel(
+            controller.useRecovery
+                ? l10n.authMfaUseApp
+                : l10n.authMfaUseRecovery,
+          ),
         ),
       ),
     );

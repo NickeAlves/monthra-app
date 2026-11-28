@@ -168,7 +168,7 @@ class _FlowSwitch extends StatelessWidget {
       final selected = value == flow;
       void select() => onChanged(value);
       final child = ButtonLabel(label);
-      return MergeSemantics(
+      return MonthraTapTarget(
         child: Semantics(
           selected: selected,
           inMutuallyExclusiveGroup: true,

@@ -138,7 +138,12 @@ class AuthSwitchLink extends StatelessWidget {
             color: theme.colorScheme.mutedForeground,
           ),
         ),
-        ShadButton.link(onPressed: onPressed, child: ButtonLabel(link)),
+        MonthraTapTarget(
+          child: ShadButton.link(
+            onPressed: onPressed,
+            child: ButtonLabel(link),
+          ),
+        ),
       ],
     );
   }

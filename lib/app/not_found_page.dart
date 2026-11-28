@@ -24,9 +24,11 @@ class NotFoundPage extends StatelessWidget {
                 icon: LucideIcons.mapPinOff,
                 title: l10n.notFoundTitle,
                 message: l10n.notFoundMessage,
-                action: ShadButton(
-                  onPressed: () => context.go('/'),
-                  child: ButtonLabel(l10n.notFoundHome),
+                action: MonthraTapTarget(
+                  child: ShadButton(
+                    onPressed: () => context.go('/'),
+                    child: ButtonLabel(l10n.notFoundHome),
+                  ),
                 ),
               ),
             ),

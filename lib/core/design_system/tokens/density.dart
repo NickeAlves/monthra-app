@@ -2,17 +2,22 @@ import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/tokens/breakpoints.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 
-/// How tall controls are drawn: a whole touch target on phones and tablets,
-/// lighter on a desktop layout, where a pointer drives them (§4.4 keeps
-/// 44 px for touch; Flutter's desktop guideline asks 24).
+/// How a layout is driven. Buttons are drawn at
+/// [MonthraLayout.controlHeight] in both; on phones and tablets a
+/// `MonthraTapTarget` gives each the 44 px touch target (§4.4) and fields
+/// keep that height, while a desktop layout, driven by a pointer, lets
+/// fields drop to the buttons' height (Flutter's desktop target is 24).
 enum MonthraDensity {
-  touch(MonthraLayout.minTouchTarget),
-  pointer(MonthraLayout.pointerControlHeight);
+  touch(MonthraLayout.minTouchTarget, MonthraLayout.minTouchTarget),
+  pointer(MonthraLayout.controlHeight, 0);
 
-  new(this.controlHeight);
+  new(this.fieldHeight, this.minTapTarget);
 
-  /// Buttons, icon buttons, inputs and selects.
-  final double controlHeight;
+  /// Inputs and selects, and the label row of a switch or checkbox.
+  final double fieldHeight;
+
+  /// The side of the box a `MonthraTapTarget` grows a control to.
+  final double minTapTarget;
 
   /// Pointer controls from the desktop breakpoint up.
   static MonthraDensity forWidth(double width) =>

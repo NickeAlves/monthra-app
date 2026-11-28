@@ -108,10 +108,12 @@ class DeleteAccountPage extends ConsumerWidget {
                   const SizedBox(height: MonthraSpacing.x6),
                   Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: ShadButton.outline(
-                      onPressed: () => context.go(AppRoutes.settingsExport),
-                      leading: const Icon(LucideIcons.download),
-                      child: ButtonLabel(l10n.deleteAccountExportFirst),
+                    child: MonthraTapTarget(
+                      child: ShadButton.outline(
+                        onPressed: () => context.go(AppRoutes.settingsExport),
+                        leading: const Icon(LucideIcons.download),
+                        child: ButtonLabel(l10n.deleteAccountExportFirst),
+                      ),
                     ),
                   ),
                 ],

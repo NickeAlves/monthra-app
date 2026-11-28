@@ -86,29 +86,46 @@ void main() {
           spacing: MonthraSpacing.x2,
           runSpacing: MonthraSpacing.x2,
           children: [
-            ShadButton(
-              onPressed: noop,
-              leading: const Icon(LucideIcons.plus),
-              child: const ButtonLabel('Nova transação'),
+            MonthraTapTarget(
+              child: ShadButton(
+                onPressed: noop,
+                leading: const Icon(LucideIcons.plus),
+                child: const ButtonLabel('Nova transação'),
+              ),
             ),
-            ShadButton.secondary(
-              onPressed: noop,
-              child: const ButtonLabel('Secondary'),
+            MonthraTapTarget(
+              child: ShadButton.secondary(
+                onPressed: noop,
+                child: const ButtonLabel('Secondary'),
+              ),
             ),
-            ShadButton.outline(
-              onPressed: noop,
-              child: const ButtonLabel('Outline'),
+            MonthraTapTarget(
+              child: ShadButton.outline(
+                onPressed: noop,
+                child: const ButtonLabel('Outline'),
+              ),
             ),
-            ShadButton.ghost(
-              onPressed: noop,
-              child: const ButtonLabel('Ghost'),
+            MonthraTapTarget(
+              child: ShadButton.ghost(
+                onPressed: noop,
+                child: const ButtonLabel('Ghost'),
+              ),
             ),
-            ShadButton.destructive(
-              onPressed: noop,
-              child: const ButtonLabel('Excluir'),
+            MonthraTapTarget(
+              child: ShadButton.destructive(
+                onPressed: noop,
+                child: const ButtonLabel('Excluir'),
+              ),
             ),
-            ShadButton.link(onPressed: noop, child: const ButtonLabel('Link')),
-            const ShadButton(enabled: false, child: ButtonLabel('Disabled')),
+            MonthraTapTarget(
+              child: ShadButton.link(
+                onPressed: noop,
+                child: const ButtonLabel('Link'),
+              ),
+            ),
+            const MonthraTapTarget(
+              child: ShadButton(enabled: false, child: ButtonLabel('Disabled')),
+            ),
           ],
         ),
         const SizedBox(height: MonthraSpacing.x3),
@@ -147,9 +164,11 @@ void main() {
         MonthraSection(
           title: const Text('Contas'),
           description: const Text('Saldo de hoje'),
-          trailing: ShadButton.link(
-            onPressed: () {},
-            child: const ButtonLabel('Ver todas'),
+          trailing: MonthraTapTarget(
+            child: ShadButton.link(
+              onPressed: () {},
+              child: const ButtonLabel('Ver todas'),
+            ),
           ),
           child: const AmountText(
             1284590,
@@ -302,10 +321,12 @@ void main() {
             title: 'Nenhuma transação ainda',
             message: 'As transações do mês aparecem aqui.',
             icon: LucideIcons.receipt,
-            action: ShadButton(
-              onPressed: () {},
-              leading: const Icon(LucideIcons.plus),
-              child: const ButtonLabel('Nova transação'),
+            action: MonthraTapTarget(
+              child: ShadButton(
+                onPressed: () {},
+                leading: const Icon(LucideIcons.plus),
+                child: const ButtonLabel('Nova transação'),
+              ),
             ),
           ),
         ),

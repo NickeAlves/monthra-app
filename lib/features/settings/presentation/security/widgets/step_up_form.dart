@@ -162,15 +162,19 @@ class _StepUpFormState extends State<StepUpForm> {
               valueListenable: _locked,
               // Read here, so the button wakes up when the wait ends.
               builder: (context, _, _) => widget.destructive
-                  ? ShadButton.destructive(
-                      enabled: !_busy && !_locked.running,
-                      onPressed: _submit,
-                      child: label,
+                  ? MonthraTapTarget(
+                      child: ShadButton.destructive(
+                        enabled: !_busy && !_locked.running,
+                        onPressed: _submit,
+                        child: label,
+                      ),
                     )
-                  : ShadButton(
-                      enabled: !_busy && !_locked.running,
-                      onPressed: _submit,
-                      child: label,
+                  : MonthraTapTarget(
+                      child: ShadButton(
+                        enabled: !_busy && !_locked.running,
+                        onPressed: _submit,
+                        child: label,
+                      ),
                     ),
             ),
             if (widget.askCode)

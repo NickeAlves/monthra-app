@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/dates/year_month.dart';
 import 'package:monthra/core/design_system/components/button_label.dart';
+import 'package:monthra/core/design_system/components/tap_target.dart';
 import 'package:monthra/core/design_system/tokens/breakpoints.dart';
 import 'package:monthra/core/design_system/tokens/spacing.dart';
 import 'package:monthra/core/design_system/tokens/typography.dart';
@@ -72,17 +73,23 @@ class MonthSwitcher extends StatelessWidget {
     final end = (anchor ?? defaultAnchor(context)) == MonthSwitcherAnchor.end;
     final back = month == current
         ? null
-        : ShadButton.outline(
-            onPressed: () => onChanged(current),
-            leading: const Icon(LucideIcons.calendarCheck),
-            child: ButtonLabel(labels.current),
+        : MonthraTapTarget(
+            child: ShadButton.outline(
+              onPressed: () => onChanged(current),
+              leading: const Icon(LucideIcons.calendarCheck),
+              child: ButtonLabel(labels.current),
+            ),
           );
     final arrows = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ShadIconButton.ghost(
-          onPressed: month > min ? () => onChanged(month.addMonths(-1)) : null,
-          icon: Icon(LucideIcons.chevronLeft, semanticLabel: labels.previous),
+        MonthraTapTarget(
+          child: ShadIconButton.ghost(
+            onPressed: month > min
+                ? () => onChanged(month.addMonths(-1))
+                : null,
+            icon: Icon(LucideIcons.chevronLeft, semanticLabel: labels.previous),
+          ),
         ),
         // Wraps at a large text size on a phone rather than overflow.
         Flexible(
@@ -102,9 +109,11 @@ class MonthSwitcher extends StatelessWidget {
             ),
           ),
         ),
-        ShadIconButton.ghost(
-          onPressed: month < max ? () => onChanged(month.addMonths(1)) : null,
-          icon: Icon(LucideIcons.chevronRight, semanticLabel: labels.next),
+        MonthraTapTarget(
+          child: ShadIconButton.ghost(
+            onPressed: month < max ? () => onChanged(month.addMonths(1)) : null,
+            icon: Icon(LucideIcons.chevronRight, semanticLabel: labels.next),
+          ),
         ),
       ],
     );

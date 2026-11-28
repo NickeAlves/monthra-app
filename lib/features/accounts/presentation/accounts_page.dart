@@ -55,10 +55,12 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
               icon: LucideIcons.wallet,
               title: l10n.accountsEmptyTitle,
               message: l10n.accountsEmptyMessage,
-              action: ShadButton(
-                onPressed: _create,
-                leading: const Icon(LucideIcons.plus),
-                child: ButtonLabel(l10n.accountsCreateFirst),
+              action: MonthraTapTarget(
+                child: ShadButton(
+                  onPressed: _create,
+                  leading: const Icon(LucideIcons.plus),
+                  child: ButtonLabel(l10n.accountsCreateFirst),
+                ),
               ),
             )
           : _AccountsList(
@@ -82,10 +84,12 @@ class _AccountsPageState extends ConsumerState<AccountsPage> {
       description: l10n.accountsDescription,
       actions: [
         if (accounts?.isNotEmpty ?? false)
-          ShadButton(
-            onPressed: _create,
-            leading: const Icon(LucideIcons.plus),
-            child: ButtonLabel(l10n.accountsNew),
+          MonthraTapTarget(
+            child: ShadButton(
+              onPressed: _create,
+              leading: const Icon(LucideIcons.plus),
+              child: ButtonLabel(l10n.accountsNew),
+            ),
           ),
       ],
       child: body,
@@ -127,15 +131,17 @@ class _AccountsList extends StatelessWidget {
           SizedBox(height: gap),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: ShadButton.ghost(
-              onPressed: onToggleArchived,
-              leading: Icon(
-                showArchived ? LucideIcons.chevronUp : LucideIcons.archive,
-              ),
-              child: ButtonLabel(
-                showArchived
-                    ? l10n.accountsHideArchived
-                    : l10n.accountsShowArchived(view.archived.length),
+            child: MonthraTapTarget(
+              child: ShadButton.ghost(
+                onPressed: onToggleArchived,
+                leading: Icon(
+                  showArchived ? LucideIcons.chevronUp : LucideIcons.archive,
+                ),
+                child: ButtonLabel(
+                  showArchived
+                      ? l10n.accountsHideArchived
+                      : l10n.accountsShowArchived(view.archived.length),
+                ),
               ),
             ),
           ),

@@ -287,38 +287,57 @@ class _ControlsState extends State<_Controls> {
             runSpacing: MonthraSpacing.x2,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              ShadButton(
-                onPressed: noop,
-                leading: const Icon(LucideIcons.plus),
-                child: const ButtonLabel('Nova transação'),
+              MonthraTapTarget(
+                child: ShadButton(
+                  onPressed: noop,
+                  leading: const Icon(LucideIcons.plus),
+                  child: const ButtonLabel('Nova transação'),
+                ),
               ),
-              ShadButton.secondary(
-                onPressed: noop,
-                child: const ButtonLabel('Secondary'),
+              MonthraTapTarget(
+                child: ShadButton.secondary(
+                  onPressed: noop,
+                  child: const ButtonLabel('Secondary'),
+                ),
               ),
-              ShadButton.outline(
-                onPressed: noop,
-                child: const ButtonLabel('Outline'),
+              MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: noop,
+                  child: const ButtonLabel('Outline'),
+                ),
               ),
-              ShadButton.ghost(
-                onPressed: noop,
-                child: const ButtonLabel('Ghost'),
+              MonthraTapTarget(
+                child: ShadButton.ghost(
+                  onPressed: noop,
+                  child: const ButtonLabel('Ghost'),
+                ),
               ),
-              ShadButton.destructive(
-                onPressed: noop,
-                child: const ButtonLabel('Excluir'),
+              MonthraTapTarget(
+                child: ShadButton.destructive(
+                  onPressed: noop,
+                  child: const ButtonLabel('Excluir'),
+                ),
               ),
-              ShadButton.link(
-                onPressed: noop,
-                child: const ButtonLabel('Link'),
+              MonthraTapTarget(
+                child: ShadButton.link(
+                  onPressed: noop,
+                  child: const ButtonLabel('Link'),
+                ),
               ),
-              const ShadButton(enabled: false, child: ButtonLabel('Disabled')),
+              const MonthraTapTarget(
+                child: ShadButton(
+                  enabled: false,
+                  child: ButtonLabel('Disabled'),
+                ),
+              ),
               // An icon-only button reads its icon's label.
-              ShadIconButton.outline(
-                onPressed: noop,
-                icon: const Icon(
-                  LucideIcons.slidersHorizontal,
-                  semanticLabel: 'Filtros',
+              MonthraTapTarget(
+                child: ShadIconButton.outline(
+                  onPressed: noop,
+                  icon: const Icon(
+                    LucideIcons.slidersHorizontal,
+                    semanticLabel: 'Filtros',
+                  ),
                 ),
               ),
             ],
@@ -329,18 +348,26 @@ class _ControlsState extends State<_Controls> {
             runSpacing: MonthraSpacing.x2,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              // 36 px: pointer layouts only, under the 44 px touch target.
-              if (context.monthraBreakpoint != MonthraBreakpoint.mobile)
-                ShadButton(
+              // Drawn at 30, 34 and 38 px; touch layouts give each 44.
+              MonthraTapTarget(
+                child: ShadButton(
                   size: ShadButtonSize.sm,
                   onPressed: noop,
                   child: const ButtonLabel('Small'),
                 ),
-              ShadButton(onPressed: noop, child: const ButtonLabel('Regular')),
-              ShadButton(
-                size: ShadButtonSize.lg,
-                onPressed: noop,
-                child: const ButtonLabel('Large'),
+              ),
+              MonthraTapTarget(
+                child: ShadButton(
+                  onPressed: noop,
+                  child: const ButtonLabel('Regular'),
+                ),
+              ),
+              MonthraTapTarget(
+                child: ShadButton(
+                  size: ShadButtonSize.lg,
+                  onPressed: noop,
+                  child: const ButtonLabel('Large'),
+                ),
               ),
               const ShadBadge(child: Text('Badge')),
               const ShadBadge.secondary(child: Text('Secondary')),
@@ -407,9 +434,11 @@ class _Cards extends StatelessWidget {
           child: MonthraSection(
             title: const Text('Contas'),
             description: const Text('Saldo de hoje'),
-            trailing: ShadButton.link(
-              onPressed: () => _toast(context, 'Link tapped'),
-              child: const ButtonLabel('Ver todas'),
+            trailing: MonthraTapTarget(
+              child: ShadButton.link(
+                onPressed: () => _toast(context, 'Link tapped'),
+                child: const ButtonLabel('Ver todas'),
+              ),
             ),
             child: const AmountText(1284590, currency: Currency.brl),
           ),
@@ -548,11 +577,14 @@ class _AmountsState extends State<_Amounts> {
                   animate: true,
                 ),
               ),
-              ShadButton.outline(
-                onPressed: () =>
-                    setState(() => _total = _random.nextInt(5000000) - 1000000),
-                leading: const Icon(LucideIcons.shuffle),
-                child: const ButtonLabel('Shuffle'),
+              MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: () => setState(
+                    () => _total = _random.nextInt(5000000) - 1000000,
+                  ),
+                  leading: const Icon(LucideIcons.shuffle),
+                  child: const ButtonLabel('Shuffle'),
+                ),
               ),
             ],
           ),
@@ -719,10 +751,12 @@ class _States extends StatelessWidget {
             title: 'Nenhuma transação ainda',
             message: 'As transações do mês aparecem aqui.',
             icon: LucideIcons.receipt,
-            action: ShadButton(
-              onPressed: () => _toast(context, 'Create tapped'),
-              leading: const Icon(LucideIcons.plus),
-              child: const ButtonLabel('Nova transação'),
+            action: MonthraTapTarget(
+              child: ShadButton(
+                onPressed: () => _toast(context, 'Create tapped'),
+                leading: const Icon(LucideIcons.plus),
+                child: const ButtonLabel('Nova transação'),
+              ),
             ),
           ),
         ),
@@ -805,43 +839,49 @@ class _Pages extends StatelessWidget {
           title: 'Configurações',
           description: 'Perfil, preferências e segurança da conta.',
           actions: [
-            ShadButton.outline(
-              onPressed: () => _toast(
-                context,
-                'Nome salvo.',
-                description: 'Aparece em todos os dispositivos.',
-              ),
-              leading: const Icon(LucideIcons.bell),
-              child: const ButtonLabel('Toast'),
-            ),
-            ShadButton.outline(
-              onPressed: () async {
-                final confirmed = await showMonthraConfirm(
+            MonthraTapTarget(
+              child: ShadButton.outline(
+                onPressed: () => _toast(
                   context,
-                  title: 'Encerrar as outras sessões?',
-                  description:
-                      'Os outros dispositivos vão pedir para entrar de novo.',
-                  confirmLabel: 'Encerrar sessões',
-                  cancelLabel: 'Cancelar',
-                  barrierLabel: 'Fechar',
-                  destructive: true,
-                );
-                if (context.mounted) {
-                  _toast(context, confirmed ? 'Confirmed' : 'Cancelled');
-                }
-              },
-              leading: const Icon(LucideIcons.messageSquareWarning),
-              child: const ButtonLabel('Confirm'),
-            ),
-            ShadButton.destructive(
-              onPressed: () => _toast(
-                context,
-                'Sua alteração não foi salva',
-                description: 'Verifique sua conexão e tente de novo.',
-                destructive: true,
+                  'Nome salvo.',
+                  description: 'Aparece em todos os dispositivos.',
+                ),
+                leading: const Icon(LucideIcons.bell),
+                child: const ButtonLabel('Toast'),
               ),
-              leading: const Icon(LucideIcons.circleAlert),
-              child: const ButtonLabel('Error toast'),
+            ),
+            MonthraTapTarget(
+              child: ShadButton.outline(
+                onPressed: () async {
+                  final confirmed = await showMonthraConfirm(
+                    context,
+                    title: 'Encerrar as outras sessões?',
+                    description:
+                        'Os outros dispositivos vão pedir para entrar de novo.',
+                    confirmLabel: 'Encerrar sessões',
+                    cancelLabel: 'Cancelar',
+                    barrierLabel: 'Fechar',
+                    destructive: true,
+                  );
+                  if (context.mounted) {
+                    _toast(context, confirmed ? 'Confirmed' : 'Cancelled');
+                  }
+                },
+                leading: const Icon(LucideIcons.messageSquareWarning),
+                child: const ButtonLabel('Confirm'),
+              ),
+            ),
+            MonthraTapTarget(
+              child: ShadButton.destructive(
+                onPressed: () => _toast(
+                  context,
+                  'Sua alteração não foi salva',
+                  description: 'Verifique sua conexão e tente de novo.',
+                  destructive: true,
+                ),
+                leading: const Icon(LucideIcons.circleAlert),
+                child: const ButtonLabel('Error toast'),
+              ),
             ),
           ],
         ),

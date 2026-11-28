@@ -131,11 +131,13 @@ class _SessionsSectionState extends ConsumerState<SessionsSection> {
         else
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: ShadButton.outline(
-              enabled: _busy.isEmpty,
-              onPressed: _revokeOthers,
-              leading: const Icon(LucideIcons.logOut),
-              child: ButtonLabel(l10n.sessionsRevokeOthers),
+            child: MonthraTapTarget(
+              child: ShadButton.outline(
+                enabled: _busy.isEmpty,
+                onPressed: _revokeOthers,
+                leading: const Icon(LucideIcons.logOut),
+                child: ButtonLabel(l10n.sessionsRevokeOthers),
+              ),
             ),
           ),
       ],
@@ -214,12 +216,14 @@ class _SessionRow extends StatelessWidget {
     );
     final revoke = session.current
         ? null
-        : ShadButton.outline(
-            enabled: !busy,
-            onPressed: onRevoke,
-            child: ButtonLabel(
-              l10n.sessionsRevoke,
-              semanticsLabel: l10n.sessionsRevokeLabel(name),
+        : MonthraTapTarget(
+            child: ShadButton.outline(
+              enabled: !busy,
+              onPressed: onRevoke,
+              child: ButtonLabel(
+                l10n.sessionsRevoke,
+                semanticsLabel: l10n.sessionsRevokeLabel(name),
+              ),
             ),
           );
     return LayoutBuilder(

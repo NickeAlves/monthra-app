@@ -134,11 +134,13 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             current: l10n.dashboardThisMonth,
           ),
         ),
-        ShadIconButton.outline(
-          onPressed: state.isLoading ? null : () => _refresh(month),
-          icon: Icon(
-            LucideIcons.refreshCw,
-            semanticLabel: l10n.dashboardRefresh,
+        MonthraTapTarget(
+          child: ShadIconButton.outline(
+            onPressed: state.isLoading ? null : () => _refresh(month),
+            icon: Icon(
+              LucideIcons.refreshCw,
+              semanticLabel: l10n.dashboardRefresh,
+            ),
           ),
         ),
       ],
@@ -153,10 +155,12 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         icon: LucideIcons.wallet,
         title: l10n.dashboardEmptyTitle,
         message: l10n.dashboardEmptyMessage,
-        action: ShadButton(
-          onPressed: () => showAccountForm(context),
-          leading: const Icon(LucideIcons.plus),
-          child: ButtonLabel(l10n.accountsCreateFirst),
+        action: MonthraTapTarget(
+          child: ShadButton(
+            onPressed: () => showAccountForm(context),
+            leading: const Icon(LucideIcons.plus),
+            child: ButtonLabel(l10n.accountsCreateFirst),
+          ),
         ),
       );
     }

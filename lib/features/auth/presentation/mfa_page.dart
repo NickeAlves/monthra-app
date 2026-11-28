@@ -111,10 +111,12 @@ class _MfaPageState extends ConsumerState<MfaPage> {
           const SizedBox(height: MonthraSpacing.x6),
           ValueListenableBuilder(
             valueListenable: _locked,
-            builder: (context, _, _) => ShadButton(
-              enabled: !_busy && !_locked.running,
-              onPressed: _submit,
-              child: ButtonLabel(l10n.authMfaVerifyButton),
+            builder: (context, _, _) => MonthraTapTarget(
+              child: ShadButton(
+                enabled: !_busy && !_locked.running,
+                onPressed: _submit,
+                child: ButtonLabel(l10n.authMfaVerifyButton),
+              ),
             ),
           ),
           const SizedBox(height: MonthraSpacing.x4),
@@ -125,10 +127,12 @@ class _MfaPageState extends ConsumerState<MfaPage> {
             ),
           ),
           Center(
-            child: ShadButton.link(
-              onPressed: _back,
-              leading: const Icon(LucideIcons.arrowLeft),
-              child: ButtonLabel(l10n.authBackToSignIn),
+            child: MonthraTapTarget(
+              child: ShadButton.link(
+                onPressed: _back,
+                leading: const Icon(LucideIcons.arrowLeft),
+                child: ButtonLabel(l10n.authBackToSignIn),
+              ),
             ),
           ),
         ],

@@ -28,7 +28,7 @@ class ThemePreferencePicker extends ConsumerWidget {
       final child = ButtonLabel(label);
       // One node per option: shadcn splits a button's flags, label and tap
       // across nodes, and the selected state would sit apart from them.
-      return MergeSemantics(
+      return MonthraTapTarget(
         child: Semantics(
           selected: selected,
           inMutuallyExclusiveGroup: true,

@@ -184,9 +184,11 @@ class _EnableMfaPageState extends ConsumerState<EnableMfaPage> {
         child: EmptyState(
           icon: LucideIcons.shieldCheck,
           title: l10n.mfaAlreadyOn,
-          action: ShadButton.outline(
-            onPressed: _back,
-            child: ButtonLabel(l10n.navSettings),
+          action: MonthraTapTarget(
+            child: ShadButton.outline(
+              onPressed: _back,
+              child: ButtonLabel(l10n.navSettings),
+            ),
           ),
         ),
       );
@@ -278,10 +280,12 @@ class _ScanStep extends StatelessWidget {
           if (canOpenApp) ...[
             const SizedBox(height: MonthraSpacing.x4),
             Center(
-              child: ShadButton.outline(
-                onPressed: onOpenApp,
-                leading: const Icon(LucideIcons.externalLink),
-                child: ButtonLabel(l10n.mfaOpenAuthenticator),
+              child: MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: onOpenApp,
+                  leading: const Icon(LucideIcons.externalLink),
+                  child: ButtonLabel(l10n.mfaOpenAuthenticator),
+                ),
               ),
             ),
           ],
@@ -305,10 +309,12 @@ class _ScanStep extends StatelessWidget {
           const SizedBox(height: MonthraSpacing.x6),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: ShadButton(
-              enabled: !busy,
-              onPressed: onEnable,
-              child: ButtonLabel(l10n.mfaEnableSubmit),
+            child: MonthraTapTarget(
+              child: ShadButton(
+                enabled: !busy,
+                onPressed: onEnable,
+                child: ButtonLabel(l10n.mfaEnableSubmit),
+              ),
             ),
           ),
         ],

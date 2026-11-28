@@ -1,6 +1,7 @@
 import 'package:flutter/semantics.dart' show SemanticsRole;
 import 'package:flutter/widgets.dart';
 import 'package:monthra/core/design_system/components/button_label.dart';
+import 'package:monthra/core/design_system/components/tap_target.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// Asks before an action that is hard to take back (signing other devices
@@ -34,17 +35,26 @@ Future<bool> showMonthraConfirm(
           title: Text(title),
           description: description == null ? null : Text(description),
           actions: [
-            ShadButton.outline(
-              onPressed: cancel,
-              child: ButtonLabel(cancelLabel),
+            MonthraTapTarget(
+              child: ShadButton.outline(
+                onPressed: cancel,
+                child: ButtonLabel(cancelLabel),
+              ),
             ),
             if (destructive)
-              ShadButton.destructive(
-                onPressed: confirm,
-                child: ButtonLabel(confirmLabel),
+              MonthraTapTarget(
+                child: ShadButton.destructive(
+                  onPressed: confirm,
+                  child: ButtonLabel(confirmLabel),
+                ),
               )
             else
-              ShadButton(onPressed: confirm, child: ButtonLabel(confirmLabel)),
+              MonthraTapTarget(
+                child: ShadButton(
+                  onPressed: confirm,
+                  child: ButtonLabel(confirmLabel),
+                ),
+              ),
           ],
         ),
       );

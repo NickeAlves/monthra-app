@@ -213,10 +213,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           ),
           const SizedBox(height: MonthraSpacing.x4),
         ],
-        ShadButton(
-          enabled: !_busy && !_captcha.waitingForToken,
-          onPressed: _submit,
-          child: ButtonLabel(l10n.authRegisterButton),
+        MonthraTapTarget(
+          child: ShadButton(
+            enabled: !_busy && !_captcha.waitingForToken,
+            onPressed: _submit,
+            child: ButtonLabel(l10n.authRegisterButton),
+          ),
         ),
         const SizedBox(height: MonthraSpacing.x6),
         AuthSwitchLink(
@@ -250,23 +252,27 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         ],
         ValueListenableBuilder(
           valueListenable: _resendWait,
-          builder: (context, seconds, _) => ShadButton.outline(
-            enabled: !_busy && seconds == 0,
-            onPressed: _resend,
-            leading: const Icon(LucideIcons.mail),
-            child: ButtonLabel(
-              seconds > 0
-                  ? l10n.authResendIn(seconds)
-                  : l10n.authResendVerification,
+          builder: (context, seconds, _) => MonthraTapTarget(
+            child: ShadButton.outline(
+              enabled: !_busy && seconds == 0,
+              onPressed: _resend,
+              leading: const Icon(LucideIcons.mail),
+              child: ButtonLabel(
+                seconds > 0
+                    ? l10n.authResendIn(seconds)
+                    : l10n.authResendVerification,
+              ),
             ),
           ),
         ),
         const SizedBox(height: MonthraSpacing.x4),
         Center(
-          child: ShadButton.link(
-            onPressed: () => context.go(AppRoutes.login),
-            leading: const Icon(LucideIcons.arrowLeft),
-            child: ButtonLabel(l10n.authBackToSignIn),
+          child: MonthraTapTarget(
+            child: ShadButton.link(
+              onPressed: () => context.go(AppRoutes.login),
+              leading: const Icon(LucideIcons.arrowLeft),
+              child: ButtonLabel(l10n.authBackToSignIn),
+            ),
           ),
         ),
       ],

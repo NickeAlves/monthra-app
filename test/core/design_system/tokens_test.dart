@@ -125,22 +125,29 @@ void main() {
       expect(MonthraDensity.forWidth(390), MonthraDensity.touch);
       expect(MonthraDensity.forWidth(1024), MonthraDensity.touch);
       expect(MonthraDensity.forWidth(1025), MonthraDensity.pointer);
-      expect(MonthraDensity.touch.controlHeight, MonthraLayout.minTouchTarget);
-      expect(MonthraDensity.pointer.controlHeight, 36);
+      // Touch: 44 px fields and targets; pointer: fields as tall as buttons.
+      expect(MonthraDensity.touch.fieldHeight, MonthraLayout.minTouchTarget);
+      expect(MonthraDensity.touch.minTapTarget, MonthraLayout.minTouchTarget);
+      expect(MonthraDensity.pointer.fieldHeight, MonthraLayout.controlHeight);
+      expect(MonthraDensity.pointer.minTapTarget, 0);
+      expect(MonthraLayout.controlHeight, 34);
     });
   });
 
-  test('the theme sizes controls by density, with quiet surfaces', () {
+  test('the theme draws 34 px buttons and sizes fields by density', () {
     for (final brightness in Brightness.values) {
       for (final density in MonthraDensity.values) {
         final theme = monthraTheme(brightness, density: density);
-        expect(theme.buttonSizesTheme.regular!.height, density.controlHeight);
-        expect(theme.buttonSizesTheme.icon!.width, density.controlHeight);
-        expect(theme.inputTheme.constraints!.minHeight, density.controlHeight);
+        final sizes = theme.buttonSizesTheme;
+        expect(sizes.regular!.height, MonthraLayout.controlHeight);
+        expect(sizes.icon!.width, MonthraLayout.controlHeight);
+        expect(sizes.icon!.height, MonthraLayout.controlHeight);
+        expect(sizes.sm!.height, lessThan(MonthraLayout.controlHeight));
+        expect(theme.inputTheme.constraints!.minHeight, density.fieldHeight);
       }
       final theme = monthraTheme(brightness);
       expect(
-        theme.buttonSizesTheme.regular!.height,
+        theme.inputTheme.constraints!.minHeight,
         MonthraLayout.minTouchTarget,
       );
       expect(theme.radius, MonthraRadii.smAll);

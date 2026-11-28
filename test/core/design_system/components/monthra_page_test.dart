@@ -61,7 +61,12 @@ void main() {
       tester.getBottomLeft(link).dy,
       lessThan(tester.getTopLeft(find.text('Alterar senha')).dy),
     );
-    expect(tester.getSize(link).height, greaterThanOrEqualTo(44));
+    // Drawn at 34 px, inside a 44 px touch target.
+    final target = find.ancestor(
+      of: link,
+      matching: find.byType(MonthraTapTarget),
+    );
+    expect(tester.getSize(target).height, greaterThanOrEqualTo(44));
     expect(
       tester.getTopLeft(link).dx,
       tester.getTopLeft(find.text('Alterar senha')).dx,

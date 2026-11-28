@@ -26,18 +26,22 @@ class DataSection extends StatelessWidget {
             SettingsRow(
               title: l10n.settingsExportLabel,
               description: l10n.settingsExportDescription,
-              control: ShadButton.outline(
-                onPressed: () => context.go(AppRoutes.settingsExport),
-                child: ButtonLabel(l10n.settingsExportOpen),
+              control: MonthraTapTarget(
+                child: ShadButton.outline(
+                  onPressed: () => context.go(AppRoutes.settingsExport),
+                  child: ButtonLabel(l10n.settingsExportOpen),
+                ),
               ),
             ),
             const SizedBox(height: MonthraSpacing.x6),
             SettingsRow(
               title: l10n.settingsDeleteLabel,
               description: l10n.settingsDeleteDescription,
-              control: ShadButton.destructive(
-                onPressed: () => context.go(AppRoutes.settingsDeleteAccount),
-                child: ButtonLabel(l10n.settingsDeleteOpen),
+              control: MonthraTapTarget(
+                child: ShadButton.destructive(
+                  onPressed: () => context.go(AppRoutes.settingsDeleteAccount),
+                  child: ButtonLabel(l10n.settingsDeleteOpen),
+                ),
               ),
             ),
           ],

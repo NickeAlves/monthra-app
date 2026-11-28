@@ -44,10 +44,12 @@ class CaptchaField extends ConsumerWidget {
           message: l10n.authCaptchaFailed,
           destructive: true,
           icon: LucideIcons.circleAlert,
-          action: ShadButton.outline(
-            onPressed: gate.retry,
-            leading: const Icon(LucideIcons.rotateCw),
-            child: ButtonLabel(l10n.appRetry),
+          action: MonthraTapTarget(
+            child: ShadButton.outline(
+              onPressed: gate.retry,
+              leading: const Icon(LucideIcons.rotateCw),
+              child: ButtonLabel(l10n.appRetry),
+            ),
           ),
         ),
         _ => _widget(context, ref),
