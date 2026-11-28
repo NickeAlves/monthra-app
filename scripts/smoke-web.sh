@@ -68,9 +68,13 @@ font="$base/assets/assets/fonts/inter/Inter-Regular.ttf"
 [ "$(curl -sS -o /dev/null -w '%{content_type}' "$font")" = font/ttf ] || fail "font content type"
 curl -sS -H 'Accept-Encoding: gzip' -D - -o /dev/null "$font" | grep -qi '^content-encoding: gzip' \
   || fail "fonts must be served compressed"
-# tool/prune_web_fonts.dart ran: the unused icon font weights are gone.
-! curl -sSf "$base/assets/FontManifest.json" | grep -q 'lucide_icons_flutter/Lucide[1-9]00' \
+# tool/prune_web_fonts.dart ran: the icon font weights the app does not draw
+# with are gone, and the one it does (300, the 1.5 px stroke) stays.
+manifest=$(curl -sSf "$base/assets/FontManifest.json")
+! printf '%s' "$manifest" | grep -q 'lucide_icons_flutter/Lucide[124-6]00' \
   || fail "unused Lucide weights still in FontManifest.json"
+printf '%s' "$manifest" | grep -q 'lucide_icons_flutter/Lucide300"' \
+  || fail "the Lucide 300 weight the app draws with is missing"
 curl -sS -H 'Accept-Encoding: gzip' -D - -o /dev/null "$base/main.dart.js" | grep -qi '^content-encoding: gzip' \
   || fail "main.dart.js must be served compressed"
 
